@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Typing Hero Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 90vw;
+            max-width: 1400px;
+            height: 90vh;
+            max-height: 800px;
+            position: relative;
+            background: linear-gradient(180deg, #252525, #151515);
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            border: 5px solid #777;
+        }
+
+        #menu, #tutorial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.5s ease;
+        }
+
+        #tutorial {
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        #menu h1, #tutorial h1 {
+            font-size: clamp(40px, 5vw, 60px);
+            margin-bottom: clamp(20px, 4vh, 40px);
+            color: #00cc66;
+            text-shadow: 0 0 20px rgba(0, 204, 102, 0.6);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 15px rgba(0, 204, 102, 0.5); }
+            to { text-shadow: 0 0 30px rgba(0, 204, 102, 0.8); }
+        }
+
+        #menu button, #tutorial button {
+            padding: clamp(10px, 1.5vh, 15px) clamp(20px, 3vw, 40px);
+            margin: clamp(10px, 1.5vh, 15px);
+            font-size: clamp(16px, 2vw, 22px);
+            background: linear-gradient(45deg, #666, #888);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            animation: buttonPulse 2s infinite;
+        }
+
+        @keyframes buttonPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        #menu button:hover, #tutorial button:hover {
+            background: linear-gradient(45deg, #00cc66, #00994d);
+            color: #fff;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 204, 102, 0.6);
+            animation: none;
+        }
+
+        #tutorial-message {
+            font-size: clamp(18px, 2vw, 24px);
+            margin: clamp(15px, 2vh, 20px);
+            text-align: center;
+            padding: clamp(10px, 1.5vh, 15px);
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+            max-width: 80%;
+        }
+
+        #tutorial-message.correct {
+            background: linear-gradient(45deg, #00cc66, #00994d);
+            box-shadow: 0 0 25px rgba(0, 204, 102, 0.6);
+        }
+
+        #tutorial-message.error {
+            background: linear-gradient(45deg, #ff4444, #cc3333);
+            box-shadow: 0 0 25px rgba(255, 68, 68, 0.6);
+        }
+
+        #score-board {
+            position: absolute;
+            top: clamp(10px, 2vh, 20px);
+            left: clamp(10px, 2vw, 20px);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.9);
+            padding: clamp(10px, 1.5vh, 15px) clamp(15px, 2vw, 25px);
+            border-radius: 15px;
+            font-size: clamp(14px, 1.8vw, 20px);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .note {
+            position: absolute;
+            width: clamp(40px, 4vw, 60px);
+            height: clamp(40px, 4vw, 60px);
+            background: linear-gradient(45deg, #00cc66, #00994d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: clamp(20px, 2.5vw, 28px);
+            font-weight: bold;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            animation: fall 0.2s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes fall {
+            0% { transform: scale(0.5) rotate(10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .note.hit {
+            animation: hit 0.25s ease;
+            background: linear-gradient(45deg, #ffcc00, #ff9900);
+        }
+
+        @keyframes hit {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(0.8); }
+        }
+
+        .note.missed {
+            animation: miss 0.5s ease forwards;
+            background: linear-gradient(45deg, #ff4444, #cc3333);
+        }
+
+        @keyframes miss {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.5) translateY(50px); opacity: 0; }
+        }
+
+        .target-zone {
+            position: absolute;
+            bottom: 20vh;
+            height: 10vh;
+            width: 100%;
+            background: rgba(255, 0, 122, 0.6);
+            border: 4px solid #ff007a;
+            box-shadow: 0 0 30px rgba(255, 0, 122, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #virtual-keyboard {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20vh;
+            background: linear-gradient(to top, #1a1a1a, #252525);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(5px, 1vh, 10px);
+            transition: opacity 0.3s ease;
+            gap: clamp(5px, 0.8vh, 8px);
+            border-top: 3px solid #666;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: clamp(5px, 0.8vw, 12px);
+        }
+
+        .key {
+            width: clamp(40px, 4vw, 60px);
+            height: clamp(40px, 4vw, 60px);
+            background: linear-gradient(145deg, #404040, #2e2e2e);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: clamp(18px, 2vw, 24px);
+            color: #ddd;
+            border: 1px solid #555;
+            transition: all 0.15s ease;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .key.correct {
+            background: linear-gradient(145deg, #00cc66, #00994d);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 6px 18px rgba(0, 204, 102, 0.7);
+            color: #fff;
+        }
+
+        .key.missed {
+            background: linear-gradient(145deg, #ff4444, #cc3333);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 6px 18px rgba(255, 68, 68, 0.7);
+            color: #fff;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+            background: rgba(0, 0, 0, 0.95);
+            padding: clamp(20px, 4vh, 50px);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            z-index: 15;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        #toggle-keyboard {
+            position: absolute;
+            top: clamp(10px, 2vh, 20px);
+            right: clamp(10px, 2vw, 20px);
+            padding: clamp(6px, 1vh, 10px) clamp(10px, 1.5vw, 20px);
+            background: linear-gradient(45deg, #666, #888);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            font-size: clamp(12px, 1.5vw, 16px);
+        }
+
+        #toggle-keyboard:hover {
+            background: linear-gradient(45deg, #00cc66, #00994d);
+            color: #fff;
+        }
+
+        #mobile-warning {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #ff4444, #cc3333);
+            padding: clamp(15px, 2vh, 30px);
+            border-radius: 15px;
+            text-align: center;
+            z-index: 25;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+            animation: warningPulse 1.5s infinite;
+        }
+
+        @keyframes warningPulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @media (max-width: 768px) or (hover: none) {
+            #game-container {
+                width: 100vw;
+                height: 100vh;
+            }
+            #mobile-warning {
+                display: block;
+            }
+            #menu, #tutorial, #game-over, #score-board, #virtual-keyboard, #toggle-keyboard {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="menu">
+            <h1>Typing Hero</h1>
+            <button onclick="startTutorial()">Tutorial</button>
+            <button onclick="startGame('easy')">Easy</button>
+            <button onclick="startGame('medium')">Medium</button>
+            <button onclick="startGame('hard')">Hard</button>
+        </div>
+        <div id="tutorial">
+            <h1>Tutorial</h1>
+            <div id="tutorial-message"></div>
+            <button id="tutorial-next" onclick="advanceTutorial()">Next</button>
+        </div>
+        <div id="score-board">
+            Score: <span id="score">0</span><br>
+            Streak: <span id="streak">0</span><br>
+            Multiplier: <span id="multiplier">1x</span><br>
+            Lives: <span id="lives">3</span>
+        </div>
+        <div class="target-zone"></div>
+        <div id="virtual-keyboard"></div>
+        <div id="game-over">
+            <h1 style="color: #ff4444; text-shadow: 0 0 20px rgba(255, 68, 68, 0.6);">Game Over</h1>
+            <button onclick="restartGame()">Restart</button>
+        </div>
+        <button id="toggle-keyboard">Hide Keyboard</button>
+        <div id="mobile-warning">
+            <h2 style="margin: 0 0 10px 0;">Physical Keyboard Required!</h2>
+            <p>Please play on a device with a physical keyboard for the best experience.</p>
+        </div>
+    </div>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const scoreElement = document.getElementById('score');
+        const streakElement = document.getElementById('streak');
+        const multiplierElement = document.getElementById('multiplier');
+        const livesElement = document.getElementById('lives');
+        const gameOverElement = document.getElementById('game-over');
+        const virtualKeyboard = document.getElementById('virtual-keyboard');
+        const menuElement = document.getElementById('menu');
+        const tutorialElement = document.getElementById('tutorial');
+        const tutorialMessage = document.getElementById('tutorial-message');
+        const tutorialNextButton = document.getElementById('tutorial-next');
+
+        let score = 0;
+        let streak = 0;
+        let multiplier = 1;
+        let lives = 3;
+        let notes = [];
+        let gameActive = false;
+        let keyboardVisible = true;
+        let tutorialActive = false;
+        let spawnInterval = null;
+        let tutorialStep = 0;
+        let demoCount = 0;
+        let difficultySettings = {
+            easy: { speed: 1.5, interval: 1200 },
+            medium: { speed: 2, interval: 1000 },
+            hard: { speed: 2.5, interval: 800 }
+        };
+        let currentDifficulty = 'easy';
+
+        const keyboardLayout = [
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+        ];
+
+        const keyPositions = {};
+        function updateKeyPositions() {
+            const containerWidth = gameContainer.offsetWidth;
+            const keyWidth = clamp(40, containerWidth * 0.04, 60);
+            const keyHeight = clamp(40, containerWidth * 0.04, 60);
+            const gap = clamp(5, containerWidth * 0.008, 12);
+            const totalWidth = (keyWidth + gap) * 10 - gap; // 10 keys in top row
+            const startX = (containerWidth - totalWidth) / 2;
+
+            keyboardLayout.forEach((row, rowIndex) => {
+                row.forEach((letter, colIndex) => {
+                    keyPositions[letter] = {
+                        x: startX + colIndex * (keyWidth + gap) + (rowIndex * (keyWidth / 2)),
+                        y: rowIndex * (keyHeight + gap)
+                    };
+                });
+            });
+        }
+
+        function clamp(min, value, max) {
+            return Math.min(Math.max(value, min), max);
+        }
+
+        function createKeyboard() {
+            virtualKeyboard.innerHTML = '';
+            updateKeyPositions();
+            keyboardLayout.forEach((row, rowIndex) => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+                const keyWidth = clamp(40, gameContainer.offsetWidth * 0.04, 60);
+                row.forEach((letter, colIndex) => {
+                    const key = document.createElement('div');
+                    key.className = 'key';
+                    key.textContent = letter;
+                    key.dataset.letter = letter;
+                    key.style.position = 'relative';
+                    key.style.left = (rowIndex * (keyWidth / 2)) + 'px'; // Realistic stagger
+                    rowDiv.appendChild(key);
+                });
+                virtualKeyboard.appendChild(rowDiv);
+            });
+        }
+
+        class Note {
+            constructor(letter) {
+                this.element = document.createElement('div');
+                this.element.className = 'note';
+                this.letter = letter || Object.keys(keyPositions)[Math.floor(Math.random() * Object.keys(keyPositions).length)];
+                this.element.textContent = this.letter;
+                updateKeyPositions();
+                const keyWidth = clamp(40, gameContainer.offsetWidth * 0.04, 60);
+                const noteWidth = clamp(40, gameContainer.offsetWidth * 0.04, 60);
+                this.x = keyPositions[this.letter].x + (keyWidth - noteWidth) / 2; // Center over key
+                this.y = -noteWidth; // Start from top of screen
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+                gameContainer.appendChild(this.element);
+            }
+
+            update() {
+                this.y += difficultySettings[currentDifficulty].speed;
+                this.element.style.top = this.y + 'px';
+                
+                const targetZoneTop = gameContainer.offsetHeight - (20 * gameContainer.offsetHeight / 100) - (10 * gameContainer.offsetHeight / 100);
+                const targetZoneBottom = gameContainer.offsetHeight - (20 * gameContainer.offsetHeight / 100);
+                
+                if (this.y > gameContainer.offsetHeight) {
+                    this.element.classList.add('missed');
+                    setTimeout(() => this.remove(), 500);
+                    if (!tutorialActive || tutorialStep === 1) this.miss();
+                    return false;
+                }
+                return true;
+            }
+
+            remove() {
+                if (this.element.parentNode) {
+                    gameContainer.removeChild(this.element);
+                }
+                const index = notes.indexOf(this);
+                if (index > -1) notes.splice(index, 1);
+            }
+
+            hit() {
+                this.element.classList.add('hit');
+                const keyElement = virtualKeyboard.querySelector(`[data-letter="${this.letter}"]`);
+                if (keyElement) {
+                    keyElement.classList.add('correct');
+                    setTimeout(() => keyElement.classList.remove('correct'), 250);
+                }
+                setTimeout(() => this.remove(), 250);
+                score += 10 * multiplier;
+                streak++;
+                if (streak % 5 === 0 && multiplier < 5) multiplier++;
+                updateScoreboard();
+                if (tutorialActive && tutorialStep === 0) advanceTutorial();
+                if (tutorialActive && tutorialStep === 2) {
+                    demoCount++;
+                    if (demoCount >= 5) endTutorial();
+                }
+            }
+
+            miss() {
+                const keyElement = virtualKeyboard.querySelector(`[data-letter="${this.letter}"]`);
+                if (keyElement) {
+                    keyElement.classList.add('missed');
+                    setTimeout(() => keyElement.classList.remove('missed'), 500);
+                }
+                streak = 0;
+                multiplier = 1;
+                lives--;
+                updateScoreboard();
+                if (lives <= 0) endGame();
+                if (tutorialActive && tutorialStep === 1) advanceTutorial();
+            }
+        }
+
+        function updateScoreboard() {
+            scoreElement.textContent = score;
+            streakElement.textContent = streak;
+            multiplierElement.textContent = multiplier + 'x';
+            livesElement.textContent = lives;
+        }
+
+        function spawnNote(letter) {
+            if (!gameActive) return;
+            const note = new Note(letter);
+            notes.push(note);
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+            
+            notes = notes.filter(note => {
+                return note.update();
+            });
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+            
+            const key = e.key.toLowerCase();
+            const targetZoneTop = gameContainer.offsetHeight - (20 * gameContainer.offsetHeight / 100) - (10 * gameContainer.offsetHeight / 100);
+            const targetZoneBottom = gameContainer.offsetHeight - (20 * gameContainer.offsetHeight / 100);
+            
+            const keyElement = virtualKeyboard.querySelector(`[data-letter="${key}"]`);
+            if (keyElement) {
+                keyElement.classList.add('correct');
+                setTimeout(() => keyElement.classList.remove('correct'), 150);
+            }
+
+            let hit = false;
+            notes.forEach(note => {
+                if (note.letter === key && note.y >= targetZoneTop && note.y <= targetZoneBottom) {
+                    note.hit();
+                    hit = true;
+                }
+            });
+        });
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(spawnInterval);
+            gameOverElement.style.display = 'block';
+        }
+
+        function restartGame() {
+            cleanupGame();
+            menuElement.style.display = 'flex';
+            updateScoreboard();
+        }
+
+        function toggleKeyboard() {
+            keyboardVisible = !keyboardVisible;
+            virtualKeyboard.style.opacity = keyboardVisible ? '1' : '0';
+            document.getElementById('toggle-keyboard').textContent = 
+                keyboardVisible ? 'Hide Keyboard' : 'Show Keyboard';
+        }
+
+        function startTutorial() {
+            cleanupGame();
+            tutorialActive = true;
+            gameActive = true;
+            menuElement.style.display = 'none';
+            tutorialElement.style.display = 'flex';
+            createKeyboard();
+            currentDifficulty = 'easy';
+            tutorialStep = 0;
+            tutorialMessage.textContent = "Type 'h' when it reaches the pink zone!";
+            tutorialMessage.className = 'tutorial-message';
+            tutorialNextButton.style.display = 'block';
+            spawnNote('h');
+            gameLoop();
+        }
+
+        function advanceTutorial() {
+            notes.forEach(note => note.remove());
+            notes = [];
+            if (tutorialStep === 0) {
+                tutorialStep = 1;
+                tutorialMessage.textContent = "CORRECT!";
+                tutorialMessage.className = 'tutorial-message correct';
+                setTimeout(() => {
+                    tutorialMessage.textContent = "Don't type too late! Watch 'x'...";
+                    tutorialMessage.className = 'tutorial-message';
+                    spawnNote('x');
+                }, 1500);
+            } else if (tutorialStep === 1) {
+                tutorialStep = 2;
+                tutorialMessage.textContent = "ERROR!";
+                tutorialMessage.className = 'tutorial-message error';
+                setTimeout(() => {
+                    tutorialMessage.textContent = "Try typing these 5 letters!";
+                    tutorialMessage.className = 'tutorial-message';
+                    spawnInterval = setInterval(() => spawnNote(), 1000);
+                }, 1500);
+            }
+        }
+
+        function endTutorial() {
+            tutorialActive = false;
+            gameActive = false;
+            clearInterval(spawnInterval);
+            notes.forEach(note => note.remove());
+            notes = [];
+            tutorialElement.style.display = 'none';
+            menuElement.style.display = 'flex';
+            demoCount = 0;
+        }
+
+        function startGame(difficulty) {
+            cleanupGame();
+            currentDifficulty = difficulty;
+            gameActive = true;
+            menuElement.style.display = 'none';
+            createKeyboard();
+            spawnInterval = setInterval(spawnNote, difficultySettings[difficulty].interval);
+            gameLoop();
+        }
+
+        function cleanupGame() {
+            gameActive = false;
+            tutorialActive = false;
+            score = 0;
+            streak = 0;
+            multiplier = 1;
+            lives = 3;
+            notes.forEach(note => note.remove());
+            notes = [];
+            while (gameContainer.getElementsByClassName('note').length > 0) {
+                const leftover = gameContainer.getElementsByClassName('note')[0];
+                if (leftover.parentNode) leftover.parentNode.removeChild(leftover);
+            }
+            clearInterval(spawnInterval);
+            spawnInterval = null;
+            gameOverElement.style.display = 'none';
+            tutorialElement.style.display = 'none';
+            virtualKeyboard.innerHTML = '';
+            updateScoreboard();
+        }
+
+        window.addEventListener('resize', () => {
+            if (gameActive || tutorialActive) {
+                createKeyboard();
+                notes.forEach(note => {
+                    const keyWidth = clamp(40, gameContainer.offsetWidth * 0.04, 60);
+                    const noteWidth = clamp(40, gameContainer.offsetWidth * 0.04, 60);
+                    note.x = keyPositions[note.letter].x + (keyWidth - noteWidth) / 2;
+                    note.element.style.left = note.x + 'px';
+                });
+            }
+        });
+
+        updateScoreboard();
+        createKeyboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+/* Dark theme with energy-efficient colors and image styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'SF Pro Text', sans-serif;
+    color: #e0e0e0; /* Light gray for text */
+    line-height: 1.8;
+    background-color: #121212; /* Dark background */
+}
+
+header {
+    text-align: center;
+    padding: 120px 20px;
+    background: linear-gradient(to bottom, #1e1e1e, #121212);
+    position: relative;
+}
+
+nav {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    background: rgba(30, 30, 30, 0.9); /* Dark nav with transparency */
+    padding: 60px 20px 20px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #e0e0e0;
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    font-size: 1.1rem;
+    transition: color 0.3s, transform 0.3s;
+}
+
+nav ul li a:hover {
+    color: #00d4ff; /* Bright cyan for hover */
+    transform: scale(1.1);
+}
+
+.language-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#lang-icon {
+    width: 24px;
+    height: 24px;
+}
+
+#language-select {
+    border: none;
+    background: transparent;
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 1rem;
+    color: #e0e0e0;
+    cursor: pointer;
+}
+
+.hero h1 {
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    color: #b0b0b0; /* Softer gray */
+    margin-bottom: 30px;
+}
+
+.cta {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #00d4ff; /* Cyan for CTA */
+    color: #121212;
+    text-decoration: none;
+    border-radius: 25px;
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.cta:hover {
+    background: #00b0cc;
+    transform: scale(1.05);
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    margin-top: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+section {
+    padding: 80px 20px;
+    background: #1e1e1e; /* Dark section background */
+}
+
+h2 {
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 50px;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.card {
+    background: #2a2a2a; /* Darker card background */
+    padding: 40px;
+    border-radius: 18px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.card h3 {
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.main-text {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.extra-text {
+    font-size: 1.1rem;
+    color: #b0b0b0;
+    line-height: 1.9;
+    font-weight: 300;
+}
+/* Previous styles remain unchanged up to the facts section */
+.fact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.fact-item {
+    background: #2a2a2a;
+    padding: 40px; /* More padding for readability */
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    text-align: left;
+    transition: transform 0.3s;
+}
+
+.fact-item:hover {
+    transform: translateY(-5px);
+}
+
+.fact-item h4 {
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 1.8rem; /* Larger for emphasis */
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.fact-item p {
+    font-family: 'SF Pro Text', sans-serif;
+    font-size: 1.2rem; /* Bigger text for clarity */
+    color: #b0b0b0;
+    line-height: 1.9;
+    margin-bottom: 25px;
+}
+
+.comparison {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    text-align: center;
+}
+
+.ev-stat, .ice-stat {
+    display: block;
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 2rem; /* Larger for impact */
+    font-weight: 600;
+    padding: 10px 20px; /* Box-like styling */
+    border-radius: 10px;
+    flex: 1;
+}
+
+.ev-stat {
+    background: rgba(0, 212, 255, 0.1); /* Cyan tint */
+    color: #00d4ff;
+}
+
+.ice-stat {
+    background: rgba(255, 82, 82, 0.1); /* Red tint for ICE */
+    color: #ff5252;
+}
+
+/* Responsive adjustments for facts section */
+@media (max-width: 768px) {
+    .fact-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .fact-item h4 {
+        font-size: 1.6rem;
+    }
+    .fact-item p {
+        font-size: 1.1rem;
+    }
+    .ev-stat, .ice-stat {
+        font-size: 1.8rem;
+        padding: 8px 15px;
+    }
+    .comparison {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fact-item {
+        padding: 25px;
+    }
+    .fact-item h4 {
+        font-size: 1.4rem;
+    }
+    .fact-item p {
+        font-size: 1rem;
+    }
+    .ev-stat, .ice-stat {
+        font-size: 1.6rem;
+        padding: 6px 10px;
+    }
+}
+}

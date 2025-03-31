@@ -1,0 +1,125 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #1a1a1a; /* Deep black */
+  color: #e6e6e6; /* Light gray for text */
+  line-height: 1.5;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #1a1a1a, #3b2c5b); /* Black to soft lilac */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header h1 {
+  font-size: 2.25rem; /* 36px */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+header p {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 300;
+  color: #d8c8ff; /* Soft lilac */
+  margin-top: 8px;
+  opacity: 0.85;
+}
+
+/* Project Grid */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px; /* Refined spacing */
+  max-width: 1280px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.project-card {
+  background-color: #252525; /* Slightly lighter black for cards */
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  color: #e6e6e6;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  background-color: #2f2f2f; /* Subtle hover shift */
+}
+
+.project-card.placeholder {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.preview {
+  width: 256px;
+  height: 256px;
+  margin-bottom: 16px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #3b2c5b; /* Lilac placeholder */
+}
+
+h3 {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+p {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 300;
+  color: #d8c8ff; /* Soft lilac */
+  line-height: 1.4;
+}
+
+/* Tooltip (Adjusted for new palette) */
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #3b2c5b; /* Lilac */
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  pointer-events: none;
+  margin-bottom: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    padding: 40px 16px;
+  }
+}
