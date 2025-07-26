@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Shop the latest fashion trends at LUXE. Discover elegant dresses, stylish accessories, and more." />
+  <meta name="keywords" content="fashion, clothing, dresses, accessories, online shopping" />
+  <meta name="author" content="LUXE" />
+  <title>LUXE - Fashion Boutique</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); }
+      to { transform: translateX(100%); }
+    }
+    @keyframes modalOpen {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .gallery img:hover {
+      border-color: #a78bfa;
+      transition: border-color 0.3s ease;
+    }
+    .cart-panel {
+      transition: transform 0.3s ease-in-out;
+    }
+    .cart-panel.open {
+      animation: slideIn 0.3s forwards;
+    }
+    .cart-panel.closed {
+      animation: slideOut 0.3s forwards;
+    }
+    .modal-open {
+      animation: modalOpen 0.3s ease-out forwards;
+    }
+    .image-error {
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <header class="bg-black text-white py-4 px-6 flex items-center justify-between sticky top-0 z-10">
+    <h1 class="text-2xl font-bold">LUXE</h1>
+    <nav class="flex space-x-6">
+      <a href="#" class="hover:text-purple-400 transition-colors">Home</a>
+      <a href="#products" class="hover:text-purple-400 transition-colors">Shop</a>
+      <a href="#contact" class="hover:text-purple-400 transition-colors">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero bg-gradient-to-r from-gray-100 to-white py-16 px-6 text-center">
+    <h2 class="text-4xl font-extrabold mb-4 fade-in">Elegance in Every Stitch</h2>
+    <p class="text-lg mb-6">Discover your next favorite outfit with our curated fashion collection.</p>
+    <a href="#products" class="inline-block bg-purple-500 text-white py-2 px-6 rounded-full hover:bg-purple-600 transition-colors">Shop Now</a>
+  </section>
+
+  <section class="products py-12 px-6 bg-gray-100" id="products">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="product bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg" onclick="openModal(0)">
+        <div class="w-full h-48 rounded-md mb-2 image-error" id="product-image-0">
+          <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Elegant Blue Dress" class="w-full h-full object-cover rounded-md hidden" onload="this.parentElement.classList.remove('image-error'); this.classList.remove('hidden');" onerror="console.error('Failed to load image for Elegant Blue Dress:', this.src); this.parentElement.innerText='Image not available';">
+        </div>
+        <h3 class="text-lg font-semibold">Elegant Blue Dress</h3>
+        <p class="text-purple-600 font-medium">$79.99</p>
+      </div>
+      <div class="product bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg" onclick="openModal(1)">
+        <div class="w-full h-48 rounded-md mb-2 image-error" id="product-image-1">
+          <img src="https://img.ltwebstatic.com/images3_pi/2020/02/24/1582527782743d110e45e498ce9e1862560bd0852c_thumbnail_405x.webp" alt="Chic Black Top" class="w-full h-full object-cover rounded-md hidden" onload="this.parentElement.classList.remove('image-error'); this.classList.remove('hidden');" onerror="console.error('Failed to load image for Chic Black Top:', this.src); this.parentElement.innerText='Image not available';">
+        </div>
+        <h3 class="text-lg font-semibold">Chic Black Top</h3>
+        <p class="text-purple-600 font-medium">$49.99</p>
+      </div>
+      <div class="product bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg" onclick="openModal(2)">
+        <div class="w-full h-48 rounded-md mb-2 image-error" id="product-image-2">
+          <img src="https://img.ltwebstatic.com/images3_pi/2021/04/14/16183721146c4c2086fb517019fbeb427d2b78edc2_thumbnail_405x.webp" alt="Summer Floral Skirt" class="w-full h-full object-cover rounded-md hidden" onload="this.parentElement.classList.remove('image-error'); this.classList.remove('hidden');" onerror="console.error('Failed to load image for Summer Floral Skirt:', this.src); this.parentElement.innerText='Image not available';">
+        </div>
+        <h3 class="text-lg font-semibold">Summer Floral Skirt</h3>
+        <p class="text-purple-600 font-medium">$59.99</p>
+      </div>
+      <div class="product bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg" onclick="openModal(3)">
+        <div class="w-full h-48 rounded-md mb-2 image-error" id="product-image-3">
+          <img src="https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202501/07/00115700915885____5__967x1200.jpg?impolicy=Resize&width=1200" alt="Classic Denim Jacket" class="w-full h-full object-cover rounded-md hidden" onload="this.parentElement.classList.remove('image-error'); this.classList.remove('hidden');" onerror="console.error('Failed to load image for Classic Denim Jacket:', this.src); this.parentElement.innerText='Image not available';">
+        </div>
+        <h3 class="text-lg font-semibold">Classic Denim Jacket</h3>
+        <p class="text-purple-600 font-medium">$89.99</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20" id="product-modal" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-content bg-white rounded-lg p-6 w-11/12 max-w-2xl relative modal-open" onclick="event.stopPropagation()">
+      <span class="close-btn absolute top-4 right-4 text-2xl cursor-pointer" onclick="closeModal()" aria-label="Close modal">&times;</span>
+      <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+      <div class="w-full h-64 rounded-md mb-4 image-error" id="modal-image-container">
+        <img id="modal-image" src="" alt="Product image" class="w-full h-full object-cover rounded-md hidden" onload="this.parentElement.classList.remove('image-error'); this.classList.remove('hidden');" onerror="console.error('Failed to load modal image:', this.src); this.parentElement.innerText='Image not available';">
+      </div>
+      <div class="gallery flex mb-4" id="modal-gallery"></div>
+      <p id="modal-description" class="mb-4"></p>
+      <p id="modal-price" class="text-purple-600 font-medium mb-4"></p>
+      <div class="mb-4">
+        <label for="modal-size" class="block text-sm font-medium mb-1">Size:</label>
+        <select id="modal-size" class="border rounded-md p-2 w-full">
+          <option value="S">Small</option>
+          <option value="M">Medium</option>
+          <option value="L">Large</option>
+          <option value="XL">Extra Large</option>
+        </select>
+      </div>
+      <div class="flex space-x-4">
+        <button onclick="addToCart()" class="bg-purple-500 text-white py-2 px-6 rounded-full hover:bg-purple-600 transition-colors">Add to Cart</button>
+        <button onclick="closeModal()" class="bg-gray-300 text-gray-800 py-2 px-6 rounded-full hover:bg-gray-400 transition-colors">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed right-4 top-20 z-20">
+    <button id="cart-toggle" class="bg-purple-500 text-white p-3 rounded-full hover:bg-purple-600 transition-colors" aria-label="Toggle cart">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+      </svg>
+    </button>
+    <div id="cart" class="cart-panel bg-white rounded-lg shadow-md p-4 w-64 absolute right-0 top-12 hidden">
+      <h4 class="text-lg font-semibold mb-2">Cart</h4>
+      <div id="cart-items" class="mb-2"></div>
+      <p class="font-medium">Total: $<span id="cart-total">0.00</span></p>
+      <button onclick="checkout()" class="bg-purple-500 text-white py-2 px-4 rounded-full w-full mt-2 hover:bg-purple-600 transition-colors">Checkout</button>
+    </div>
+  </div>
+
+  <footer class="bg-black text-white text-center py-6 mt-12">
+    <p>&copy; 2025 LUXE. All rights reserved.</p>
+    <div class="mt-2">
+      <a href="#contact" class="text-purple-400 hover:text-purple-300 mx-2">Contact Us</a>
+      <a href="#" class="text-purple-400 hover:text-purple-300 mx-2">Privacy Policy</a>
+      <a href="#" class="text-purple-400 hover:text-purple-300 mx-2">Terms of Service</a>
+    </div>
+  </footer>
+
+  <script>
+    const products = [
+      {
+        name: 'Elegant Blue Dress',
+        price: 79.99,
+        description: 'A beautiful, flowing evening dress perfect for any occasion.',
+        images: [
+          'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+          'https://images.unsplash.com/photo-1568254183919-8530685f7f5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60'
+        ]
+      },
+      {
+        name: 'Chic Black Top',
+        price: 49.99,
+        description: 'A versatile black top that pairs perfectly with any outfit.',
+        images: [
+          'https://img.ltwebstatic.com/images3_pi/2020/02/24/1582527782743d110e45e498ce9e1862560bd0852c_thumbnail_405x.webp',
+          'https://img.ltwebstatic.com/images3_pi/2020/02/24/158252778620e504d892a30b68db2158e08c4ff69d_thumbnail_560x.webp'
+        ]
+      },
+      {
+        name: 'Summer Floral Skirt',
+        price: 59.99,
+        description: 'A vibrant floral skirt to brighten up your summer wardrobe.',
+        images: [
+          'https://img.ltwebstatic.com/images3_pi/2021/04/14/16183721146c4c2086fb517019fbeb427d2b78edc2_thumbnail_405x.webp',
+          'https://img.ltwebstatic.com/images3_pi/2021/04/14/16183721392f417a9e455af29b861d2ad21e1c1a81_thumbnail_560x.webp'
+        ]
+      },
+      {
+        name: 'Classic Denim Jacket',
+        price: 89.99,
+        description: 'A timeless denim jacket for a casual, stylish look.',
+        images: [
+          'https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202501/07/00115700915885____5__967x1200.jpg?impolicy=Resize&width=1200',
+          'https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202501/07/00115700915885____4__967x1200.jpg?impolicy=Resize&width=1200'
+        ]
+      }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let selectedProduct = null;
+
+    function openModal(index) {
+      // Validate index
+      if (!Number.isInteger(index) || index < 0 || index >= products.length) {
+        console.error(`Invalid product index: ${index}`);
+        return;
+      }
+
+      selectedProduct = products[index];
+      // Set modal content with fallbacks
+      document.getElementById('modal-title').innerText = selectedProduct.name || 'Unnamed Product';
+      document.getElementById('modal-description').innerText = selectedProduct.description || 'No description available';
+      document.getElementById('modal-price').innerText = selectedProduct.price ? `$${selectedProduct.price.toFixed(2)}` : 'Price not available';
+
+      // Handle main image
+      const modalImageContainer = document.getElementById('modal-image-container');
+      const modalImage = document.getElementById('modal-image');
+      if (modalImage && modalImageContainer) {
+        modalImage.src = selectedProduct.images && selectedProduct.images[0] ? selectedProduct.images[0] : '';
+        modalImageContainer.classList.add('image-error');
+        modalImageContainer.innerText = 'Image not available';
+      } else {
+        console.error('Modal image or container element not found');
+        if (modalImageContainer) {
+          modalImageContainer.classList.add('image-error');
+          modalImageContainer.innerText = 'Image not available';
+        }
+      }
+
+      // Handle gallery images
+      const gallery = document.getElementById('modal-gallery');
+      if (gallery) {
+        gallery.innerHTML = '';
+        const images = Array.isArray(selectedProduct.images) ? selectedProduct.images : [];
+        images.forEach((img, i) => {
+          const thumb = document.createElement('img');
+          thumb.src = img || '';
+          thumb.alt = `${selectedProduct.name || 'Product'} thumbnail ${i + 1}`;
+          thumb.className = `w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${i === 0 && img ? 'border-purple-500' : 'border-transparent'} ${img ? '' : 'hidden'}`;
+          thumb.onload = () => {
+            thumb.classList.remove('hidden');
+          };
+          thumb.onerror = () => {
+            console.error(`Failed to load gallery image for ${selectedProduct.name || 'product'}:`, img);
+            thumb.classList.add('hidden');
+          };
+          thumb.onclick = () => {
+            if (img && modalImage) {
+              modalImage.src = img;
+              gallery.querySelectorAll('img').forEach(img => img.classList.remove('border-purple-500'));
+              thumb.classList.add('border-purple-500');
+            }
+          };
+          gallery.appendChild(thumb);
+        });
+      } else {
+        console.error('Modal gallery element not found');
+      }
+
+      // Show modal
+      const modal = document.getElementById('product-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      } else {
+        console.error('Product modal element not found');
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('product-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+      selectedProduct = null;
+    }
+
+    function addToCart() {
+      if (!selectedProduct) return;
+      const size = document.getElementById('modal-size').value;
+      const existing = cart.find(item => item.name === selectedProduct.name && item.size === size);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ name: selectedProduct.name, price: selectedProduct.price, size, qty: 1 });
+      }
+      updateCart();
+      localStorage.setItem('cart', JSON.stringify(cart));
+      closeModal();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function updateCart() {
+      const cartContainer = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      if (cartContainer && cartTotal) {
+        cartContainer.innerHTML = '';
+
+        let total = 0;
+        cart.forEach((item, index) => {
+          total += item.price * item.qty;
+          const div = document.createElement('div');
+          div.className = 'cart-item flex justify-between items-center mb-2';
+          div.innerHTML = `
+            <span>${item.name} (${item.size}) x${item.qty}</span>
+            <div class="flex items-center">
+              <span>$${(item.price * item.qty).toFixed(2)}</span>
+              <button onclick="removeFromCart(${index})" class="ml-2 text-red-500 hover:text-red-700" aria-label="Remove ${item.name} from cart">✕</button>
+            </div>
+          `;
+          cartContainer.appendChild(div);
+        });
+
+        cartTotal.innerText = total.toFixed(2);
+      } else {
+        console.error('Cart container or total element not found');
+      }
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      alert('Proceeding to checkout (placeholder). Total: $' + document.getElementById('cart-total').innerText);
+    }
+
+    // Cart toggle functionality
+    const cartToggle = document.getElementById('cart-toggle');
+    const cartPanel = document.getElementById('cart');
+    if (cartToggle && cartPanel) {
+      cartToggle.addEventListener('click', () => {
+        if (cartPanel.classList.contains('hidden')) {
+          cartPanel.classList.remove('hidden');
+          cartPanel.classList.remove('closed');
+          cartPanel.classList.add('open');
+        } else {
+          cartPanel.classList.remove('open');
+          cartPanel.classList.add('closed');
+          setTimeout(() => cartPanel.classList.add('hidden'), 300);
+        }
+      });
+    } else {
+      console.error('Cart toggle or panel element not found');
+    }
+
+    // Close modal on Escape key or click outside
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+          if (cartPanel && !cartPanel.classList.contains('hidden')) {
+            cartPanel.classList.remove('open');
+            cartPanel.classList.add('closed');
+            setTimeout(() => cartPanel.classList.add('hidden'), 300);
+          }
+        }
+      });
+    } else {
+      console.error('Product modal element not found');
+    }
+
+    // Initialize cart on page load
+    updateCart();
+  </script>
+</body>
+</html>
