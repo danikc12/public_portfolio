@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A comprehensive introduction to Artificial Intelligence, covering fundamental concepts, historical development, applications, and future considerations.">
+    <meta name="keywords" content="Artificial Intelligence, AI, Machine Learning, Neural Networks, Deep Learning">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <title>Understanding Artificial Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0f1c3a 0%, #1a2f5c 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .container {
+            background: #1e1e1e;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            background: linear-gradient(135deg, #269ccc 0%, #9ed2c5 100%);
+            color: white;
+            padding: 65px 50px 55px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: padding 0.3s, box-shadow 0.3s;
+        }
+
+        header.scrolled {
+            padding: 20px 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode header {
+            background: linear-gradient(135deg, #0f1c3a 0%, #1a2f5c 100%);
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8em;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            line-height: 1.15;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        header.scrolled h1 {
+            font-size: 2em;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.05em;
+            opacity: 0.88;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+            animation: fadeInDown 1.5s ease-out;
+            text-align: center;
+        }
+
+        header.scrolled .subtitle {
+            display: none;
+        }
+
+        nav {
+            margin-top: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 5px 15px;
+        }
+
+        nav li {
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 15px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 15px;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: calc(100% - 30px);
+        }
+
+        nav a:hover {
+            color: #ffffff;
+        }
+
+        .dark-toggle {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .dark-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .lang-toggle {
+            position: absolute;
+            top: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .lang-toggle.active {
+            transform: scale(1.2);
+        }
+
+        .lang-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #lang-en {
+            right: 60px;
+        }
+
+        #lang-es {
+            right: 20px;
+        }
+
+        .content {
+            padding: 60px 50px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #1e3c72;
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-left: 4px solid #2a5298;
+            padding-left: 20px;
+        }
+
+        body.dark-mode h2 {
+            color: #667eea;
+            border-left-color: #764ba2;
+        }
+
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #34495e;
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        body.dark-mode h3 {
+            color: #a8b2d1;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 18px;
+            color: #4a5568;
+            text-align: justify;
+        }
+
+        body.dark-mode p {
+            color: #b8c2cc;
+        }
+
+        .intro-text {
+            font-size: 1.25em;
+            color: #2c3e50;
+            line-height: 1.9;
+            margin-bottom: 25px;
+        }
+
+        body.dark-mode .intro-text {
+            color: #e0e0e0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 12px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        body.dark-mode .highlight-box {
+            background: linear-gradient(135deg, #4c51bf 0%, #6b46c1 100%);
+            box-shadow: 0 10px 30px rgba(76, 81, 191, 0.3);
+        }
+
+        .highlight-box h2 {
+            color: white;
+            border-left: 4px solid white;
+            margin-bottom: 15px;
+        }
+
+        .highlight-box p {
+            color: white;
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid #2a5298;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .info-card {
+            background: #2d2d2d;
+            border-left-color: #764ba2;
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+        }
+
+        body.dark-mode .info-card:hover {
+            background: #3a3a3a;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-card h3 {
+            color: #1e3c72;
+            margin-top: 0;
+        }
+
+        body.dark-mode .info-card h3 {
+            color: #667eea;
+        }
+
+        .info-card p {
+            color: #4a5568;
+            font-size: 1em;
+            text-align: left;
+        }
+
+        body.dark-mode .info-card p {
+            color: #b8c2cc;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .example-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode .example-card {
+            background: #2d2d2d;
+            border-color: #4a5568;
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            border-color: #2a5298;
+        }
+
+        body.dark-mode .example-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .example-icon {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        body.dark-mode .example-title {
+            color: #e0e0e0;
+        }
+
+        .example-desc {
+            font-size: 0.95em;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .example-desc {
+            color: #a0aec0;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 30px 0;
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            padding: 20px 0 20px 40px;
+            border-left: 3px solid #2a5298;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        body.dark-mode .timeline-item {
+            border-left-color: #764ba2;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 25px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #2a5298;
+        }
+
+        body.dark-mode .timeline-item:before {
+            background: #764ba2;
+        }
+
+        .timeline-year {
+            font-weight: 700;
+            color: #1e3c72;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .timeline-year {
+            color: #667eea;
+        }
+
+        .timeline-text {
+            color: #4a5568;
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        body.dark-mode .timeline-text {
+            color: #b8c2cc;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 40px 50px;
+            text-align: center;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode footer {
+            background: #2d2d2d;
+            color: #a0aec0;
+            border-top-color: #4a5568;
+        }
+
+        footer p {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        body.dark-mode footer p {
+            color: #a0aec0;
+        }
+
+        /* Tablet styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .subtitle {
+                font-size: 0.98em;
+            }
+            
+            header {
+                padding: 50px 35px 45px;
+            }
+
+            header.scrolled {
+                padding: 15px 35px;
+            }
+            
+            .content {
+                padding: 45px 35px;
+            }
+
+            footer {
+                padding: 35px 35px;
+            }
+
+            h2 {
+                font-size: 1.7em;
+            }
+
+            .intro-text {
+                font-size: 1.15em;
+            }
+
+            p {
+                font-size: 1.05em;
+                text-align: left;
+            }
+
+            .info-grid,
+            .examples {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                padding-left: 30px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 10px;
+            }
+
+            nav li {
+                margin: 5px 0;
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.85em;
+            }
+
+            .subtitle {
+                font-size: 0.9em;
+            }
+            
+            header {
+                padding: 40px 25px 36px;
+            }
+
+            header.scrolled {
+                padding: 10px 25px;
+            }
+            
+            .content {
+                padding: 35px 25px;
+            }
+
+            footer {
+                padding: 30px 25px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+                padding-left: 15px;
+            }
+
+            h3 {
+                font-size: 1.2em;
+            }
+
+            .intro-text {
+                font-size: 1.05em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .highlight-box {
+                padding: 25px 20px;
+            }
+
+            .info-card,
+            .example-card {
+                padding: 25px 20px;
+            }
+
+            .timeline-item {
+                padding-left: 25px;
+            }
+
+            .examples {
+                gap: 20px;
+            }
+
+            .dark-toggle {
+                right: 140px;
+            }
+
+            #lang-en {
+                right: 100px;
+            }
+
+            #lang-es {
+                right: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 data-lang="title">Understanding Artificial Intelligence</h1>
+            <p class="subtitle" data-lang="subtitle">A Comprehensive Introduction to AI Technology</p>
+            <nav>
+                <ul>
+                    <li><a data-lang="nav-introduction" href="#introduction">Introduction</a></li>
+                    <li><a data-lang="nav-fundamentals" href="#fundamentals">Fundamentals</a></li>
+                    <li><a data-lang="nav-history" href="#history">History</a></li>
+                    <li><a data-lang="nav-applications" href="#applications">Applications</a></li>
+                    <li><a data-lang="nav-benefits" href="#benefits">Benefits</a></li>
+                    <li><a data-lang="nav-future" href="#future">Future</a></li>
+                </ul>
+            </nav>
+            <button class="dark-toggle" aria-label="Toggle Dark Mode">&#127769;</button>
+            <button id="lang-en" class="lang-toggle active" data-lang="en" aria-label="English">&#127482;&#127480;</button>
+            <button id="lang-es" class="lang-toggle" data-lang="es" aria-label="Español">&#127466;&#127480;</button>
+        </header>
+
+        <div class="content">
+            <div class="section" id="introduction">
+                <h2 data-lang="introduction-h2">Introduction</h2>
+                <p class="intro-text" data-lang="introduction-p1">Artificial Intelligence (AI) represents one of the most significant technological developments of the 21st century. It refers to computer systems designed to perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.</p>
+                <p data-lang="introduction-p2">At its core, AI enables machines to learn from experience, adjust to new inputs, and perform human-like tasks. Rather than being explicitly programmed for every possible scenario, AI systems analyze data, identify patterns, and make informed decisions based on their training.</p>
+            </div>
+
+            <div class="section" id="fundamentals">
+                <h2 data-lang="fundamentals-h2">Fundamental Concepts</h2>
+                <p data-lang="fundamentals-p">To understand AI, it is essential to grasp several key concepts that form the foundation of this technology:</p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3 data-lang="machine-learning-h3">Machine Learning</h3>
+                        <p data-lang="machine-learning-p">The ability of systems to automatically learn and improve from experience without being explicitly programmed. Algorithms identify patterns in data and use them to make predictions or decisions.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3 data-lang="neural-networks-h3">Neural Networks</h3>
+                        <p data-lang="neural-networks-p">Computing systems inspired by biological neural networks in the human brain. They consist of interconnected nodes that process information in layers, enabling complex pattern recognition.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3 data-lang="deep-learning-h3">Deep Learning</h3>
+                        <p data-lang="deep-learning-p">A subset of machine learning using multi-layered neural networks to analyze various factors of data. This approach powers many modern AI applications, from image recognition to natural language processing.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3 data-lang="nlp-h3">Natural Language Processing</h3>
+                        <p data-lang="nlp-p">The branch of AI focused on enabling computers to understand, interpret, and generate human language in a valuable way. This technology powers virtual assistants and translation services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h2 data-lang="learning-process-h2">The Learning Process</h2>
+                <p data-lang="learning-process-p">AI systems learn through exposure to vast amounts of data. Similar to how humans learn from experience, AI algorithms analyze examples, identify patterns, and develop the ability to make predictions or decisions about new, previously unseen data. The quality and quantity of training data directly influence the system's accuracy and reliability.</p>
+            </div>
+
+            <div class="section" id="history">
+                <h2 data-lang="history-h2">Historical Development</h2>
+                <p data-lang="history-p">The concept of artificial intelligence has evolved significantly since its inception. Understanding this evolution provides context for current capabilities and future potential:</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year" data-lang="timeline-1950s-year">1950s</div>
+                        <p class="timeline-text" data-lang="timeline-1950s-text">The term "Artificial Intelligence" was coined by John McCarthy. Alan Turing proposed the Turing Test as a measure of machine intelligence.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year" data-lang="timeline-1960s-year">1960s-1970s</div>
+                        <p class="timeline-text" data-lang="timeline-1960s-text">Early AI research focused on problem-solving and symbolic methods. The first chatbot, ELIZA, was developed, demonstrating basic natural language processing.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year" data-lang="timeline-1980s-year">1980s-1990s</div>
+                        <p class="timeline-text" data-lang="timeline-1980s-text">Machine learning gained prominence. Expert systems were widely adopted in business. Deep Blue defeated world chess champion Garry Kasparov in 1997.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year" data-lang="timeline-2000s-year">2000s-2010s</div>
+                        <p class="timeline-text" data-lang="timeline-2000s-text">Big data and improved computational power enabled significant advances. Deep learning revolutionized image and speech recognition. AI became integrated into consumer products.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year" data-lang="timeline-2020s-year">2020s-Present</div>
+                        <p class="timeline-text" data-lang="timeline-2020s-text">Large language models and generative AI demonstrate unprecedented capabilities. AI is transforming industries from healthcare to transportation, raising new questions about ethics and regulation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="applications">
+                <h2 data-lang="applications-h2">Practical Applications</h2>
+                <p data-lang="applications-p">AI technology has become deeply integrated into numerous aspects of daily life and professional operations. The following examples demonstrate the breadth of AI applications across different sectors:</p>
+                
+                <div class="examples">
+                    <div class="example-card">
+                        <div class="example-icon">🏥</div>
+                        <div class="example-title" data-lang="healthcare-title">Healthcare</div>
+                        <div class="example-desc" data-lang="healthcare-desc">Diagnostic imaging analysis, drug discovery, personalized treatment plans, and predictive health monitoring</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">🚗</div>
+                        <div class="example-title" data-lang="transportation-title">Transportation</div>
+                        <div class="example-desc" data-lang="transportation-desc">Autonomous vehicles, traffic optimization, route planning, and predictive maintenance systems</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">💼</div>
+                        <div class="example-title" data-lang="finance-title">Finance</div>
+                        <div class="example-desc" data-lang="finance-desc">Fraud detection, algorithmic trading, credit scoring, and personalized financial advice</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">🛒</div>
+                        <div class="example-title" data-lang="ecommerce-title">E-Commerce</div>
+                        <div class="example-desc" data-lang="ecommerce-desc">Product recommendations, dynamic pricing, inventory management, and customer service chatbots</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">🎓</div>
+                        <div class="example-title" data-lang="education-title">Education</div>
+                        <div class="example-desc" data-lang="education-desc">Personalized learning paths, automated grading, intelligent tutoring systems, and educational content creation</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">🏭</div>
+                        <div class="example-title" data-lang="manufacturing-title">Manufacturing</div>
+                        <div class="example-desc" data-lang="manufacturing-desc">Quality control, predictive maintenance, supply chain optimization, and robotic automation</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">🎬</div>
+                        <div class="example-title" data-lang="entertainment-title">Entertainment</div>
+                        <div class="example-desc" data-lang="entertainment-desc">Content recommendations, music composition, video game AI, and special effects generation</div>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-icon">🌾</div>
+                        <div class="example-title" data-lang="agriculture-title">Agriculture</div>
+                        <div class="example-desc" data-lang="agriculture-desc">Crop monitoring, yield prediction, precision farming, and automated harvesting systems</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="benefits">
+                <h2 data-lang="benefits-h2">Benefits and Considerations</h2>
+                <p data-lang="benefits-p">As AI technology continues to advance, it presents both significant opportunities and important considerations that society must address:</p>
+                
+                <h3 data-lang="primary-benefits-h3">Primary Benefits</h3>
+                <p data-lang="primary-benefits-p">AI systems can process and analyze vast quantities of data far more rapidly than humans, leading to increased efficiency and productivity across industries. They can identify patterns and insights that might be imperceptible to human observers, enabling better decision-making and innovation. AI also performs repetitive tasks consistently without fatigue, freeing human workers to focus on creative and strategic activities.</p>
+                
+                <h3 data-lang="important-considerations-h3">Important Considerations</h3>
+                <p data-lang="important-considerations-p">The deployment of AI raises questions about employment displacement, as automation may affect certain job categories. Privacy concerns emerge as AI systems require substantial data to function effectively. Algorithmic bias can perpetuate or amplify existing societal inequalities if training data reflects historical prejudices. Additionally, the "black box" nature of some AI systems makes it challenging to understand how decisions are reached, raising accountability concerns.</p>
+                
+                <p data-lang="responsible-development-p">Responsible development and deployment of AI requires ongoing dialogue among technologists, policymakers, ethicists, and the public to establish appropriate guidelines and safeguards.</p>
+            </div>
+
+            <div class="section" id="future">
+                <h2 data-lang="future-h2">Looking Forward</h2>
+                <p data-lang="future-p1">Artificial Intelligence continues to evolve at a remarkable pace. Current research focuses on developing more efficient algorithms, reducing bias, improving interpretability, and creating AI systems that can generalize knowledge across different domains.</p>
+                <p data-lang="future-p2">As AI becomes more sophisticated and ubiquitous, understanding its fundamental principles, capabilities, and limitations becomes increasingly important for everyone. This knowledge enables informed participation in discussions about AI policy, ethical considerations, and the future direction of this transformative technology.</p>
+                <p data-lang="future-p3">The future of AI holds immense potential for addressing complex global challenges, from climate change to disease eradication. However, realizing this potential responsibly requires continued attention to ethical development, equitable access, and thoughtful integration into society.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p data-lang="footer-p1"><strong>Artificial Intelligence represents a fundamental shift in how we interact with technology.</strong></p>
+            <p data-lang="footer-p2">Understanding AI empowers individuals and organizations to leverage its capabilities effectively while navigating its challenges responsibly.</p>
+        </footer>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: 'Understanding Artificial Intelligence',
+                subtitle: 'A Comprehensive Introduction to AI Technology',
+                'nav-introduction': 'Introduction',
+                'nav-fundamentals': 'Fundamentals',
+                'nav-history': 'History',
+                'nav-applications': 'Applications',
+                'nav-benefits': 'Benefits',
+                'nav-future': 'Future',
+                'introduction-h2': 'Introduction',
+                'introduction-p1': 'Artificial Intelligence (AI) represents one of the most significant technological developments of the 21st century. It refers to computer systems designed to perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.',
+                'introduction-p2': 'At its core, AI enables machines to learn from experience, adjust to new inputs, and perform human-like tasks. Rather than being explicitly programmed for every possible scenario, AI systems analyze data, identify patterns, and make informed decisions based on their training.',
+                'fundamentals-h2': 'Fundamental Concepts',
+                'fundamentals-p': 'To understand AI, it is essential to grasp several key concepts that form the foundation of this technology:',
+                'machine-learning-h3': 'Machine Learning',
+                'machine-learning-p': 'The ability of systems to automatically learn and improve from experience without being explicitly programmed. Algorithms identify patterns in data and use them to make predictions or decisions.',
+                'neural-networks-h3': 'Neural Networks',
+                'neural-networks-p': 'Computing systems inspired by biological neural networks in the human brain. They consist of interconnected nodes that process information in layers, enabling complex pattern recognition.',
+                'deep-learning-h3': 'Deep Learning',
+                'deep-learning-p': 'A subset of machine learning using multi-layered neural networks to analyze various factors of data. This approach powers many modern AI applications, from image recognition to natural language processing.',
+                'nlp-h3': 'Natural Language Processing',
+                'nlp-p': 'The branch of AI focused on enabling computers to understand, interpret, and generate human language in a valuable way. This technology powers virtual assistants and translation services.',
+                'learning-process-h2': 'The Learning Process',
+                'learning-process-p': 'AI systems learn through exposure to vast amounts of data. Similar to how humans learn from experience, AI algorithms analyze examples, identify patterns, and develop the ability to make predictions or decisions about new, previously unseen data. The quality and quantity of training data directly influence the system\'s accuracy and reliability.',
+                'history-h2': 'Historical Development',
+                'history-p': 'The concept of artificial intelligence has evolved significantly since its inception. Understanding this evolution provides context for current capabilities and future potential:',
+                'timeline-1950s-year': '1950s',
+                'timeline-1950s-text': 'The term "Artificial Intelligence" was coined by John McCarthy. Alan Turing proposed the Turing Test as a measure of machine intelligence.',
+                'timeline-1960s-year': '1960s-1970s',
+                'timeline-1960s-text': 'Early AI research focused on problem-solving and symbolic methods. The first chatbot, ELIZA, was developed, demonstrating basic natural language processing.',
+                'timeline-1980s-year': '1980s-1990s',
+                'timeline-1980s-text': 'Machine learning gained prominence. Expert systems were widely adopted in business. Deep Blue defeated world chess champion Garry Kasparov in 1997.',
+                'timeline-2000s-year': '2000s-2010s',
+                'timeline-2000s-text': 'Big data and improved computational power enabled significant advances. Deep learning revolutionized image and speech recognition. AI became integrated into consumer products.',
+                'timeline-2020s-year': '2020s-Present',
+                'timeline-2020s-text': 'Large language models and generative AI demonstrate unprecedented capabilities. AI is transforming industries from healthcare to transportation, raising new questions about ethics and regulation.',
+                'applications-h2': 'Practical Applications',
+                'applications-p': 'AI technology has become deeply integrated into numerous aspects of daily life and professional operations. The following examples demonstrate the breadth of AI applications across different sectors:',
+                'healthcare-title': 'Healthcare',
+                'healthcare-desc': 'Diagnostic imaging analysis, drug discovery, personalized treatment plans, and predictive health monitoring',
+                'transportation-title': 'Transportation',
+                'transportation-desc': 'Autonomous vehicles, traffic optimization, route planning, and predictive maintenance systems',
+                'finance-title': 'Finance',
+                'finance-desc': 'Fraud detection, algorithmic trading, credit scoring, and personalized financial advice',
+                'ecommerce-title': 'E-Commerce',
+                'ecommerce-desc': 'Product recommendations, dynamic pricing, inventory management, and customer service chatbots',
+                'education-title': 'Education',
+                'education-desc': 'Personalized learning paths, automated grading, intelligent tutoring systems, and educational content creation',
+                'manufacturing-title': 'Manufacturing',
+                'manufacturing-desc': 'Quality control, predictive maintenance, supply chain optimization, and robotic automation',
+                'entertainment-title': 'Entertainment',
+                'entertainment-desc': 'Content recommendations, music composition, video game AI, and special effects generation',
+                'agriculture-title': 'Agriculture',
+                'agriculture-desc': 'Crop monitoring, yield prediction, precision farming, and automated harvesting systems',
+                'benefits-h2': 'Benefits and Considerations',
+                'benefits-p': 'As AI technology continues to advance, it presents both significant opportunities and important considerations that society must address:',
+                'primary-benefits-h3': 'Primary Benefits',
+                'primary-benefits-p': 'AI systems can process and analyze vast quantities of data far more rapidly than humans, leading to increased efficiency and productivity across industries. They can identify patterns and insights that might be imperceptible to human observers, enabling better decision-making and innovation. AI also performs repetitive tasks consistently without fatigue, freeing human workers to focus on creative and strategic activities.',
+                'important-considerations-h3': 'Important Considerations',
+                'important-considerations-p': 'The deployment of AI raises questions about employment displacement, as automation may affect certain job categories. Privacy concerns emerge as AI systems require substantial data to function effectively. Algorithmic bias can perpetuate or amplify existing societal inequalities if training data reflects historical prejudices. Additionally, the "black box" nature of some AI systems makes it challenging to understand how decisions are reached, raising accountability concerns.',
+                'responsible-development-p': 'Responsible development and deployment of AI requires ongoing dialogue among technologists, policymakers, ethicists, and the public to establish appropriate guidelines and safeguards.',
+                'future-h2': 'Looking Forward',
+                'future-p1': 'Artificial Intelligence continues to evolve at a remarkable pace. Current research focuses on developing more efficient algorithms, reducing bias, improving interpretability, and creating AI systems that can generalize knowledge across different domains.',
+                'future-p2': 'As AI becomes more sophisticated and ubiquitous, understanding its fundamental principles, capabilities, and limitations becomes increasingly important for everyone. This knowledge enables informed participation in discussions about AI policy, ethical considerations, and the future direction of this transformative technology.',
+                'future-p3': 'The future of AI holds immense potential for addressing complex global challenges, from climate change to disease eradication. However, realizing this potential responsibly requires continued attention to ethical development, equitable access, and thoughtful integration into society.',
+                'footer-p1': '<strong>Artificial Intelligence represents a fundamental shift in how we interact with technology.</strong>',
+                'footer-p2': 'Understanding AI empowers individuals and organizations to leverage its capabilities effectively while navigating its challenges responsibly.'
+            },
+            es: {
+                title: 'Entendiendo la Inteligencia Artificial',
+                subtitle: 'Una Introducción Exhaustiva a la Tecnología de IA',
+                'nav-introduction': 'Introducción',
+                'nav-fundamentals': 'Conceptos Fundamentales',
+                'nav-history': 'Historia',
+                'nav-applications': 'Aplicaciones',
+                'nav-benefits': 'Beneficios',
+                'nav-future': 'Futuro',
+                'introduction-h2': 'Introducción',
+                'introduction-p1': 'La Inteligencia Artificial (IA) representa uno de los desarrollos tecnológicos más significativos del siglo XXI. Se refiere a sistemas informáticos diseñados para realizar tareas que típicamente requieren inteligencia humana, como la percepción visual, el reconocimiento de habla, la toma de decisiones y la traducción de idiomas.',
+                'introduction-p2': 'En su núcleo, la IA permite a las máquinas aprender de la experiencia, ajustarse a nuevas entradas y realizar tareas similares a las humanas. En lugar de ser programadas explícitamente para cada escenario posible, los sistemas de IA analizan datos, identifican patrones y toman decisiones informadas basadas en su entrenamiento.',
+                'fundamentals-h2': 'Conceptos Fundamentales',
+                'fundamentals-p': 'Para entender la IA, es esencial comprender varios conceptos clave que forman la base de esta tecnología:',
+                'machine-learning-h3': 'Aprendizaje Automático',
+                'machine-learning-p': 'La capacidad de los sistemas para aprender y mejorar automáticamente de la experiencia sin ser programados explícitamente. Los algoritmos identifican patrones en los datos y los utilizan para hacer predicciones o decisiones.',
+                'neural-networks-h3': 'Redes Neuronales',
+                'neural-networks-p': 'Sistemas de cómputo inspirados en las redes neuronales biológicas del cerebro humano. Consisten en nodos interconectados que procesan información en capas, permitiendo el reconocimiento de patrones complejos.',
+                'deep-learning-h3': 'Aprendizaje Profundo',
+                'deep-learning-p': 'Un subconjunto del aprendizaje automático que utiliza redes neuronales de múltiples capas para analizar varios factores de los datos. Este enfoque impulsa muchas aplicaciones de IA modernas, desde el reconocimiento de imágenes hasta el procesamiento de lenguaje natural.',
+                'nlp-h3': 'Procesamiento de Lenguaje Natural',
+                'nlp-p': 'La rama de la IA enfocada en permitir a los ordenadores entender, interpretar y generar lenguaje humano de manera valiosa. Esta tecnología impulsa asistentes virtuales y servicios de traducción.',
+                'learning-process-h2': 'El Proceso de Aprendizaje',
+                'learning-process-p': 'Los sistemas de IA aprenden a través de la exposición a vastas cantidades de datos. Similar a cómo los humanos aprenden de la experiencia, los algoritmos de IA analizan ejemplos, identifican patrones y desarrollan la capacidad para hacer predicciones o decisiones sobre datos nuevos, previamente no vistos. La calidad y cantidad de los datos de entrenamiento influyen directamente en la precisión y fiabilidad del sistema.',
+                'history-h2': 'Desarrollo Histórico',
+                'history-p': 'El concepto de inteligencia artificial ha evolucionado significativamente desde su inicio. Entender esta evolución proporciona contexto para las capacidades actuales y el potencial futuro:',
+                'timeline-1950s-year': '1950s',
+                'timeline-1950s-text': 'El término "Inteligencia Artificial" fue acuñado por John McCarthy. Alan Turing propuso la Prueba de Turing como medida de la inteligencia de las máquinas.',
+                'timeline-1960s-year': '1960s-1970s',
+                'timeline-1960s-text': 'La investigación temprana en IA se centró en la resolución de problemas y métodos simbólicos. Se desarrolló el primer chatbot, ELIZA, demostrando procesamiento básico de lenguaje natural.',
+                'timeline-1980s-year': '1980s-1990s',
+                'timeline-1980s-text': 'El aprendizaje automático ganó prominencia. Los sistemas expertos fueron ampliamente adoptados en los negocios. Deep Blue derrotó al campeón mundial de ajedrez Garry Kasparov en 1997.',
+                'timeline-2000s-year': '2000s-2010s',
+                'timeline-2000s-text': 'El big data y el poder computacional mejorado permitieron avances significativos. El aprendizaje profundo revolucionó el reconocimiento de imágenes y habla. La IA se integró en productos de consumo.',
+                'timeline-2020s-year': '2020s-Present',
+                'timeline-2020s-text': 'Los modelos de lenguaje grandes y la IA generativa demuestran capacidades sin precedentes. La IA está transformando industrias desde la salud hasta el transporte, planteando nuevas preguntas sobre ética y regulación.',
+                'applications-h2': 'Aplicaciones Prácticas',
+                'applications-p': 'La tecnología de IA se ha integrado profundamente en numerosos aspectos de la vida diaria y las operaciones profesionales. Los siguientes ejemplos demuestran la amplitud de las aplicaciones de IA en diferentes sectores:',
+                'healthcare-title': 'Salud',
+                'healthcare-desc': 'Análisis de imágenes diagnósticas, descubrimiento de fármacos, planes de tratamiento personalizados y monitoreo predictivo de la salud',
+                'transportation-title': 'Transporte',
+                'transportation-desc': 'Vehículos autónomos, optimización de tráfico, planificación de rutas y sistemas de mantenimiento predictivo',
+                'finance-title': 'Finanzas',
+                'finance-desc': 'Detección de fraude, comercio algorítmico, puntuación de crédito y asesoramiento financiero personalizado',
+                'ecommerce-title': 'Comercio Electrónico',
+                'ecommerce-desc': 'Recomendaciones de productos, precios dinámicos, gestión de inventarios y chatbots de servicio al cliente',
+                'education-title': 'Educación',
+                'education-desc': 'Rutas de aprendizaje personalizadas, calificación automatizada, sistemas de tutoría inteligente y creación de contenido educativo',
+                'manufacturing-title': 'Manufactura',
+                'manufacturing-desc': 'Control de calidad, mantenimiento predictivo, optimización de la cadena de suministro y automatización robótica',
+                'entertainment-title': 'Entretenimiento',
+                'entertainment-desc': 'Recomendaciones de contenido, composición musical, IA en videojuegos y generación de efectos especiales',
+                'agriculture-title': 'Agricultura',
+                'agriculture-desc': 'Monitoreo de cultivos, predicción de rendimientos, agricultura de precisión y sistemas de cosecha automatizados',
+                'benefits-h2': 'Beneficios y Consideraciones',
+                'benefits-p': 'A medida que la tecnología de IA continúa avanzando, presenta tanto oportunidades significativas como consideraciones importantes que la sociedad debe abordar:',
+                'primary-benefits-h3': 'Beneficios Principales',
+                'primary-benefits-p': 'Los sistemas de IA pueden procesar y analizar vastas cantidades de datos mucho más rápidamente que los humanos, lo que lleva a una mayor eficiencia y productividad en las industrias. Pueden identificar patrones e insights que podrían ser imperceptibles para los observadores humanos, permitiendo una mejor toma de decisiones e innovación. La IA también realiza tareas repetitivas de manera consistente sin fatiga, liberando a los trabajadores humanos para enfocarse en actividades creativas y estratégicas.',
+                'important-considerations-h3': 'Consideraciones Importantes',
+                'important-considerations-p': 'La implementación de la IA plantea preguntas sobre el desplazamiento laboral, ya que la automatización puede afectar ciertas categorías de empleos. Surgen preocupaciones sobre la privacidad ya que los sistemas de IA requieren datos sustanciales para funcionar efectivamente. El sesgo algorítmico puede perpetuar o amplificar desigualdades sociales existentes si los datos de entrenamiento reflejan prejuicios históricos. Además, la naturaleza de "caja negra" de algunos sistemas de IA hace difícil entender cómo se toman las decisiones, planteando preocupaciones sobre la responsabilidad.',
+                'responsible-development-p': 'El desarrollo y despliegue responsable de la IA requiere un diálogo continuo entre tecnólogos, policymakers, éticos y el público para establecer directrices y salvaguardas apropiadas.',
+                'future-h2': 'Mirando hacia el Futuro',
+                'future-p1': 'La Inteligencia Artificial continúa evolucionando a un ritmo notable. La investigación actual se centra en desarrollar algoritmos más eficientes, reducir sesgos, mejorar la interpretabilidad y crear sistemas de IA que puedan generalizar conocimiento a través de diferentes dominios.',
+                'future-p2': 'A medida que la IA se vuelve más sofisticada y ubicua, entender sus principios fundamentales, capacidades y limitaciones se vuelve cada vez más importante para todos. Este conocimiento permite una participación informada en discusiones sobre políticas de IA, consideraciones éticas y la dirección futura de esta tecnología transformadora.',
+                'future-p3': 'El futuro de la IA tiene un potencial inmenso para abordar desafíos globales complejos, desde el cambio climático hasta la erradicación de enfermedades. Sin embargo, realizar este potencial de manera responsable requiere atención continua al desarrollo ético, acceso equitativo y integración pensada en la sociedad.',
+                'footer-p1': '<strong>La Inteligencia Artificial representa un cambio fundamental en cómo interactuamos con la tecnología.</strong>',
+                'footer-p2': 'Entender la IA empodera a individuos y organizaciones para aprovechar sus capacidades efectivamente mientras navegan sus desafíos de manera responsable.'
+            }
+        };
+
+        function switchLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (translations[lang][el.dataset.lang]) {
+                    el.innerHTML = translations[lang][el.dataset.lang];
+                }
+            });
+            document.querySelectorAll('.lang-toggle').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`#lang-${lang}`).classList.add('active');
+            document.documentElement.lang = lang === 'es' ? 'es' : 'en';
+        }
+
+        // Dark mode toggle
+        const toggleButton = document.querySelector('.dark-toggle');
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleButton.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+
+        // Language toggles
+        document.querySelectorAll('.lang-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchLanguage(btn.dataset.lang);
+            });
+        });
+
+        // Scroll effect for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Enhanced hover effects for cards
+        const cards = document.querySelectorAll('.example-card, .info-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+
+        // Lazy animation trigger on scroll for better performance
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateX(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
