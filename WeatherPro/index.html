@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeatherPro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            shake: 'shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both',
+          },
+          keyframes: {
+            shake: {
+              '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+              '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+              '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+              '40%, 60%': { transform: 'translate3d(4px, 0, 0)' },
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-3 md:p-6">
+  <div class="max-w-4xl mx-auto">
+    <!-- Animated Header -->
+    <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8 mb-6 transform hover:scale-[1.02] transition-transform duration-300">
+      <div class="flex items-center justify-center gap-3 mb-3">
+        <div class="relative">
+          <i data-lucide="sun" class="w-12 h-12 md:w-16 md:h-16 text-yellow-500 animate-pulse"></i>
+          <i data-lucide="sparkles" class="w-6 h-6 text-yellow-300 absolute -top-1 -right-1 animate-bounce"></i>
+        </div>
+        <h1 id="app-title" class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+          WeatherPro
+        </h1>
+      </div>
+      <p id="app-subtitle" class="text-center text-gray-600 text-sm md:text-base font-medium">
+        🌤️ Perfect timing for laundry & outdoor activities
+      </p>
+      <div class="flex justify-center mt-4">
+        <select id="lang-select" class="bg-white/90 backdrop-blur-sm rounded-xl px-5 py-2 font-bold text-lg shadow-md">
+          <option value="en" >🇬🇧 English</option>
+          <option value="es" selected>🇪🇸 Español</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Search Card -->
+    <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8 mb-6">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="flex-1 relative group">
+          <i data-lucide="map-pin" class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-500 w-6 h-6 group-hover:scale-110 transition"></i>
+          <input
+            id="location"
+            type="text"
+            placeholder="Enter city (e.g., London, Tokyo, Madrid)"
+            class="w-full pl-14 pr-4 py-4 text-lg border-[3px] border-purple-200 rounded-2xl focus:ring-4 focus:ring-purple-300 focus:border-purple-500 transition-all outline-none font-medium"
+          />
+        </div>
+        <button
+          id="search-btn"
+          class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl hover:from-purple-700 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+        >
+          🔍 Search
+        </button>
+      </div>
+     
+      <div id="error" class="hidden mt-4 p-4 bg-red-100 border-2 border-red-300 rounded-2xl animate-shake">
+        <div class="flex items-start gap-3">
+          <i data-lucide="alert-circle" class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="text-red-800 font-bold mb-2">Error:</p>
+            <p id="error-msg" class="text-red-700 font-medium text-sm"></p>
+          </div>
+        </div>
+        <div class="mt-3 p-3 bg-white rounded-lg border border-red-200 text-xs text-gray-600">
+          <p class="font-medium mb-1">🔍 Tips: F12 → Console • try “London” • check internet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="hidden bg-white bg-opacity-95 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">
+      <div class="flex">
+        <button id="drying-tab" class="flex-1 py-5 px-4 font-bold text-lg bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg">
+          👕 Dry Clothes
+        </button>
+        <button id="sports-tab" class="flex-1 py-5 px-4 font-bold text-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+          🏃 Sports Time
+        </button>
+      </div>
+
+      <div class="p-6 md:p-8">
+        <div class="flex items-center gap-2 mb-6">
+          <i data-lucide="map-pin" class="w-6 h-6 text-purple-600"></i>
+          <h2 id="location-name" class="text-2xl md:text-3xl font-bold text-gray-800"></h2>
+        </div>
+
+        <div id="drying-content" class="space-y-6"></div>
+        <div id="sports-content" class="hidden space-y-6"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center text-white text-sm font-medium bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-4">
+      <p id="footer1">🌍 Weather data by Open-Meteo.com</p>
+      <p id="footer2" class="mt-1">🔒 No cookies • No storage • 100% Privacy</p>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'es';
+    let weatherData = null;
+    let bestDryingSlot = null;
+    let bestSportsSlot = null;
+    let activeTab = 'drying';
+
+    const searchBtn = document.getElementById('search-btn');
+    const locationInput = document.getElementById('location');
+    const errorDiv = document.getElementById('error');
+    const errorMsg = document.getElementById('error-msg');
+    const resultsDiv = document.getElementById('results');
+    const locationName = document.getElementById('location-name');
+    const dryingContent = document.getElementById('drying-content');
+    const sportsContent = document.getElementById('sports-content');
+    const dryingTab = document.getElementById('drying-tab');
+    const sportsTab = document.getElementById('sports-tab');
+
+    document.getElementById('lang-select').addEventListener('change', (e) => {
+      currentLang = e.target.value;
+      updateLanguage();
+      if (weatherData) renderResults();
+    });
+
+    locationInput.addEventListener('keypress', e => e.key === 'Enter' && fetchWeather());
+    searchBtn.addEventListener('click', fetchWeather);
+    dryingTab.addEventListener('click', () => setActiveTab('drying'));
+    sportsTab.addEventListener('click', () => setActiveTab('sports'));
+
+    function updateLanguage() {
+      document.getElementById('app-title').textContent = currentLang === 'es' ? 'WeatherPro' : 'WeatherPro';
+      document.getElementById('app-subtitle').textContent = currentLang === 'es' ? '🌤️ Momento perfecto para tender la ropa y actividades al aire libre' : '🌤️ Perfect timing for laundry & outdoor activities';
+      locationInput.placeholder = currentLang === 'es' ? 'Ingresa una ciudad (ej. Londres, Tokio, Madrid)' : 'Enter city (e.g., London, Tokyo, Madrid)';
+      searchBtn.innerHTML = currentLang === 'es' ? '🔍 Buscar' : '🔍 Search';
+      dryingTab.innerHTML = currentLang === 'es' ? '👕 Tender Ropa' : '👕 Dry Clothes';
+      sportsTab.innerHTML = currentLang === 'es' ? '🏃 Hora de Deportes' : '🏃 Sports Time';
+      document.getElementById('footer1').textContent = currentLang === 'es' ? '🌍 Datos del tiempo por Open-Meteo.com' : '🌍 Weather data by Open-Meteo.com';
+      document.getElementById('footer2').textContent = currentLang === 'es' ? '🔒 Sin cookies • Sin almacenamiento • 100% Privacidad' : '🔒 No cookies • No storage • 100% Privacy';
+    }
+
+    function setError(msg) {
+      errorMsg.textContent = msg;
+      errorDiv.classList.remove('hidden');
+    }
+
+    function clearError() {
+      errorDiv.classList.add('hidden');
+    }
+
+    function setLoading(loading) {
+      searchBtn.disabled = loading;
+      searchBtn.innerHTML = loading 
+        ? '<i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto"></i>'
+        : (currentLang === 'es' ? '🔍 Buscar' : '🔍 Search');
+      lucide.createIcons();
+    }
+
+    async function fetchWeather() {
+      const location = locationInput.value.trim();
+      if (!location) return setError(currentLang === 'es' ? 'Por favor, ingresa una ubicación' : 'Please enter a location');
+
+      setLoading(true);
+      clearError();
+      resultsDiv.classList.add('hidden');
+
+      try {
+        const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=1&language=en&format=json`);
+        if (!geoResponse.ok) throw new Error(`Geocoding error ${geoResponse.status}`);
+
+        const geoData = await geoResponse.json();
+        if (!geoData.results?.length) return setError(currentLang === 'es' ? 'Ubicación no encontrada — prueba “Londres”, “Tokio”, “Madrid”' : 'Location not found — try “London”, “Tokyo”, “Madrid”');
+
+        const { latitude, longitude, name, country } = geoData.results[0];
+
+        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,cloud_cover,wind_speed_10m&daily=uv_index_max&timezone=auto&forecast_days=7`;
+
+        const weatherResponse = await fetch(weatherUrl);
+        if (!weatherResponse.ok) throw new Error(`Weather API error ${weatherResponse.status}`);
+
+        const data = await weatherResponse.json();
+        weatherData = { ...data, locationName: `${name}, ${country}` };
+
+        analyzeBestSlots(data);
+        renderResults();
+      } catch (err) {
+        const msg = err.message.includes('fetch') || err.message.includes('network') 
+          ? (currentLang === 'es' ? 'Error de red — verifica tu conexión a internet' : 'Network error — check your internet')
+          : err.message;
+        setError(msg);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function analyzeBestSlots(data) {
+      const hours = data.hourly.time.length;
+
+      // === DRYING SLOT (3-hour window) ===
+      let maxScore = -Infinity;
+      bestDryingSlot = null;
+
+      for (let i = 0; i < hours - 2; i++) {
+        let sumTemp = 0, sumHum = 0, sumCloud = 0, sumWind = 0, maxPrecip = 0;
+        let hasRainRisk = false;
+
+        for (let j = 0; j < 3; j++) {
+          const pp = data.hourly.precipitation_probability[i + j];
+          if (pp > 20) hasRainRisk = true;
+          maxPrecip = Math.max(maxPrecip, pp);
+          sumTemp += data.hourly.temperature_2m[i + j];
+          sumHum += data.hourly.relative_humidity_2m[i + j];
+          sumCloud += data.hourly.cloud_cover[i + j];
+          sumWind += data.hourly.wind_speed_10m[i + j];
+        }
+
+        if (hasRainRisk) continue;
+
+        const avg = {
+          temp: sumTemp / 3,
+          humidity: sumHum / 3,
+          clouds: sumCloud / 3,
+          wind: sumWind / 3,
+          precipProb: maxPrecip
+        };
+
+        const score = avg.temp - (avg.humidity / 2) - (avg.clouds / 4) + (avg.wind / 3);
+
+        if (score > maxScore) {
+          maxScore = score;
+          bestDryingSlot = { startIndex: i, ...avg, score };
+        }
+      }
+
+      // === SPORTS SLOT (single hour) ===
+      let minPenalty = Infinity;
+      bestSportsSlot = null;
+
+      for (let i = 0; i < hours; i++) {
+        const temp = data.hourly.temperature_2m[i];
+        const precip = data.hourly.precipitation_probability[i];
+        if (precip > 20) continue;
+
+        const humidity = data.hourly.relative_humidity_2m[i];
+        const penalty = Math.abs(temp - 21.5) + Math.max(0, humidity - 60) / 4;
+
+        if (penalty < minPenalty) {
+          minPenalty = penalty;
+          bestSportsSlot = {
+            index: i,
+            temp,
+            humidity,
+            precip,
+            clouds: data.hourly.cloud_cover[i],
+            wind: data.hourly.wind_speed_10m[i]
+          };
+        }
+      }
+
+      // Add UV
+      if (bestDryingSlot) {
+        const dateStr = data.hourly.time[bestDryingSlot.startIndex].split('T')[0];
+        const dayIdx = data.daily.time.indexOf(dateStr);
+        if (dayIdx !== -1) bestDryingSlot.uv = data.daily.uv_index_max[dayIdx];
+      }
+
+      if (bestSportsSlot) {
+        const dateStr = data.hourly.time[bestSportsSlot.index].split('T')[0];
+        const dayIdx = data.daily.time.indexOf(dateStr);
+        if (dayIdx !== -1) bestSportsSlot.uv = data.daily.uv_index_max[dayIdx];
+      }
+    }
+
+    function formatDay(timeStr) {
+      const date = new Date(timeStr);
+      const options = { weekday: 'long', month: 'long', day: 'numeric' };
+      const locale = currentLang === 'es' ? 'es-ES' : 'en-US';
+      let str = date.toLocaleString(locale, options);
+
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+
+      const todayKey = currentLang === 'es' ? ' (Hoy)' : ' (Today)';
+      const tomorrowKey = currentLang === 'es' ? ' (Mañana)' : ' (Tomorrow)';
+
+      if (date.toDateString() === today.toDateString()) str += todayKey;
+      if (date.toDateString() === tomorrow.toDateString()) str += tomorrowKey;
+
+      if (currentLang === 'es') str = str.charAt(0).toUpperCase() + str.slice(1);
+      return str;
+    }
+
+    function formatHour(timeStr) {
+      const locale = currentLang === 'es' ? 'es-ES' : 'en-GB';
+      return new Date(timeStr).toLocaleString(locale, { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    function getWeatherIcon(clouds) {
+      if (clouds < 20) return '<i data-lucide="sun" class="w-8 h-8 text-yellow-400"></i>';
+      if (clouds < 60) return '<i data-lucide="cloud-sun" class="w-8 h-8 text-blue-300"></i>';
+      return '<i data-lucide="cloud" class="w-8 h-8 text-blue-400"></i>';
+    }
+
+    function getConditionText(clouds) {
+      if (currentLang === 'es') {
+        if (clouds < 20) return '☀️ Soleado';
+        if (clouds < 60) return '⛅ Parcialmente nublado';
+        return '☁️ Nublado';
+      }
+      if (clouds < 20) return '☀️ Sunny';
+      if (clouds < 60) return '⛅ Partly Cloudy';
+      return '☁️ Cloudy';
+    }
+
+    function getConditionAdjective(clouds) {
+      if (currentLang === 'es') {
+        if (clouds < 20) return 'soleado';
+        if (clouds < 60) return 'parcialmente nublado';
+        return 'nublado';
+      }
+      if (clouds < 20) return 'sunny';
+      if (clouds < 60) return 'partly cloudy';
+      return 'cloudy';
+    }
+
+    function getUVText(uv) {
+      if (currentLang === 'es') {
+        if (uv < 3) return 'Bajo';
+        if (uv < 6) return 'Moderado';
+        if (uv < 8) return 'Alto';
+        if (uv < 11) return 'Muy Alto';
+        return 'Extremo';
+      }
+      if (uv < 3) return 'Low';
+      if (uv < 6) return 'Moderate';
+      if (uv < 8) return 'High';
+      if (uv < 11) return 'Very High';
+      return 'Extreme';
+    }
+
+    function setActiveTab(tab) {
+      activeTab = tab;
+
+      const commonActive = ['bg-gradient-to-r', 'text-white', 'shadow-lg'];
+      const dryingGradient = ['from-yellow-400', 'to-orange-500'];
+      const sportsGradient = ['from-green-400', 'to-emerald-500'];
+      const inactive = ['bg-gray-100', 'text-gray-600', 'hover:bg-gray-200'];
+
+      commonActive.forEach(cls => dryingTab.classList.toggle(cls, tab === 'drying'));
+      dryingGradient.forEach(cls => dryingTab.classList.toggle(cls, tab === 'drying'));
+      inactive.forEach(cls => dryingTab.classList.toggle(cls, tab !== 'drying'));
+
+      commonActive.forEach(cls => sportsTab.classList.toggle(cls, tab === 'sports'));
+      sportsGradient.forEach(cls => sportsTab.classList.toggle(cls, tab === 'sports'));
+      inactive.forEach(cls => sportsTab.classList.toggle(cls, tab !== 'sports'));
+
+      dryingContent.classList.toggle('hidden', tab !== 'drying');
+      sportsContent.classList.toggle('hidden', tab !== 'sports');
+    }
+
+    function renderResults() {
+      locationName.textContent = weatherData.locationName;
+      renderDryingContent();
+      renderSportsContent();
+      resultsDiv.classList.remove('hidden');
+      setActiveTab(activeTab);
+      lucide.createIcons();
+    }
+
+    function renderDryingContent() {
+      if (!bestDryingSlot) {
+        const noText = currentLang === 'es' 
+          ? 'No hay condiciones ideales para tender la ropa en los próximos 7 días. ¡Demasiada lluvia! 🌧️'
+          : 'No ideal drying conditions in the next 7 days. Too rainy! 🌧️';
+        dryingContent.innerHTML = `
+          <div class="p-8 bg-yellow-50 border-[3px] border-yellow-300 rounded-2xl text-center">
+            <i data-lucide="cloud-rain" class="w-16 h-16 text-yellow-600 mx-auto mb-4"></i>
+            <p class="text-yellow-800 font-bold text-lg">${noText}</p>
+          </div>`;
+        lucide.createIcons();
+        return;
+      }
+
+      const start = weatherData.hourly.time[bestDryingSlot.startIndex];
+      const end = weatherData.hourly.time[bestDryingSlot.startIndex + 2];
+
+      const perfectTitle = currentLang === 'es' ? '✨ ¡Momento Perfecto para Tender!' : '✨ Perfect Drying Time!';
+      const windowText = currentLang === 'es' ? 'Ventana óptima de 3 horas' : '3-hour optimal window';
+      const avgTempLabel = currentLang === 'es' ? 'Temp. Prom.' : 'Avg Temp';
+      const avgHumidityLabel = currentLang === 'es' ? 'Hum. Prom.' : 'Avg Humidity';
+      const skyLabel = currentLang === 'es' ? 'Cielo' : 'Sky';
+      const avgWindLabel = currentLang === 'es' ? 'Viento Prom.' : 'Avg Wind';
+      const uvLabel = currentLang === 'es' ? 'Índice UV (máx diario)' : 'UV Index (daily max)';
+      const timeArrow = currentLang === 'es' ? ' a ' : '→';
+      const whyPrefix = currentLang === 'es' ? '💡 ¿Por qué este horario?' : '💡 Why this time?';
+
+      const conditionAdj = getConditionAdjective(Math.round(bestDryingSlot.clouds));
+
+      const whyText = currentLang === 'es'
+        ? `Promedio ${bestDryingSlot.temp.toFixed(1)}°C, ${Math.round(bestDryingSlot.humidity)}% humedad, cielos ${conditionAdj}, brisa ${bestDryingSlot.wind.toFixed(1)} km/h y máx ${bestDryingSlot.precipProb}% probabilidad de lluvia → ¡el secado más rápido en los próximos 7 días! UV máx ${bestDryingSlot.uv.toFixed(0)} (${getUVText(bestDryingSlot.uv)}).`
+        : `Average ${bestDryingSlot.temp.toFixed(1)}°C, ${Math.round(bestDryingSlot.humidity)}% humidity, ${conditionAdj} skies, breeze ${bestDryingSlot.wind.toFixed(1)} km/h and max ${bestDryingSlot.precipProb}% rain chance → fastest drying in the next 7 days! Daily max UV ${bestDryingSlot.uv.toFixed(0)} (${getUVText(bestDryingSlot.uv)}).`;
+
+      dryingContent.innerHTML = `
+        <div class="bg-gradient-to-br from-yellow-100 via-orange-50 to-pink-100 rounded-3xl p-6 md:p-8 border-4 border-yellow-300 shadow-xl">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="text-2xl font-black text-gray-800 mb-2">${perfectTitle}</h3>
+              <p class="text-gray-700 font-medium">${windowText}</p>
+            </div>
+            <div class="bg-white rounded-full p-4 shadow-lg">
+              ${getWeatherIcon(Math.round(bestDryingSlot.clouds))}
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg border-2 border-yellow-200">
+            <p class="text-gray-600 font-semibold mb-2">${formatDay(start)}</p>
+            <p class="text-4xl font-black text-purple-700 mb-2">${formatHour(start)}</p>
+            <p class="text-lg text-gray-600 font-medium">${timeArrow} ${formatHour(end)}</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-orange-600 mb-2">
+                <i data-lucide="sun" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${avgTempLabel}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${bestDryingSlot.temp.toFixed(1)}°C</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-blue-600 mb-2">
+                <i data-lucide="droplets" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${avgHumidityLabel}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${Math.round(bestDryingSlot.humidity)}%</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-gray-600 mb-2">
+                <i data-lucide="cloud" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${skyLabel}</span>
+              </div>
+              <p class="text-lg font-black text-gray-800">${getConditionText(Math.round(bestDryingSlot.clouds))}</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-cyan-600 mb-2">
+                <i data-lucide="wind" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${avgWindLabel}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${bestDryingSlot.wind.toFixed(1)} km/h</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md col-span-2">
+              <div class="flex items-center gap-2 text-yellow-600 mb-2">
+                <i data-lucide="sun-medium" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${uvLabel}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${bestDryingSlot.uv.toFixed(0)}</p>
+            </div>
+          </div>
+
+          <div class="mt-6 p-6 bg-blue-50 rounded-2xl border-2 border-blue-200">
+            <p class="text-gray-800 font-medium leading-relaxed">
+              <strong class="text-blue-700">${whyPrefix}</strong> ${whyText}
+            </p>
+          </div>
+        </div>`;
+      lucide.createIcons();
+    }
+
+    function renderSportsContent() {
+      if (!bestSportsSlot) {
+        const noText = currentLang === 'es' 
+          ? 'No hay clima cómodo para deportes en los próximos 7 días'
+          : 'No comfortable sports weather in the next 7 days';
+        sportsContent.innerHTML = `
+          <div class="p-8 bg-green-50 border-[3px] border-green-300 rounded-2xl text-center">
+            <i data-lucide="cloud-rain" class="w-16 h-16 text-green-600 mx-auto mb-4"></i>
+            <p class="text-green-800 font-bold text-lg">${noText}</p>
+          </div>`;
+        lucide.createIcons();
+        return;
+      }
+
+      const time = weatherData.hourly.time[bestSportsSlot.index];
+
+      const perfectTitle = currentLang === 'es' ? '🏃‍♂️ ¡Mejor Clima para Deportes!' : '🏃‍♂️ Best Sports Weather!';
+      const subTitle = currentLang === 'es' ? 'Hora ideal para actividades al aire libre' : 'Ideal outdoor activity time';
+      const uvLabel = currentLang === 'es' ? 'Índice UV (máx diario)' : 'UV Index (daily max)';
+      const whyPrefix = currentLang === 'es' ? '💡 ¿Por qué este horario?' : '💡 Why this time?';
+
+      const conditionAdj = getConditionAdjective(Math.round(bestSportsSlot.clouds));
+
+      const whyText = currentLang === 'es'
+        ? `Más cercano al ideal 18–25°C (${bestSportsSlot.temp.toFixed(1)}°C), buena humedad y solo ${bestSportsSlot.precip}% probabilidad de lluvia → ¡perfecto para entrenar! 💪 UV máx diario ${bestSportsSlot.uv.toFixed(0)} (${getUVText(bestSportsSlot.uv)}).`
+        : `Closest to ideal 18–25°C (${bestSportsSlot.temp.toFixed(1)}°C), good humidity and only ${bestSportsSlot.precip}% rain chance → perfect for exercise! 💪 Daily max UV ${bestSportsSlot.uv.toFixed(0)} (${getUVText(bestSportsSlot.uv)}).`;
+
+      sportsContent.innerHTML = `
+        <div class="bg-gradient-to-br from-green-100 via-emerald-50 to-teal-100 rounded-3xl p-6 md:p-8 border-4 border-green-300 shadow-xl">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="text-2xl font-black text-gray-800 mb-2">${perfectTitle}</h3>
+              <p class="text-gray-700 font-medium">${subTitle}</p>
+            </div>
+            <div class="bg-white rounded-full p-4 shadow-lg">
+              ${getWeatherIcon(Math.round(bestSportsSlot.clouds))}
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg border-2 border-green-200">
+            <p class="text-gray-600 font-semibold mb-2">${formatDay(time)}</p>
+            <p class="text-4xl font-black text-green-700">${formatHour(time)}</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-orange-600 mb-2">
+                <i data-lucide="sun" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${currentLang === 'es' ? 'Temperatura' : 'Temperature'}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${bestSportsSlot.temp.toFixed(1)}°C</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-blue-600 mb-2">
+                <i data-lucide="droplets" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${currentLang === 'es' ? 'Humedad' : 'Humidity'}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${Math.round(bestSportsSlot.humidity)}%</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-gray-600 mb-2">
+                <i data-lucide="cloud" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${currentLang === 'es' ? 'Cielo' : 'Sky'}</span>
+              </div>
+              <p class="text-lg font-black text-gray-800">${getConditionText(Math.round(bestSportsSlot.clouds))}</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md">
+              <div class="flex items-center gap-2 text-cyan-600 mb-2">
+                <i data-lucide="wind" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${currentLang === 'es' ? 'Viento' : 'Wind'}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${bestSportsSlot.wind.toFixed(1)} km/h</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 shadow-md col-span-2">
+              <div class="flex items-center gap-2 text-yellow-600 mb-2">
+                <i data-lucide="sun-medium" class="w-5 h-5"></i>
+                <span class="text-sm font-bold">${uvLabel}</span>
+              </div>
+              <p class="text-3xl font-black text-gray-800">${bestSportsSlot.uv.toFixed(0)}</p>
+            </div>
+          </div>
+
+          <div class="mt-6 p-6 bg-green-50 rounded-2xl border-2 border-green-200">
+            <p class="text-gray-800 font-medium leading-relaxed">
+              <strong class="text-green-700">${whyPrefix}</strong> ${whyText}
+            </p>
+          </div>
+        </div>`;
+      lucide.createIcons();
+    }
+
+    // Initial
+    updateLanguage();
+    window.addEventListener('load', lucide.createIcons);
+  </script>
+</body>
+</html>
