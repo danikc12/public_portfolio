@@ -1,0 +1,818 @@
+import React, { useState, useEffect, useRef } from 'react';
+
+const LunarLander = () => {
+  const canvasRef = useRef(null);
+  const [gameState, setGameState] = useState('menu'); // menu, playing, won, lost, levelComplete
+  const [score, setScore] = useState(0);
+  const [fuel, setFuel] = useState(1200);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [totalScore, setTotalScore] = useState(0);
+  
+  const gameRef = useRef({
+    lander: { x: 100, y: 100, vx: 0.4, vy: 0, rotation: 0 },
+    thrust: false,
+    rotateLeft: false,
+    rotateRight: false,
+    gravity: 0.0098,
+    thrustPower: 0.018,
+    rotationSpeed: 0.7,
+    terrain: [],
+    landingZones: []
+  });
+
+  // Level configurations
+  const levels = {
+    1: {
+      name: "TRAINING MISSION",
+      gravity: 0.0098,
+      thrustPower: 0.018,
+      rotationSpeed: 0.7,
+      startVx: 0.3,
+      fuel: 1500,
+      terrain: [
+        { x: 0, y: 550 }, { x: 150, y: 520 }, { x: 300, y: 550 },
+        { x: 450, y: 550 }, { x: 600, y: 520 }, { x: 750, y: 550 },
+        { x: 900, y: 520 }, { x: 1000, y: 550 }
+      ],
+      landingZones: [
+        { x: 150, width: 150, multiplier: 2, label: "2X" },
+        { x: 450, width: 150, multiplier: 2, label: "2X" },
+        { x: 750, width: 150, multiplier: 5, label: "5X" }
+      ]
+    },
+    2: {
+      name: "ADVANCED DESCENT",
+      gravity: 0.0105,
+      thrustPower: 0.017,
+      rotationSpeed: 0.65,
+      startVx: 0.5,
+      fuel: 1300,
+      terrain: [
+        { x: 0, y: 550 }, { x: 100, y: 480 }, { x: 200, y: 450 },
+        { x: 350, y: 480 }, { x: 500, y: 550 }, { x: 650, y: 520 },
+        { x: 750, y: 480 }, { x: 850, y: 450 }, { x: 950, y: 500 },
+        { x: 1000, y: 550 }
+      ],
+      landingZones: [
+        { x: 210, width: 140, multiplier: 2, label: "2X" },
+        { x: 500, width: 150, multiplier: 2, label: "2X" },
+        { x: 810, width: 90, multiplier: 5, label: "5X" }
+      ]
+    },
+    3: {
+      name: "EXTREME LANDING",
+      gravity: 0.0108,
+      thrustPower: 0.0165,
+      rotationSpeed: 0.65,
+      startVx: 0.5,
+      fuel: 1200,
+      terrain: [
+        { x: 0, y: 550 }, { x: 100, y: 490 }, { x: 200, y: 450 },
+        { x: 300, y: 480 }, { x: 400, y: 550 }, { x: 500, y: 520 },
+        { x: 600, y: 480 }, { x: 700, y: 450 }, { x: 800, y: 490 },
+        { x: 900, y: 550 }, { x: 1000, y: 550 }
+      ],
+      landingZones: [
+        { x: 180, width: 110, multiplier: 2, label: "2X" },
+        { x: 470, width: 120, multiplier: 2, label: "2X" },
+        { x: 700, width: 85, multiplier: 5, label: "5X" }
+      ]
+    }
+  };
+
+  // Detect mobile on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Load level terrain
+  useEffect(() => {
+    const levelConfig = levels[currentLevel];
+    gameRef.current.terrain = levelConfig.terrain;
+    gameRef.current.landingZones = levelConfig.landingZones;
+    gameRef.current.gravity = levelConfig.gravity;
+    gameRef.current.thrustPower = levelConfig.thrustPower;
+    gameRef.current.rotationSpeed = levelConfig.rotationSpeed;
+  }, [currentLevel]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let lastTime = Date.now();
+
+    const handleKeyDown = (e) => {
+      if (gameState === 'menu' && e.key === ' ') {
+        startLevel(1);
+        e.preventDefault();
+        return;
+      }
+      
+      if (gameState !== 'playing') return;
+      
+      if (e.key === 'ArrowUp' || e.key === ' ') {
+        gameRef.current.thrust = true;
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowLeft') {
+        gameRef.current.rotateLeft = true;
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowRight') {
+        gameRef.current.rotateRight = true;
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === 'ArrowUp' || e.key === ' ') {
+        gameRef.current.thrust = false;
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowLeft') {
+        gameRef.current.rotateLeft = false;
+        e.preventDefault();
+      }
+      if (e.key === 'ArrowRight') {
+        gameRef.current.rotateRight = false;
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    const gameLoop = () => {
+      const currentTime = Date.now();
+      const deltaTime = Math.min((currentTime - lastTime) / 16.67, 2);
+      lastTime = currentTime;
+
+      if (gameState === 'playing') {
+        updateGame(deltaTime);
+      }
+      drawGame(ctx);
+      animationId = requestAnimationFrame(gameLoop);
+    };
+
+    const updateGame = (deltaTime) => {
+      const game = gameRef.current;
+      const lander = game.lander;
+
+      if (Math.random() < 0.015) {
+        setScore(s => Math.max(0, s - 1));
+      }
+
+      if (game.rotateLeft) lander.rotation -= game.rotationSpeed * deltaTime;
+      if (game.rotateRight) lander.rotation += game.rotationSpeed * deltaTime;
+
+      if (game.thrust && fuel > 0) {
+        const angle = (lander.rotation - 90) * Math.PI / 180;
+        lander.vx += Math.cos(angle) * game.thrustPower * deltaTime;
+        lander.vy += Math.sin(angle) * game.thrustPower * deltaTime;
+        setFuel(f => Math.max(0, f - 0.35 * deltaTime));
+      }
+
+      lander.vy += game.gravity * deltaTime;
+      
+      lander.vx *= 0.9995;
+      lander.vy *= 0.9995;
+
+      lander.x += lander.vx * deltaTime;
+      lander.y += lander.vy * deltaTime;
+
+      if (lander.x < -20) lander.x = 1020;
+      if (lander.x > 1020) lander.x = -20;
+      if (lander.y < 0) {
+        setGameState('lost');
+        return;
+      }
+
+      const landerBottom = lander.y + 15;
+      
+      for (let i = 0; i < game.terrain.length - 1; i++) {
+        const p1 = game.terrain[i];
+        const p2 = game.terrain[i + 1];
+        
+        if (lander.x >= p1.x && lander.x <= p2.x) {
+          const ratio = (lander.x - p1.x) / (p2.x - p1.x);
+          const terrainY = p1.y + ratio * (p2.y - p1.y);
+          
+          if (landerBottom >= terrainY) {
+            // Check which landing zone
+            let landedZone = null;
+            for (const zone of game.landingZones) {
+              if (lander.x >= zone.x && lander.x <= zone.x + zone.width) {
+                landedZone = zone;
+                break;
+              }
+            }
+            
+            if (landedZone) {
+              const horizontalSpeed = Math.abs(lander.vx);
+              const verticalSpeed = Math.abs(lander.vy);
+              const tilt = Math.abs(lander.rotation);
+              
+              // Difficulty-based landing requirements
+              const maxVSpeed = currentLevel === 1 ? 0.6 : currentLevel === 2 ? 0.5 : 0.45;
+              const maxHSpeed = currentLevel === 1 ? 0.5 : currentLevel === 2 ? 0.45 : 0.4;
+              const maxTilt = currentLevel === 1 ? 25 : currentLevel === 2 ? 20 : 15;
+              
+              if (verticalSpeed < maxVSpeed && horizontalSpeed < maxHSpeed && tilt < maxTilt) {
+                const fuelBonus = Math.floor(fuel / 2);
+                const finalScore = (score + fuelBonus) * landedZone.multiplier;
+                setScore(finalScore);
+                setTotalScore(ts => ts + finalScore);
+                setGameState('levelComplete');
+              } else {
+                setGameState('lost');
+              }
+            } else {
+              setGameState('lost');
+            }
+            return;
+          }
+        }
+      }
+    };
+
+    const drawGame = (ctx) => {
+      // Space background with gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+      gradient.addColorStop(0, '#000814');
+      gradient.addColorStop(1, '#001d3d');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1000, 600);
+
+      // Stars
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      for (let i = 0; i < 150; i++) {
+        const x = (i * 137.5) % 1000;
+        const y = (i * 219.3) % 450;
+        ctx.fillRect(x, y, 1, 1);
+      }
+
+      ctx.fillStyle = '#fff';
+      for (let i = 0; i < 60; i++) {
+        const x = (i * 271.3) % 1000;
+        const y = (i * 163.7) % 450;
+        const size = (i % 4) === 0 ? 2 : 1;
+        ctx.fillRect(x, y, size, size);
+      }
+
+      if (Math.random() > 0.95) {
+        const twinkle = Math.floor(Math.random() * 60);
+        const x = (twinkle * 271.3) % 1000;
+        const y = (twinkle * 163.7) % 450;
+        ctx.fillStyle = '#ffff88';
+        ctx.fillRect(x, y, 2, 2);
+      }
+
+      // Earth
+      ctx.save();
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#4af';
+      ctx.fillStyle = '#2b7fdb';
+      ctx.beginPath();
+      ctx.arc(850, 80, 32, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#6ba3e8';
+      ctx.beginPath();
+      ctx.arc(845, 72, 15, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.beginPath();
+      ctx.arc(842, 68, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Terrain
+      const game = gameRef.current;
+      
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.beginPath();
+      ctx.moveTo(game.terrain[0].x, game.terrain[0].y + 3);
+      for (const point of game.terrain) {
+        ctx.lineTo(point.x, point.y + 3);
+      }
+      ctx.lineTo(1000, 603);
+      ctx.lineTo(0, 603);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.strokeStyle = '#9ca3af';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(game.terrain[0].x, game.terrain[0].y);
+      for (const point of game.terrain) {
+        ctx.lineTo(point.x, point.y);
+      }
+      ctx.lineTo(1000, 600);
+      ctx.lineTo(0, 600);
+      ctx.closePath();
+      
+      const terrainGradient = ctx.createLinearGradient(0, 400, 0, 600);
+      terrainGradient.addColorStop(0, '#4a5568');
+      terrainGradient.addColorStop(1, '#1a202c');
+      ctx.fillStyle = terrainGradient;
+      ctx.fill();
+      ctx.stroke();
+      
+      // Craters
+      ctx.fillStyle = '#2d3748';
+      ctx.beginPath();
+      ctx.arc(250, 470, 15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(800, 490, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Landing zones - highlight directly on terrain surface
+      for (const zone of game.landingZones) {
+        const zoneColor = zone.multiplier === 5 ? '#ffff00' : '#00ff00';
+        
+        // Find terrain points within zone and highlight them
+        ctx.save();
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = zoneColor;
+        
+        // Draw glowing path along terrain in zone
+        ctx.strokeStyle = zoneColor;
+        ctx.lineWidth = 6;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        ctx.beginPath();
+        let started = false;
+        for (let i = 0; i < game.terrain.length - 1; i++) {
+          const p1 = game.terrain[i];
+          const p2 = game.terrain[i + 1];
+          
+          if (p1.x >= zone.x && p1.x <= zone.x + zone.width) {
+            if (!started) {
+              ctx.moveTo(p1.x, p1.y);
+              started = true;
+            }
+            ctx.lineTo(p2.x, p2.y);
+          } else if (started && p1.x > zone.x + zone.width) {
+            break;
+          }
+        }
+        ctx.stroke();
+        
+        // Add zone label above
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        const labelX = zone.x + zone.width / 2;
+        ctx.fillRect(labelX - 30, 510, 60, 25);
+        
+        ctx.fillStyle = zoneColor;
+        ctx.font = 'bold 18px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(zone.label, labelX, 530);
+        ctx.textAlign = 'left';
+        
+        ctx.restore();
+      }
+
+      // Draw lander
+      if (gameState === 'playing') {
+        const lander = game.lander;
+        ctx.save();
+        ctx.translate(lander.x, lander.y);
+        ctx.rotate(lander.rotation * Math.PI / 180);
+        
+        const shadowAlpha = Math.max(0, 1 - (550 - lander.y) / 300);
+        if (shadowAlpha > 0) {
+          ctx.fillStyle = `rgba(0, 0, 0, ${shadowAlpha * 0.3})`;
+          ctx.fillRect(-18, 15, 36, 4);
+        }
+        
+        const bodyGradient = ctx.createLinearGradient(-8, -12, 8, 8);
+        bodyGradient.addColorStop(0, '#ffd700');
+        bodyGradient.addColorStop(1, '#b8860b');
+        ctx.fillStyle = bodyGradient;
+        ctx.fillRect(-8, -12, 16, 8);
+        
+        ctx.strokeStyle = '#8b6914';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(-8, -12, 16, 8);
+        
+        ctx.fillStyle = '#1e40af';
+        ctx.fillRect(-4, -10, 8, 4);
+        ctx.fillStyle = 'rgba(147, 197, 253, 0.6)';
+        ctx.fillRect(-3, -9, 3, 2);
+        
+        ctx.strokeStyle = '#c9a840';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -16);
+        ctx.lineTo(0, -22);
+        ctx.stroke();
+        ctx.fillStyle = '#ff0000';
+        ctx.beginPath();
+        ctx.arc(0, -23, 2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = '#daa520';
+        ctx.beginPath();
+        ctx.moveTo(-6, -12);
+        ctx.lineTo(6, -12);
+        ctx.lineTo(4, -16);
+        ctx.lineTo(-4, -16);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#8b6914';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        ctx.strokeStyle = '#ff8c00';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        
+        ctx.beginPath();
+        ctx.moveTo(-6, -4);
+        ctx.lineTo(-9, 3);
+        ctx.lineTo(-12, 10);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(6, -4);
+        ctx.lineTo(9, 3);
+        ctx.lineTo(12, 10);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#ff8c00';
+        ctx.beginPath();
+        ctx.arc(-9, 3, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(9, 3, 2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = '#ff6600';
+        ctx.fillRect(-16, 10, 8, 3);
+        ctx.fillRect(8, 10, 8, 3);
+        ctx.strokeStyle = '#cc5200';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(-16, 10, 8, 3);
+        ctx.strokeRect(8, 10, 8, 3);
+
+        if (game.thrust && fuel > 0) {
+          const flameLength = 15 + Math.random() * 8;
+          
+          ctx.save();
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = '#ff6600';
+          
+          ctx.fillStyle = '#ffff00';
+          ctx.beginPath();
+          ctx.moveTo(-5, -4);
+          ctx.lineTo(-2, -4 + flameLength * 0.7);
+          ctx.lineTo(0, -4 + flameLength);
+          ctx.lineTo(2, -4 + flameLength * 0.7);
+          ctx.lineTo(5, -4);
+          ctx.closePath();
+          ctx.fill();
+          
+          ctx.fillStyle = '#ff6600';
+          ctx.beginPath();
+          ctx.moveTo(-3, -4);
+          ctx.lineTo(-1, -4 + flameLength * 0.5);
+          ctx.lineTo(0, -4 + flameLength * 0.7);
+          ctx.lineTo(1, -4 + flameLength * 0.5);
+          ctx.lineTo(3, -4);
+          ctx.closePath();
+          ctx.fill();
+          
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.moveTo(-1, -4);
+          ctx.lineTo(0, -4 + flameLength * 0.3);
+          ctx.lineTo(1, -4);
+          ctx.closePath();
+          ctx.fill();
+          
+          ctx.restore();
+        }
+        
+        ctx.restore();
+      }
+
+      // UI Panel
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillRect(10, 10, 220, 110);
+      ctx.strokeStyle = '#00ff00';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(10, 10, 220, 110);
+      
+      ctx.fillStyle = '#00ff00';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText('═══ TELEMETRY ═══', 25, 35);
+      
+      ctx.font = '16px monospace';
+      ctx.fillText(`SCORE: ${score}`, 25, 65);
+      
+      ctx.fillText(`FUEL:`, 25, 95);
+      ctx.strokeStyle = '#00ff00';
+      const maxFuel = levels[currentLevel].fuel;
+      ctx.strokeRect(90, 82, 120, 15);
+      const fuelPercent = fuel / maxFuel;
+      const fuelColor = fuelPercent > 0.3 ? '#00ff00' : fuelPercent > 0.15 ? '#ffff00' : '#ff0000';
+      ctx.fillStyle = fuelColor;
+      ctx.fillRect(92, 84, 116 * fuelPercent, 11);
+
+      // Level indicator
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillRect(770, 10, 220, 50);
+      ctx.strokeStyle = '#00ff00';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(770, 10, 220, 50);
+      ctx.fillStyle = '#00ff00';
+      ctx.font = 'bold 16px monospace';
+      ctx.fillText(`LEVEL ${currentLevel}`, 820, 35);
+      ctx.font = '12px monospace';
+      ctx.fillText(levels[currentLevel].name, 780, 50);
+
+      // Messages
+      if (gameState === 'menu') {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+        ctx.fillRect(200, 100, 600, 400);
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(200, 100, 600, 400);
+        
+        ctx.fillStyle = '#00ff00';
+        ctx.font = 'bold 42px monospace';
+        ctx.fillText('LUNAR LANDER', 270, 170);
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '18px monospace';
+        ctx.fillText('═══════════════════════', 285, 200);
+        
+        ctx.fillStyle = '#ffff00';
+        ctx.font = 'bold 20px monospace';
+        ctx.fillText('SELECT LEVEL:', 360, 240);
+        
+        // Level buttons info
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '16px monospace';
+        ctx.fillText('LEVEL 1: Training Mission', 260, 280);
+        ctx.fillText('LEVEL 2: Advanced Descent', 260, 320);
+        ctx.fillText('LEVEL 3: Extreme Landing', 260, 360);
+        
+        ctx.fillStyle = '#00ff00';
+        ctx.font = '14px monospace';
+        ctx.fillText('Land on pads for bonus:', 285, 405);
+        ctx.fillStyle = '#0f0';
+        ctx.fillText('GREEN = 2X', 310, 425);
+        ctx.fillStyle = '#ff0';
+        ctx.fillText('YELLOW = 5X (harder)', 310, 445);
+        
+        ctx.fillStyle = '#00ff00';
+        ctx.font = 'bold 16px monospace';
+        ctx.fillText('Click level button below!', 290, 480);
+      } else if (gameState === 'levelComplete') {
+        ctx.fillStyle = 'rgba(0, 60, 0, 0.95)';
+        ctx.fillRect(250, 180, 500, 240);
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(250, 180, 500, 240);
+        
+        ctx.fillStyle = '#00ff00';
+        ctx.font = 'bold 36px monospace';
+        ctx.fillText('LEVEL COMPLETE!', 280, 240);
+        ctx.font = '24px monospace';
+        ctx.fillText(`Score: ${score}`, 370, 285);
+        ctx.fillText(`Total: ${totalScore}`, 370, 320);
+        
+        if (currentLevel < 3) {
+          ctx.font = '18px monospace';
+          ctx.fillText('Ready for next level?', 310, 365);
+        } else {
+          ctx.fillStyle = '#ffff00';
+          ctx.font = 'bold 22px monospace';
+          ctx.fillText('ALL LEVELS COMPLETE!', 270, 365);
+          ctx.fillStyle = '#00ff00';
+          ctx.font = '18px monospace';
+          ctx.fillText(`Final Score: ${totalScore}`, 330, 395);
+        }
+      } else if (gameState === 'lost') {
+        ctx.fillStyle = 'rgba(60, 0, 0, 0.95)';
+        ctx.fillRect(280, 200, 440, 200);
+        ctx.strokeStyle = '#ff0000';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(280, 200, 440, 200);
+        
+        ctx.fillStyle = '#ff0000';
+        ctx.font = 'bold 40px monospace';
+        ctx.fillText('MISSION', 380, 255);
+        ctx.fillText('FAILED', 395, 300);
+        
+        ctx.fillStyle = '#ffaaaa';
+        ctx.font = '16px monospace';
+        ctx.fillText('The lander was destroyed', 320, 340);
+        ctx.fillText('Remember: gentle descent', 320, 365);
+      }
+    };
+
+    gameLoop();
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      cancelAnimationFrame(animationId);
+    };
+  }, [gameState, fuel, score, currentLevel, totalScore]);
+
+  const startLevel = (level) => {
+    const levelConfig = levels[level];
+    setCurrentLevel(level);
+    gameRef.current.lander = { x: 100, y: 100, vx: levelConfig.startVx, vy: 0, rotation: 0 };
+    gameRef.current.thrust = false;
+    gameRef.current.rotateLeft = false;
+    gameRef.current.rotateRight = false;
+    setFuel(levelConfig.fuel);
+    setScore(1000);
+    setGameState('playing');
+  };
+
+  const nextLevel = () => {
+    if (currentLevel < 3) {
+      startLevel(currentLevel + 1);
+    } else {
+      setGameState('menu');
+      setTotalScore(0);
+      setCurrentLevel(1);
+    }
+  };
+
+  const restartLevel = () => {
+    startLevel(currentLevel);
+  };
+
+  const backToMenu = () => {
+    setGameState('menu');
+    setTotalScore(0);
+    setCurrentLevel(1);
+  };
+
+  // Mobile control handlers
+  const handleTouchStart = (control) => {
+    if (gameState !== 'playing') return;
+    
+    if (control === 'thrust') {
+      gameRef.current.thrust = true;
+    } else if (control === 'left') {
+      gameRef.current.rotateLeft = true;
+    } else if (control === 'right') {
+      gameRef.current.rotateRight = true;
+    }
+  };
+
+  const handleTouchEnd = (control) => {
+    if (control === 'thrust') {
+      gameRef.current.thrust = false;
+    } else if (control === 'left') {
+      gameRef.current.rotateLeft = false;
+    } else if (control === 'right') {
+      gameRef.current.rotateRight = false;
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black p-4">
+      <div className="relative w-full max-w-4xl">
+        <canvas
+          ref={canvasRef}
+          width={1000}
+          height={600}
+          className="border-4 border-cyan-500 rounded-lg shadow-2xl shadow-cyan-500/50 w-full h-auto"
+        />
+      </div>
+      
+      {/* Mobile Controls */}
+      {isMobile && gameState === 'playing' && (
+        <div className="fixed bottom-8 left-0 right-0 flex justify-between items-end px-4 gap-4" style={{ maxWidth: '100%' }}>
+          <button
+            onTouchStart={() => handleTouchStart('left')}
+            onTouchEnd={() => handleTouchEnd('left')}
+            onMouseDown={() => handleTouchStart('left')}
+            onMouseUp={() => handleTouchEnd('left')}
+            onMouseLeave={() => handleTouchEnd('left')}
+            className="w-20 h-20 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold text-2xl rounded-lg border-4 border-blue-400 shadow-lg shadow-blue-500/50 flex items-center justify-center"
+            style={{ touchAction: 'none', userSelect: 'none' }}
+          >
+            ←
+          </button>
+          
+          <button
+            onTouchStart={() => handleTouchStart('thrust')}
+            onTouchEnd={() => handleTouchEnd('thrust')}
+            onMouseDown={() => handleTouchStart('thrust')}
+            onMouseUp={() => handleTouchEnd('thrust')}
+            onMouseLeave={() => handleTouchEnd('thrust')}
+            className="w-24 h-24 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-bold text-3xl rounded-full border-4 border-red-400 shadow-lg shadow-red-500/50 flex items-center justify-center"
+            style={{ touchAction: 'none', userSelect: 'none' }}
+          >
+            ↑
+          </button>
+          
+          <button
+            onTouchStart={() => handleTouchStart('right')}
+            onTouchEnd={() => handleTouchEnd('right')}
+            onMouseDown={() => handleTouchStart('right')}
+            onMouseUp={() => handleTouchEnd('right')}
+            onMouseLeave={() => handleTouchEnd('right')}
+            className="w-20 h-20 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold text-2xl rounded-lg border-4 border-blue-400 shadow-lg shadow-blue-500/50 flex items-center justify-center"
+            style={{ touchAction: 'none', userSelect: 'none' }}
+          >
+            →
+          </button>
+        </div>
+      )}
+      
+      <div className="mt-6 flex gap-4 flex-wrap justify-center z-10">
+        {gameState === 'menu' && (
+          <>
+            <button
+              onClick={() => startLevel(1)}
+              className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-mono rounded-lg border-2 border-green-400 shadow-lg"
+            >
+              Level 1
+            </button>
+            <button
+              onClick={() => startLevel(2)}
+              className="px-6 py-3 bg-yellow-600 hover:bg-yellow-500 text-white font-mono rounded-lg border-2 border-yellow-400 shadow-lg"
+            >
+              Level 2
+            </button>
+            <button
+              onClick={() => startLevel(3)}
+              className="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-mono rounded-lg border-2 border-red-400 shadow-lg"
+            >
+              Level 3
+            </button>
+          </>
+        )}
+        
+        {gameState === 'levelComplete' && (
+          <>
+            <button
+              onClick={nextLevel}
+              className="px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-mono text-lg rounded-lg border-2 border-green-400 shadow-lg shadow-green-500/50"
+            >
+              {currentLevel < 3 ? '▶ NEXT LEVEL' : '🏁 FINISH'}
+            </button>
+            <button
+              onClick={restartLevel}
+              className="px-8 py-4 bg-yellow-600 hover:bg-yellow-500 text-white font-mono text-lg rounded-lg border-2 border-yellow-400 shadow-lg shadow-yellow-500/50"
+            >
+              ↻ RETRY
+            </button>
+            <button
+              onClick={backToMenu}
+              className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-mono text-lg rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-500/50"
+            >
+              ⌂ MENU
+            </button>
+          </>
+        )}
+        
+        {gameState === 'lost' && (
+          <>
+            <button
+              onClick={restartLevel}
+              className="px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-mono text-lg rounded-lg border-2 border-green-400 shadow-lg shadow-green-500/50"
+            >
+              ↻ RETRY LEVEL
+            </button>
+            <button
+              onClick={backToMenu}
+              className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-mono text-lg rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-500/50"
+            >
+              ⌂ BACK TO MENU
+            </button>
+          </>
+        )}
+      </div>
+
+      <div className="mt-4 text-cyan-400 text-sm font-mono text-center max-w-2xl px-4">
+        <p>🌙 3 Landing Zones Per Level • 2X & 5X Multipliers • 3 Difficulty Levels</p>
+        <p>⚠️ Each level gets harder with stronger gravity and less fuel</p>
+        {isMobile && <p className="mt-2 text-yellow-400">📱 Use on-screen controls to pilot your lander</p>}
+      </div>
+    </div>
+  );
+};
+
+export default LunarLander;
