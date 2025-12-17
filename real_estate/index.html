@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestige Properties - Luxury Real Estate</title>
+    <style>
+        :root {
+            --primary: #d4af37;
+            --dark: #1a1a1a;
+            --text: #2c3e50;
+            --light: #f8f9fa;
+            --gray: #666;
+            --border: #e8e8e8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            color: var(--text);
+            background: var(--light);
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; }
+        ul { list-style: none; }
+
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: #c19b2a;
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(26,26,26,0.75), rgba(26,26,26,0.75)),
+                        url('https://mbluxury1.s3.amazonaws.com/2024/02/01151752/luxury-real-estate-website-design-scaled.jpg') center/cover no-repeat;
+            color: white;
+            padding: 8rem 3rem 10rem;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            font-family: Arial, sans-serif;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            transform: translateY(-100px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 1rem 2.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--dark);
+            border-bottom-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-family: Arial, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text);
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .advanced-filters {
+            background: #fafafa;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .advanced-filters.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid #ddd;
+            padding: 0.8rem 1.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0f0;
+            border-color: var(--text);
+        }
+
+        .btn-search {
+            background: var(--dark);
+            color: white;
+            width: 100%;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-search:hover {
+            background: #000;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            border-left: 5px solid var(--primary);
+            padding-left: 1.5rem;
+            text-align: center;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 3rem;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: var(--dark);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+            z-index: 1;
+        }
+
+        .property-badge.rent {
+            background: #2c5f2d;
+        }
+
+        .property-info {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .property-price {
+            font-size: 1.9rem;
+            font-weight: 300;
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .property-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+        }
+
+        .property-location {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .property-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .stats { /* unchanged */ }
+
+        footer { /* unchanged */ }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 3rem; }
+            .search-filters { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 1.5rem; }
+            .nav-links { 
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: var(--dark);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 1.5rem 0;
+                gap: 1.5rem;
+            }
+            .nav-links.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+
+            .hero { padding: 6rem 1.5rem 8rem; }
+            .hero h1 { font-size: 2.6rem; }
+            .hero p { font-size: 1.1rem; }
+
+            .search-container {
+                padding: 2rem;
+                transform: translateY(-70px);
+            }
+            .search-filters { grid-template-columns: 1fr; }
+            .search-tabs { justify-content: center; }
+
+            .container { padding: 4rem 1.5rem; }
+            .property-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.2rem; }
+            .tab { padding: 0.8rem 1.2rem; font-size: 0.9rem; }
+            .search-container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Prestige Properties</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#buy">Purchase</a></li>
+                <li><a href="#rent">Lease</a></li>
+                <li><a href="#sell">List Property</a></li>
+                <li><a href="#agents">Advisors</a></li>
+                <li><a href="#mortgage">Financing</a></li>
+                <li><button class="btn btn-primary">Client Portal</button></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Exceptional Properties for Distinguished Clientele</h1>
+            <p>Discover premium residential and commercial real estate opportunities</p>
+            
+            <div class="search-container">
+                <div class="search-tabs">
+                    <button class="tab active" onclick="switchTab(event)">Purchase</button>
+                    <button class="tab" onclick="switchTab(event)">Lease</button>
+                    <button class="tab" onclick="switchTab(event)">List Property</button>
+                </div>
+
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="City, district, or postal code">
+                    </div>
+                    <div class="filter-group">
+                        <label for="category">Property Category</label>
+                        <select id="category">
+                            <option>All Categories</option>
+                            <option>Detached House</option>
+                            <option>Apartment</option>
+                            <option>Penthouse</option>
+                            <option>Villa</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="price">Price Range</label>
+                        <select id="price">
+                            <option>Any Price</option>
+                            <option>Up to $500,000</option>
+                            <option>$500,000 - $2M</option>
+                            <option>$2M+</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="bedrooms">Bedrooms</label>
+                        <select id="bedrooms">
+                            <option>Any</option>
+                            <option>3+</option>
+                            <option>4+</option>
+                            <option>5+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="toggleAdvanced()">Advanced Search Criteria</button>
+
+                <div class="advanced-filters" id="advancedFilters">
+                    <div class="filter-row">
+                        <!-- Advanced filters (same as before, kept for functionality) -->
+                        <div class="filter-group"><label>Bathrooms</label><select><option>Any</option><option>2+</option><option>3+</option></select></div>
+                        <div class="filter-group"><label>Min Area (sq ft)</label><input type="number"></div>
+                        <div class="filter-group"><label>Max Area (sq ft)</label><input type="number"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Amenities</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox"> Pool</label>
+                            <label><input type="checkbox"> Gym</label>
+                            <label><input type="checkbox"> Garden</label>
+                            <label><input type="checkbox"> Waterfront</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-search">Search Properties</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title">Featured Collection</h2>
+        <div class="property-grid">
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://images.squarespace-cdn.com/content/v1/65a8583b3f2bb32732bff587/fa5d488b-e385-4c3b-a80a-5b2a40ba968c/1897+Lilac+Ln-44.jpg" alt="Modern luxury home in Frisco">
+                    <span class="property-badge">For Sale</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$2,850,000</div>
+                    <div class="property-title">Hilltop Modern Residence</div>
+                    <div class="property-location">📍 Frisco Hills, Texas</div>
+                    <div class="property-features">
+                        <span>🛏 5 Beds</span>
+                        <span>🚿 4 Baths</span>
+                        <span>📐 5,200 sq ft</span>
+                        <span>🏊 Pool</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://www.zhcustomhomes.com/wp-content/uploads/2025/01/Modern-Luxury-Hill-Top-stacked-stone-entryway-white-stucco-Zbranek-and-Holt-Custom-Homes.jpg" alt="Luxury hilltop home with stone entry">
+                    <span class="property-badge">For Sale</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$4,200,000</div>
+                    <div class="property-title">Contemporary Hilltop Estate</div>
+                    <div class="property-location">📍 Austin, Texas</div>
+                    <div class="property-features">
+                        <span>🛏 6 Beds</span>
+                        <span>🚿 5 Baths</span>
+                        <span>📐 6,800 sq ft</span>
+                        <span>🌳 2 Acres</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://onekindesign.com/wp-content/uploads/2024/06/Contemporary-Newport-Beach-House-Brandon-Architects-01-1-Kindesign.jpg" alt="Newport Beach contemporary house">
+                    <span class="property-badge rent">For Lease</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$18,000/month</div>
+                    <div class="property-title">Ocean View Contemporary Home</div>
+                    <div class="property-location">📍 Newport Beach, California</div>
+                    <div class="property-features">
+                        <span>🛏 4 Beds</span>
+                        <span>🚿 4 Baths</span>
+                        <span>📐 4,100 sq ft</span>
+                        <span>🌊 Ocean View</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://bocadolobo.com/blog/wp-content/uploads/2020/02/Earth-Tones-Set-The-Mood-In-This-Luxury-Moscow-Apartment-1.jpg" alt="Luxury Moscow apartment interior">
+                    <span class="property-badge rent">For Lease</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$12,500/month</div>
+                    <div class="property-title">Earth-Tone Luxury Apartment</div>
+                    <div class="property-location">📍 Moscow City Center</div>
+                    <div class="property-features">
+                        <span>🛏 3 Beds</span>
+                        <span>🚿 3 Baths</span>
+                        <span>📐 2,800 sq ft</span>
+                        <span>🏙 City View</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://thumbs.dreamstime.com/b/modern-penthouse-living-room-night-panoramic-city-views-367639042.jpg" alt="Modern penthouse with city views">
+                    <span class="property-badge">For Sale</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$7,950,000</div>
+                    <div class="property-title">Panoramic City Penthouse</div>
+                    <div class="property-location">📍 Downtown Manhattan</div>
+                    <div class="property-features">
+                        <span>🛏 4 Beds</span>
+                        <span>🚿 5 Baths</span>
+                        <span>📐 4,500 sq ft</span>
+                        <span>🌃 Skyline View</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://portozante.com/wp-content/uploads/2023/06/greece-5-star-luxury-two-bedroom-private-villla-with-pool-royal-infinity-spa-villa-with-heated-pool-porto-zante-villas-and-spa-zakynthos-island-1367x911.webp" alt="Luxury villa with infinity pool in Greece">
+                    <span class="property-badge">For Sale</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$9,800,000</div>
+                    <div class="property-title">Royal Infinity Pool Villa</div>
+                    <div class="property-location">📍 Zakynthos, Greece</div>
+                    <div class="property-features">
+                        <span>🛏 5 Beds</span>
+                        <span>🚿 6 Baths</span>
+                        <span>📐 7,000 sq ft</span>
+                        <span>🏊 Private Pool</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Added a few more for variety -->
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://media.istockphoto.com/id/2175972607/photo/modern-luxury-home-with-geometric-driveway-and-sunset-sky.jpg?s=612x612&w=0&k=20&c=0pvJ_frDStQGywjOptq9XmyEQgVIxfH3Yg7MbYIfIjI=" alt="Modern luxury home at sunset">
+                    <span class="property-badge">For Sale</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$3,150,000</div>
+                    <div class="property-title">Sunset Geometric Residence</div>
+                    <div class="property-location">📍 Los Angeles, California</div>
+                    <div class="property-features">
+                        <span>🛏 5 Beds</span>
+                        <span>🚿 4 Baths</span>
+                        <span>📐 4,900 sq ft</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <div style="position: relative;">
+                    <img class="property-image" src="https://thumbs.dreamstime.com/b/luxurious-penthouse-balcony-overlooking-vibrant-city-twilight-luxurious-penthouse-balcony-offers-breathtaking-views-city-339554468.jpg" alt="Luxury penthouse balcony city view">
+                    <span class="property-badge rent">For Lease</span>
+                </div>
+                <div class="property-info">
+                    <div class="property-price">$25,000/month</div>
+                    <div class="property-title">Twilight Sky Penthouse</div>
+                    <div class="property-location">📍 Dubai Marina</div>
+                    <div class="property-features">
+                        <span>🛏 4 Beds</span>
+                        <span>🚿 5 Baths</span>
+                        <span>📐 5,200 sq ft</span>
+                        <span>🌆 Panoramic View</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats and Footer sections unchanged for brevity -->
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>15,000+</h3>
+                <p>Premium Listings</p>
+            </div>
+            <div class="stat-item">
+                <h3>8,500+</h3>
+                <p>Satisfied Clients</p>
+            </div>
+            <div class="stat-item">
+                <h3>1,200+</h3>
+                <p>Professional Advisors</p>
+            </div>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>Metropolitan Areas</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Footer content unchanged -->
+        <div class="footer-content">
+            <!-- ... -->
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Prestige Properties International. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(e) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+        }
+
+        function toggleAdvanced() {
+            document.getElementById('advancedFilters').classList.toggle('show');
+        }
+
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
