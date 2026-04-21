@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETL: The Journey of Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: #050505; 
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .gradient-bg {
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #050505 100%);
+        }
+
+        .step-number {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            color: transparent;
+            font-size: 8rem;
+            line-height: 1;
+        }
+
+        .data-stream-container {
+            height: 200px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-box {
+            position: absolute;
+            background: #38bdf8;
+            box-shadow: 0 0 20px #38bdf8;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+
+    <header class="min-h-screen flex flex-col items-center justify-center text-center px-6">
+        <div class="space-y-4 max-w-4xl">
+            <h1 class="text-5xl md:text-8xl font-bold tracking-tight text-white mb-6">
+                Making Sense of <br><span class="text-sky-400 italic">Messy Data</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-400 font-light leading-relaxed">
+                If data is the new oil, then <strong>ETL</strong> is the refinery. <br> 
+                It's how we turn raw, confusing bits of info into answers we can actually use.
+            </p>
+        </div>
+        <div class="absolute bottom-10 animate-bounce opacity-50">
+            <i data-lucide="mouse" class="w-8 h-8"></i>
+        </div>
+    </header>
+
+    <section class="py-24 px-6 max-w-5xl mx-auto border-t border-white/10">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="reveal">
+                <h2 class="text-3xl font-bold text-white mb-6">The "Kitchen" Analogy</h2>
+                <p class="text-slate-400 text-lg leading-relaxed">
+                    Imagine you want to cook a world-class dinner. You don't just dump dirt-covered carrots and whole cows into a pot. 
+                    <br><br>
+                    You have to <strong>Gather</strong> ingredients, <strong>Prep</strong> them (peel, chop, wash), and then <strong>Plate</strong> them. That is exactly what ETL does for business data.
+                </p>
+            </div>
+            <div class="data-stream-container flex items-center justify-center">
+                <div id="kitchen-animation" class="text-sky-400 font-mono text-sm">Initializing Flow...</div>
+            </div>
+        </div>
+    </section>
+
+    <main class="py-20">
+        
+        <section class="min-h-screen flex items-center px-6 sticky top-0 bg-black/80 backdrop-blur-md border-y border-white/5">
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center w-full">
+                <div>
+                    <span class="step-number font-bold">01</span>
+                    <h2 class="text-5xl font-bold text-sky-400 mb-4 uppercase tracking-tighter">Extract</h2>
+                    <h3 class="text-xl text-white mb-6 italic">"The Gathering"</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        In a company, data is everywhere: your website, your cash registers, and your social media. 
+                        <strong>Extraction</strong> is like a vacuum cleaner. It goes to all these different places and sucks up the raw information so it's all in one room.
+                    </p>
+                    <div class="mt-8 flex gap-4">
+                        <div class="px-4 py-2 rounded-full border border-sky-500/30 text-xs bg-sky-500/5 uppercase">App Data</div>
+                        <div class="px-4 py-2 rounded-full border border-sky-500/30 text-xs bg-sky-500/5 uppercase">Spreadsheets</div>
+                    </div>
+                </div>
+                <div class="bg-slate-900/50 p-8 rounded-3xl border border-white/10 text-center">
+                    <i data-lucide="download-cloud" class="w-24 h-24 mx-auto text-sky-500 mb-4 animate-pulse"></i>
+                    <p class="text-sm text-slate-500">Retrieving data from 14 different sources...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="min-h-screen flex items-center px-6 sticky top-0 bg-black border-y border-white/5">
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center w-full">
+                <div class="order-2 md:order-1 bg-indigo-900/20 p-8 rounded-3xl border border-indigo-500/20">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-xs text-slate-500">
+                            <span>$100.00 USD</span>
+                            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            <span class="text-indigo-400">92.00 EUR</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-slate-500">
+                            <span>"john doe"</span>
+                            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            <span class="text-indigo-400">"John Doe"</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2">
+                    <span class="step-number font-bold" style="-webkit-text-stroke: 1px #818cf8;">02</span>
+                    <h2 class="text-5xl font-bold text-indigo-400 mb-4 uppercase tracking-tighter">Transform</h2>
+                    <h3 class="text-xl text-white mb-6 italic">"The Cleaning"</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        Raw data is full of mistakes. Some dates are written as 01/02 and others as Feb 1st. 
+                        <strong>Transformation</strong> fixes the format, removes duplicates, and translates everything into a single "language." It’s the difference between a pile of bricks and a finished wall.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="min-h-screen flex items-center px-6 sticky top-0 bg-black border-y border-white/5">
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center w-full">
+                <div>
+                    <span class="step-number font-bold" style="-webkit-text-stroke: 1px #10b981;">03</span>
+                    <h2 class="text-5xl font-bold text-emerald-400 mb-4 uppercase tracking-tighter">Load</h2>
+                    <h3 class="text-xl text-white mb-6 italic">"The Storage"</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        Now that the data is clean and organized, we put it into its final home—a <strong>Data Warehouse</strong>. 
+                        It’s now ready for a boss to look at a chart, or for an AI to learn from it. You’ve successfully turned "noise" into "knowledge."
+                    </p>
+                </div>
+                <div class="relative h-64 flex items-center justify-center">
+                    <div class="w-32 h-32 bg-emerald-500/20 border-2 border-emerald-500 rounded-2xl flex items-center justify-center">
+                        <i data-lucide="database" class="text-emerald-500 w-12 h-12"></i>
+                    </div>
+                    <div class="absolute inset-0" id="load-animation"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <section class="py-32 px-6 bg-slate-900">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-12">The Bottom Line</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6">
+                    <i data-lucide="zap" class="mx-auto mb-4 text-yellow-400"></i>
+                    <h4 class="font-bold mb-2">Speed</h4>
+                    <p class="text-sm text-slate-400">Stop waiting weeks for reports. ETL makes data ready instantly.</p>
+                </div>
+                <div class="p-6">
+                    <i data-lucide="shield-check" class="mx-auto mb-4 text-sky-400"></i>
+                    <h4 class="font-bold mb-2">Accuracy</h4>
+                    <p class="text-sm text-slate-400">No more guessing based on broken or old spreadsheets.</p>
+                </div>
+                <div class="p-6">
+                    <i data-lucide="trending-up" class="mx-auto mb-4 text-emerald-400"></i>
+                    <h4 class="font-bold mb-2">AI Ready</h4>
+                    <p class="text-sm text-slate-400">You can't use AI until your data is clean. ETL is the first step.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 text-center text-slate-600 text-xs tracking-widest">
+        &copy; 2026 DATA PIPELINE EXPLAINER // DESIGNED FOR CLARITY
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Kitchen/Data stream animation
+        const container = document.querySelector('.data-stream-container');
+        for(let i=0; i<15; i++) {
+            let dot = document.createElement('div');
+            dot.className = 'floating-box w-2 h-2 rounded-full';
+            container.appendChild(dot);
+            
+            gsap.set(dot, { x: -20, y: gsap.utils.random(20, 180) });
+            
+            gsap.to(dot, {
+                x: 600,
+                duration: gsap.utils.random(2, 4),
+                repeat: -1,
+                delay: gsap.utils.random(0, 4),
+                ease: "none",
+                opacity: [0, 1, 0]
+            });
+        }
+
+        // Load particles
+        const loadArea = document.getElementById('load-animation');
+        for(let i=0; i<10; i++) {
+            let p = document.createElement('div');
+            p.className = 'absolute w-1 h-1 bg-emerald-400 rounded-full';
+            loadArea.appendChild(p);
+            
+            gsap.fromTo(p, 
+                { x: gsap.utils.random(-100, 100), y: -100, opacity: 0 },
+                { x: 0, y: 0, opacity: 1, duration: 1.5, repeat: -1, delay: i * 0.2 }
+            );
+        }
+
+        // Fade in reveals
+        gsap.utils.toArray('.reveal').forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: el,
+                opacity: 0,
+                y: 50,
+                duration: 1
+            });
+        });
+    </script>
+</body>
+</html>
