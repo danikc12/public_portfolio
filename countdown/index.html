@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manchester Countdown</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Elegant Serif and Clean Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for minimalistic icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'manc-gold': '#D4AF37',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Glassmorphism and Subtle Animations -->
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Elegant Frosted Glass Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Subtle Fade In */
+        .fade-in {
+            animation: fadeIn 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Delicate Pulse for the Gold Accent */
+        .pulse-gold {
+            animation: pulseGold 4s infinite ease-in-out;
+        }
+
+        @keyframes pulseGold {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+            100% { opacity: 0.7; }
+        }
+    </style>
+</head>
+
+<!-- Background Image: A moody, aesthetic shot representing Manchester's architecture -->
+<!-- To use your own image, replace the URL inside bg-[url('...')] -->
+<body class="h-screen w-screen relative flex items-center justify-center bg-[url('manchester.jpeg')] bg-cover bg-center bg-no-repeat">
+
+    <!-- Dark Gradient Overlay for text readability and elegance -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80 z-0"></div>
+
+    <!-- Main Glassmorphism Card -->
+    <div class="glass-card relative z-10 p-10 md:p-16 rounded-2xl w-11/12 max-w-4xl text-center fade-in">
+        
+        <!-- Elegant Header -->
+        <div class="mb-4">
+            <i class="fa-solid fa-location-dot text-manc-gold pulse-gold text-xl mb-4"></i>
+            <h2 class="text-manc-gold uppercase tracking-[0.3em] text-sm md:text-base font-light mb-2">Awaiting the arrival</h2>
+            <h1 class="font-serif text-5xl md:text-7xl text-white font-normal tracking-wide mb-6">
+                Manchester
+            </h1>
+            <div class="w-16 h-[1px] bg-manc-gold/50 mx-auto mb-12"></div>
+        </div>
+
+        <!-- Minimalist Countdown Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 w-full">
+            
+            <!-- Days -->
+            <div class="flex flex-col items-center">
+                <span id="days" class="font-sans text-5xl md:text-6xl font-light text-white mb-2">00</span>
+                <span class="font-sans text-xs md:text-sm font-light text-white/60 uppercase tracking-[0.2em]">Days</span>
+            </div>
+            
+            <!-- Hours -->
+            <div class="flex flex-col items-center">
+                <span id="hours" class="font-sans text-5xl md:text-6xl font-light text-white mb-2">00</span>
+                <span class="font-sans text-xs md:text-sm font-light text-white/60 uppercase tracking-[0.2em]">Hours</span>
+            </div>
+            
+            <!-- Minutes -->
+            <div class="flex flex-col items-center">
+                <span id="minutes" class="font-sans text-5xl md:text-6xl font-light text-white mb-2">00</span>
+                <span class="font-sans text-xs md:text-sm font-light text-white/60 uppercase tracking-[0.2em]">Minutes</span>
+            </div>
+            
+            <!-- Seconds -->
+            <div class="flex flex-col items-center">
+                <span id="seconds" class="font-sans text-5xl md:text-6xl font-light text-white mb-2">00</span>
+                <span class="font-sans text-xs md:text-sm font-light text-white/60 uppercase tracking-[0.2em]">Seconds</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Engine -->
+    <script>
+        // ==========================================
+        // 🗓️ SET YOUR TARGET DATE & TIME HERE 
+        // Format: "YYYY-MM-DDTHH:MM:SS"
+        // ==========================================
+        const targetDate = new Date("2026-05-28T22:45:59").getTime();
+
+        // ⏱️ Countdown Logic
+        const countdown = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // If the countdown is finished
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            // Time calculations
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update DOM with leading zeros for elegance
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+    </script>
+</body>
+</html>
