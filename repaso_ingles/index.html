@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Inglés Perfecto | 10 Claves Gramaticales</title>
     
-    <!-- Google Fonts: Outfit (Títulos) e Inter (Cuerpo) para un look moderno y limpio -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS (Framework CDN moderno) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Configuración personalizada de Tailwind -->
@@ -39,6 +39,7 @@
             background-color: #f8fafc;
             color: #1e293b;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Mesh Gradient Background animado (Tendencia 2026) */
@@ -57,21 +58,27 @@
             background-clip: text;
         }
 
-        /* Tarjetas estilo "Neo-Clean" */
+        /* Tarjetas estilo "Neo-Clean" optimizadas para móvil */
         .concept-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px; /* Un poco más suaves en móvil */
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .concept-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 30px 60px -15px rgba(79, 70, 229, 0.15);
+        /* Efecto hover solo visible en dispositivos con ratón (evita el estado pegajoso en táctiles) */
+        @media (hover: hover) {
+            .concept-card:hover {
+                transform: translateY(-4px) scale(1.005);
+                box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.12);
+            }
+            .concept-card:hover::before {
+                opacity: 1;
+            }
         }
 
         /* Detalle decorativo de la tarjeta */
@@ -80,21 +87,23 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 6px;
+            width: 4px; /* Más fino en móvil */
             height: 100%;
             background: linear-gradient(to bottom, #4f46e5, #ec4899);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            opacity: 1; /* Siempre visible en móvil para dar color */
+        }
+        @media (min-width: 768px) {
+            .concept-card::before {
+                width: 6px;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
         }
 
-        .concept-card:hover::before {
-            opacity: 1;
-        }
-
-        /* Estilo de ejemplos sin dependencias de iconos */
+        /* Estilo de ejemplos adaptado */
         .example-item {
             position: relative;
-            padding-left: 20px;
+            padding-left: 18px; /* Ajustado para pantallas pequeñas */
         }
         .example-item::before {
             content: '«';
@@ -102,7 +111,7 @@
             left: 0;
             top: -2px;
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: #ec4899;
             font-weight: bold;
         }
@@ -110,8 +119,8 @@
         /* Animaciones al hacer Scroll */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            transform: translateY(20px); /* Movimiento más corto para móvil */
+            transition: all 0.7s cubic-bezier(0.5, 0, 0, 1);
         }
         .reveal.active {
             opacity: 1;
@@ -119,39 +128,42 @@
         }
     </style>
 </head>
-<body class="antialiased selection:bg-primary selection:text-white">
+<body>
 
     <!-- Hero Section -->
-    <header class="mesh-bg text-white py-32 px-6 relative overflow-hidden">
+    <header class="mesh-bg text-white py-16 sm:py-32 px-5 relative overflow-hidden">
         <div class="max-w-4xl mx-auto text-center relative z-10 reveal">
-            <span class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-sm font-medium mb-6 tracking-wide">
+            <span class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-medium mb-4 sm:mb-6 tracking-wide">
                 ESPECIAL HISPANOHABLANTES
             </span>
-            <h1 class="font-heading text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
-                Domina el <span class="text-gradient">Inglés Real</span>
+            <!-- Tipografía reescalada para que no se corte en móviles -->
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold mb-4 sm:mb-6 tracking-tight leading-tight">
+                Domina el <br class="sm:hidden"><span class="text-gradient">Inglés Real</span>
             </h1>
-            <p class="text-xl md:text-2xl text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
-                Los 10 conceptos gramaticales que todo español necesita entender para dejar de traducir mentalmente y empezar a hablar con fluidez.
+            <p class="text-base sm:text-xl md:text-2xl text-slate-300 font-light max-w-2xl mx-auto leading-relaxed px-2">
+                Los 10 conceptos gramaticales que todo español necesita entender para dejar de traducir mentalmente.
             </p>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 py-20 space-y-12 -mt-10 relative z-20">
+    <!-- Espaciados ajustados: menos margen negativo, paddings más estrechos en móvil -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-20 space-y-6 sm:space-y-12 -mt-6 sm:-mt-10 relative z-20">
 
         <!-- Concepto 1 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-2xl font-bold">1</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">El orden inquebrantable (S-V-O)</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <!-- Alineación ajustada en caso de que el título salte a 2-3 líneas en móvil -->
+            <div class="flex items-center sm:items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">1</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">El orden inquebrantable (S-V-O)</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                En España somos muy flexibles: "Me gusta la pizza", "La pizza me gusta". <strong>En inglés, esto está prohibido.</strong> La estructura siempre es rígida: <strong>Sujeto + Verbo + Objeto</strong>. Si falta el sujeto (algo común en español con los sujetos omitidos), la frase es incorrecta. Siempre necesitas decir quién hace la acción.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                En España somos muy flexibles: "Me gusta la pizza", "La pizza me gusta". <strong>En inglés, esto está prohibido.</strong> La estructura siempre es rígida: <strong>Sujeto + Verbo + Objeto</strong>. Siempre necesitas decir quién hace la acción.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item"><strong>It</strong> is raining. <span class="text-slate-400 text-sm">(En español decimos "Llueve", pero en inglés el sujeto "It" es obligatorio).</span></li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item"><strong>It</strong> is raining. <span class="text-slate-400 block sm:inline mt-0.5 sm:mt-0 text-xs sm:text-sm">(Decimos "Llueve", pero en inglés el "It" es obligatorio).</span></li>
                     <li class="example-item"><strong>I</strong> (Sujeto) <strong>like</strong> (Verbo) <strong>pizza</strong> (Objeto).</li>
                     <li class="example-item"><strong>My brother</strong> plays football every weekend.</li>
                 </ul>
@@ -159,17 +171,17 @@
         </article>
 
         <!-- Concepto 2 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-2xl font-bold">2</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">La maldita "S" de la tercera persona</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">2</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">La maldita "S" de la tercera persona</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                Es el error más común del estudiante español. En el presente simple, cuando hablamos de él, ella o eso (he, she, it), <strong>siempre</strong> hay que añadir una "-s" o "-es" al final del verbo. Parece una tontería, pero olvidarla suena muy poco natural para un nativo.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                El error más común del estudiante español. En el presente simple, cuando hablamos de él, ella o eso (he, she, it), <strong>siempre</strong> hay que añadir "-s" o "-es" al verbo. Olvidarla suena muy poco natural.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
                     <li class="example-item">She work<strong>s</strong> in a bank in Madrid.</li>
                     <li class="example-item">My dog sleep<strong>s</strong> all day.</li>
                     <li class="example-item">He watch<strong>es</strong> Netflix every night.</li>
@@ -178,75 +190,75 @@
         </article>
 
         <!-- Concepto 3 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-2xl font-bold">3</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">El drama de "En" (In, On, At)</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">3</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">El drama de "En" (In, On, At)</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                En castellano usamos "en" para todo: en la mesa, en enero, en las cinco, en Madrid. En inglés, se divide en tres: <strong>IN</strong> (para meses, años y lugares cerrados/ciudades), <strong>ON</strong> (para días de la semana, fechas exactas y superficies) y <strong>AT</strong> (para horas exactas y lugares específicos como "at home").
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Usamos "en" para todo, pero en inglés se divide: <strong>IN</strong> (meses, años, ciudades, dentro de), <strong>ON</strong> (días de la semana, fechas, superficies) y <strong>AT</strong> (horas exactas y lugares específicos).
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item">I live <strong>in</strong> Seville. The keys are <strong>in</strong> the drawer. (Dentro de / Ciudades)</li>
-                    <li class="example-item">The exam is <strong>on</strong> Monday. The book is <strong>on</strong> the table. (Días / Superficies)</li>
-                    <li class="example-item">Let's meet <strong>at</strong> 8:00 PM <strong>at</strong> the airport. (Hora exacta / Punto específico)</li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item">I live <strong>in</strong> Seville. The keys are <strong>in</strong> the drawer.</li>
+                    <li class="example-item">The exam is <strong>on</strong> Monday. The book is <strong>on</strong> the table.</li>
+                    <li class="example-item">Let's meet <strong>at</strong> 8:00 PM <strong>at</strong> the airport.</li>
                 </ul>
             </div>
         </article>
 
         <!-- Concepto 4 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-2xl font-bold">4</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">No uses "The" para todo</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">4</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">No uses "The" para todo</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                En español decimos "El amor es ciego" o "La gente es amable". En inglés, cuando hablamos de algo de forma general o abstracta, <strong>el artículo "The" desaparece</strong>. Solo se usa "The" cuando nos referimos a algo muy específico. Además, "The" no tiene plural ni género (vale para el, la, los, las).
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Cuando hablamos de algo de forma general o abstracta (el amor, la gente), <strong>el artículo "The" desaparece</strong>. Solo se usa para referirnos a cosas muy específicas y conocidas por ambos hablantes.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item"><strong>People</strong> are crazy. <span class="text-slate-400 text-sm">(NO digas "The people", hablamos de la gente en general).</span></li>
-                    <li class="example-item">I love <strong>music</strong>. <span class="text-slate-400 text-sm">(NO digas "the music", a menos que sea una canción concreta).</span></li>
-                    <li class="example-item"><strong>The</strong> music in this bar is too loud. <span class="text-slate-400 text-sm">(Aquí sí, porque es una música específica).</span></li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item"><strong>People</strong> are crazy. <span class="text-slate-400 block sm:inline text-xs sm:text-sm">(NO "The people").</span></li>
+                    <li class="example-item">I love <strong>music</strong>. <span class="text-slate-400 block sm:inline text-xs sm:text-sm">(La música en general).</span></li>
+                    <li class="example-item"><strong>The</strong> music in this bar is loud. <span class="text-slate-400 block sm:inline text-xs sm:text-sm">(Específica de este bar).</span></li>
                 </ul>
             </div>
         </article>
 
         <!-- Concepto 5 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-2xl font-bold">5</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">Presente Simple vs. Continuo</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">5</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">Presente Simple vs. Continuo</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                En España a veces decimos "Ahora voy" cuando en realidad lo estamos haciendo en ese momento. En inglés son muy estrictos: usa el <strong>Presente Simple</strong> (I do) para rutinas y cosas que son siempre verdad. Usa el <strong>Presente Continuo</strong> (I am doing) <em>exclusivamente</em> para lo que está ocurriendo ahora mismo o es temporal.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Usa el <strong>Presente Simple</strong> (I do) para rutinas y verdades generales. Usa el <strong>Presente Continuo</strong> (I am doing) <em>exclusivamente</em> para lo que está ocurriendo justo ahora o situaciones temporales.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item">I <strong>work</strong> in an office. (Rutina, es mi trabajo normal).</li>
-                    <li class="example-item">Today, I <strong>am working</strong> from home. (Situación temporal de hoy).</li>
-                    <li class="example-item">Listen! The baby <strong>is crying</strong>. (Está ocurriendo en este segundo).</li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item">I <strong>work</strong> in an office. (Rutina/Permanente).</li>
+                    <li class="example-item">Today, I <strong>am working</strong> from home. (Temporal).</li>
+                    <li class="example-item">Listen! The baby <strong>is crying</strong>. (Ocurriendo ahora).</li>
                 </ul>
             </div>
         </article>
 
         <!-- Concepto 6 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-2xl font-bold">6</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">Adjetivos: Sin plural y al revés</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">6</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">Adjetivos: Sin plural y al revés</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                Dos reglas de oro que rompen con el español: primero, <strong>los adjetivos siempre van delante del sustantivo</strong> (coche rojo = red car). Segundo, <strong>los adjetivos nunca llevan plural</strong>. No importa si hablas de un coche o de cien, el adjetivo se queda igual.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Dos reglas de oro: primero, <strong>los adjetivos siempre van delante</strong> del sustantivo (coche rojo = red car). Segundo, <strong>nunca llevan plural</strong>, aunque hables de cien cosas.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item">They are <strong>smart boys</strong>. <span class="text-slate-400 text-sm">(NO digas "smarts boys").</span></li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item">They are <strong>smart boys</strong>. <span class="text-slate-400 text-xs sm:text-sm">(NO "smarts boys").</span></li>
                     <li class="example-item">I bought a <strong>beautiful blue shirt</strong>.</li>
                     <li class="example-item">We have <strong>difficult problems</strong> to solve.</li>
                 </ul>
@@ -254,77 +266,77 @@
         </article>
 
         <!-- Concepto 7 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-2xl font-bold">7</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">Los Verbos Modales (Can, Must, Should)</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">7</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">Los Verbos Modales</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                Son verbos "rebeldes". No necesitan auxiliares para negar o preguntar, no llevan "s" en la tercera persona y el verbo que les sigue <strong>nunca lleva "to"</strong>. Sirven para expresar habilidad (can), obligación (must) o consejo (should).
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Can, Must, Should... Son verbos especiales. No necesitan "Do" para preguntar, no llevan "s" y el verbo que les sigue <strong>nunca lleva "to"</strong>.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item">He <strong>can speak</strong> English. <span class="text-slate-400 text-sm">(NO digas "He cans speak" ni "He can to speak").</span></li>
-                    <li class="example-item">You <strong>should go</strong> to the doctor. (Deberías ir - Consejo).</li>
-                    <li class="example-item">We <strong>must finish</strong> this today. (Debemos terminar - Obligación).</li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item">He <strong>can speak</strong> English. <span class="text-slate-400 text-xs sm:text-sm">(NO "can to speak").</span></li>
+                    <li class="example-item">You <strong>should go</strong> to the doctor. (Consejo).</li>
+                    <li class="example-item">We <strong>must finish</strong> this today. (Obligación).</li>
                 </ul>
             </div>
         </article>
 
         <!-- Concepto 8 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-2xl font-bold">8</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">Contables vs. Incontables (Much / Many)</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">8</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">Much vs. Many</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                En español decimos "mucho dinero" y "muchos amigos". En inglés, tienes que distinguir si la cosa se puede contar o no. Si se puede contar uno a uno (libros, personas), usa <strong>Many</strong>. Si es una masa o concepto que no se cuenta individualmente (agua, dinero, tiempo), usa <strong>Much</strong>.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Si la cosa se puede contar uno a uno (libros, personas), usa <strong>Many</strong>. Si es una masa o concepto que no se cuenta por unidades (agua, dinero, tiempo), usa <strong>Much</strong>.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item">How <strong>many</strong> cars are in the street? (Coches = Contable).</li>
-                    <li class="example-item">I don't have <strong>much</strong> time. (Tiempo = Incontable).</li>
-                    <li class="example-item">Can you give me <strong>some</strong> information? <span class="text-slate-400 text-sm">(La información en inglés es incontable, no tiene plural).</span></li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item">How <strong>many</strong> cars are there? (Contable).</li>
+                    <li class="example-item">I don't have <strong>much</strong> time. (Incontable).</li>
+                    <li class="example-item">Can you give me <strong>some</strong> information? <span class="text-slate-400 block sm:inline text-xs sm:text-sm">(Información es incontable en inglés).</span></li>
                 </ul>
             </div>
         </article>
 
         <!-- Concepto 9 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-2xl font-bold">9</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">Las Preguntas y el Auxiliar "Do/Does"</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-indigo-50 text-primary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">9</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">Preguntas y el Auxiliar "Do/Does"</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                A los españoles nos cuesta porque en castellano solo subimos la entonación: "¿Vives aquí?". En inglés, para preguntar en presente (excepto con el verbo To Be o modales), <strong>necesitas usar "Do" o "Does"</strong> (para he/she/it) al principio. Actúan como el signo de interrogación inicial (¿) que ellos no tienen.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                En inglés no basta con subir el tono de voz para preguntar. Necesitas usar <strong>"Do" o "Does"</strong> (para he/she/it) al principio de la frase. Piensa en ellos como el signo de interrogación inicial (¿) que no existe en su idioma.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
                     <li class="example-item"><strong>Do</strong> you like tapas?</li>
-                    <li class="example-item"><strong>Does</strong> she live in Barcelona? <span class="text-slate-400 text-sm">(Nota: El verbo principal ya NO lleva 's', la lleva el auxiliar).</span></li>
-                    <li class="example-item">What time <strong>do</strong> they open the shop?</li>
+                    <li class="example-item"><strong>Does</strong> she live in Barcelona? <span class="text-slate-400 block sm:inline text-xs sm:text-sm">(El verbo principal ya no lleva 's').</span></li>
+                    <li class="example-item">What time <strong>do</strong> they open?</li>
                 </ul>
             </div>
         </article>
 
         <!-- Concepto 10 -->
-        <article class="concept-card p-8 md:p-10 reveal">
-            <div class="flex items-center gap-6 mb-6">
-                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-2xl font-bold">10</div>
-                <h2 class="font-heading text-3xl font-semibold text-slate-800">El Pasado: Regulares e Irregulares</h2>
+        <article class="concept-card p-5 sm:p-8 md:p-10 reveal">
+            <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-pink-50 text-secondary flex items-center justify-center font-heading text-xl sm:text-2xl font-bold shadow-sm">10</div>
+                <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 leading-tight">El Pasado: Regulares e Irregulares</h2>
             </div>
-            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                Para hablar del pasado (acciones terminadas en un tiempo específico), el inglés es más sencillo que el español porque hay menos conjugaciones. Solo tienes que recordar que los verbos regulares terminan en <strong>-ed</strong>, pero los irregulares (como go -> went) hay que aprenderlos de memoria. En negativas y preguntas usamos <strong>Did</strong>.
+            <p class="text-base sm:text-lg text-slate-600 mb-5 sm:mb-8 leading-relaxed">
+                Los verbos regulares en pasado terminan en <strong>-ed</strong>. Los irregulares (como go -> went) hay que memorizarlos. En negativas y preguntas en pasado usamos el auxiliar <strong>Did</strong>.
             </p>
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Ejemplos Prácticos</h3>
-                <ul class="space-y-3 text-slate-700">
-                    <li class="example-item">I <strong>worked</strong> late yesterday. (Verbo regular).</li>
-                    <li class="example-item">We <strong>went</strong> to the beach last summer. (Verbo irregular).</li>
-                    <li class="example-item">I <strong>didn't see</strong> that movie. <span class="text-slate-400 text-sm">(Al usar 'didn't', el verbo principal vuelve a su forma base).</span></li>
+            <div class="bg-slate-50/80 rounded-xl p-4 sm:p-6 border border-slate-100">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 sm:mb-4">Ejemplos Prácticos</h3>
+                <ul class="space-y-3 text-sm sm:text-base text-slate-700">
+                    <li class="example-item">I <strong>worked</strong> late yesterday. (Regular).</li>
+                    <li class="example-item">We <strong>went</strong> to the beach. (Irregular).</li>
+                    <li class="example-item">I <strong>didn't see</strong> that movie. <span class="text-slate-400 block sm:inline text-xs sm:text-sm">(Al usar 'didn't', el verbo vuelve a su forma base).</span></li>
                 </ul>
             </div>
         </article>
@@ -332,10 +344,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-slate-400 py-12 mt-20 border-t border-slate-800">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <p class="font-light tracking-wide mb-2">Diseñado para la comprensión nativa hispana.</p>
-            <p class="text-sm opacity-70">© 2026 · Vanguardia Web Design</p>
+    <footer class="bg-dark text-slate-400 py-10 mt-10 sm:mt-16 border-t border-slate-800">
+        <div class="max-w-4xl mx-auto px-5 text-center">
+            <p class="font-light tracking-wide mb-2 text-sm sm:text-base">Diseñado para la comprensión nativa hispana.</p>
+            <p class="text-xs sm:text-sm opacity-70">© 2026 · Vanguardia Web Design</p>
         </div>
     </footer>
 
@@ -346,15 +358,15 @@
 
             const observerOptions = {
                 root: null,
-                rootMargin: "0px",
-                threshold: 0.15 // El elemento debe estar al menos 15% visible
+                rootMargin: "0px 0px -50px 0px", // Activa la animación un poco antes en móvil
+                threshold: 0.1
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add("active");
-                        observer.unobserve(entry.target); // Dejar de observar una vez animado
+                        observer.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
