@@ -3,1304 +3,1764 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mundial 2026 — Horarios para España</title>
+<title>Mundial 2026 — Horarios España</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:        #0a0e1a;
-    --surface:   #111827;
-    --card:      #161d2e;
-    --border:    #1e2a3a;
-    --accent:    #c8a84b;
-    --accent2:   #e63946;
-    --text:      #e8eaf0;
-    --muted:     #6b7a99;
-    --group-tag: #1a2540;
-  }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ─── DESIGN TOKENS ─── */
+:root {
+  --bg:           #070a12;
+  --bg-raised:    #0c1018;
+  --card:         #0f131e;
+  --card-hover:   #131825;
+  --border:       rgba(255,255,255,0.065);
+  --border-hi:    rgba(255,255,255,0.115);
+  --gold:         #c9a84c;
+  --gold-glow:    rgba(201,168,76,0.15);
+  --gold-border:  rgba(201,168,76,0.22);
+  --red:          #e53e45;
+  --red-dim:      rgba(229,62,69,0.10);
+  --red-border:   rgba(229,62,69,0.24);
+  --text-hi:      #eef0f8;
+  --text-body:    #8b97b5;
+  --text-muted:   #404d68;
+  --r-sm:         6px;
+  --r-md:         10px;
+  --r-lg:         14px;
+  --ease-spring:  cubic-bezier(.34,1.56,.64,1);
+  --ease-out:     cubic-bezier(.22,.68,0,1);
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    line-height: 1.5;
-  }
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  /* ── HERO ── */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    padding: clamp(32px, 6vw, 56px) 20px clamp(28px, 5vw, 48px);
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-    background: radial-gradient(ellipse 80% 60% at 50% -10%, #1a2d55 0%, transparent 70%);
-  }
-  .hero::before {
-    content: '2026';
-    position: absolute;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: clamp(80px, 22vw, 280px);
-    color: rgba(255,255,255,0.03);
-    top: -10px; left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-    white-space: nowrap;
-    letter-spacing: -4px;
-  }
-  .hero-eyebrow {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(10px, 2vw, 11px);
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-  }
-  .hero h1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: clamp(32px, 8vw, 72px);
-    line-height: 1;
-    text-transform: uppercase;
-    letter-spacing: -1px;
-    color: #fff;
-    margin-bottom: 8px;
-  }
-  .hero h1 span { color: var(--accent); }
-  .hero-sub {
-    font-size: clamp(12px, 3vw, 14px);
-    color: var(--muted);
-    letter-spacing: 0.5px;
-  }
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px,9vw,96px) 20px clamp(44px,7vw,80px);
+  text-align: center;
+}
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -5%, rgba(18,42,110,.55) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 20% 110%, rgba(201,168,76,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(229,62,69,.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+  opacity: .35;
+  pointer-events: none;
+}
+.hero-watermark {
+  position: absolute;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: clamp(100px, 26vw, 320px);
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.038);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-border);
+  border-radius: 100px;
+  padding: 5px 16px 5px 12px;
+  margin-bottom: 24px;
+}
+.hero-pill-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px 2px rgba(201,168,76,.5);
+  flex-shrink: 0;
+}
+.hero h1 {
+  font-size: clamp(40px, 8vw, 84px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: clamp(-1.5px, -0.03em, -4px);
+  color: var(--text-hi);
+  margin-bottom: 16px;
+}
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero-sub {
+  font-size: clamp(12px, 1.8vw, 13px);
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-sub-dot { color: var(--text-muted); opacity: .4; }
+.hero-border {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border-hi) 30%, var(--border-hi) 70%, transparent 100%);
+}
 
-  /* ── CONTROLS ── */
-  .controls {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(10,14,26,0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .controls-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .filter-btn {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all .18s;
-    white-space: nowrap;
-  }
-  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
-  .filter-btn.spain-btn.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
-  .search-wrap { margin-left: auto; position: relative; }
-  .search-wrap input {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-size: 13px;
-    padding: 5px 10px 5px 28px;
-    outline: none;
-    width: clamp(120px, 20vw, 180px);
-    transition: border .18s;
-  }
-  .search-wrap input:focus { border-color: var(--accent); }
-  .search-wrap::before {
-    content: '⌕';
-    position: absolute;
-    left: 8px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    font-size: 15px;
-    pointer-events: none;
-  }
+/* ─── STICKY NAV ─── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(7,10,18,0.82);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 10px clamp(16px,4vw,32px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 3px;
+}
+.filter-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background .14s, color .14s;
+  white-space: nowrap;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+.filter-btn:hover  { background: rgba(255,255,255,.07); color: var(--text-hi); }
+.filter-btn.active { background: rgba(255,255,255,.10); color: var(--text-hi); }
+.filter-btn.btn-spain.active {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(229,62,69,.35);
+}
+.nav-sep {
+  width: 1px; height: 18px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.search-wrap {
+  margin-left: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  pointer-events: none;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+.search-wrap input {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-hi);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  padding: 6px 12px 6px 32px;
+  outline: none;
+  width: clamp(140px,18vw,200px);
+  transition: border-color .15s, background .15s;
+  -webkit-appearance: none;
+}
+.search-wrap input::placeholder { color: var(--text-muted); }
+.search-wrap input:focus {
+  border-color: var(--gold-border);
+  background: var(--gold-glow);
+}
 
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: clamp(20px, 4vw, 40px) clamp(12px, 4vw, 24px) 80px;
-  }
+/* ─── LAYOUT ─── */
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: clamp(24px,4vw,52px) clamp(16px,4vw,32px) 100px;
+}
 
-  /* ── PHASE HEADER ── */
-  .phase-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: clamp(28px, 5vw, 48px) 0 16px;
-  }
-  .phase-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .phase-line { flex: 1; height: 1px; background: var(--border); }
+/* ─── PHASE HEADER ─── */
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: clamp(36px,6vw,60px) 0 clamp(14px,2vw,22px);
+}
+.phase-header:first-child { margin-top: 0; }
+.phase-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.phase-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border-hi) 0%, transparent 100%);
+}
 
-  /* ── DAY BLOCK ── */
-  .day-block { margin-bottom: 4px; }
-  .day-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 14px 0 7px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .day-label::after { content: ''; flex: 1; height: 1px; background: var(--border); opacity: .4; }
-  .today-badge {
-    background: var(--accent);
-    color: #000;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 2px 7px;
-    border-radius: 3px;
-  }
+/* ─── DAY ROW ─── */
+.day-block { margin-bottom: 2px; }
+.day-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(12px,2.5vw,20px) 0 clamp(7px,1.5vw,11px);
+}
+.day-text {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.today-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000;
+  background: var(--gold);
+  padding: 2px 8px;
+  border-radius: 100px;
+  line-height: 1.6;
+}
+.day-rule { flex: 1; height: 1px; background: var(--border); }
 
-  /* ── MATCH CARD — DESKTOP ── */
+/* ─── MATCH CARD ─── */
+.match-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 70px 1fr 34px 1fr 104px;
+  align-items: stretch;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  margin-bottom: 3px;
+  overflow: hidden;
+  transition:
+    border-color .2s var(--ease-out),
+    background .2s var(--ease-out),
+    transform .18s var(--ease-spring),
+    box-shadow .2s var(--ease-out);
+}
+.match-card:hover {
+  background: var(--card-hover);
+  border-color: var(--border-hi);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 32px rgba(0,0,0,.32), 0 1px 0 rgba(255,255,255,.04) inset;
+}
+.match-card.hidden { display: none !important; }
+
+/* Spain accent */
+.match-card.spain { border-color: var(--red-border); }
+.match-card.spain::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 2px;
+  background: var(--red);
+  border-radius: 0 2px 2px 0;
+}
+.match-card.spain:hover {
+  border-color: rgba(229,62,69,.4);
+  box-shadow: 0 6px 32px rgba(229,62,69,.12), 0 1px 0 rgba(255,255,255,.04) inset;
+}
+
+/* ── Time cell ── */
+.card-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 12px 14px 16px;
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 2px;
+}
+.time-digits {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.time-zone {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+/* ── Team cells ── */
+.card-team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+.card-team.right {
+  flex-direction: row-reverse;
+  text-align: right;
+  padding-left: 20px;
+}
+.card-team.left {
+  text-align: left;
+  padding-right: 20px;
+}
+.t-flag {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: block;
+}
+.t-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-hi);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.t-name.is-spain { color: #f09499; }
+
+/* ── VS ── */
+.card-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+.vs-text {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Meta cell ── */
+.card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px 16px 12px 12px;
+  border-left: 1px solid var(--border);
+  gap: 3px;
+  min-width: 0;
+}
+.meta-tag {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(255,255,255,.05);
+  border-radius: 4px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.meta-venue {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: right;
+}
+
+/* ─── NO RESULTS ─── */
+.no-results {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 24px;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+.no-results svg { opacity: .2; }
+
+/* ─── FOOTER ─── */
+.foot {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.foot-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.foot-dot {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.foot-tz {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ─── RESPONSIVE: 740px ─── */
+@media (max-width: 740px) {
   .match-card {
-    display: grid;
-    grid-template-columns: 68px 1fr 32px 1fr 88px;
+    grid-template-columns: 58px 1fr 26px 1fr;
+    grid-template-rows: auto auto;
+    border-radius: var(--r-sm);
+  }
+  .card-time {
+    grid-column: 1; grid-row: 1 / 3;
+    padding: 12px 8px;
+    border-right: 1px solid var(--border);
+  }
+  .time-digits { font-size: 13px; }
+  .card-team.right { grid-column: 2; grid-row: 1; padding: 10px 8px 3px 12px; }
+  .card-vs        { grid-column: 3; grid-row: 1; align-self: center; padding-top: 10px; }
+  .card-team.left { grid-column: 4; grid-row: 1; padding: 10px 12px 3px 8px; }
+  .card-meta {
+    grid-column: 2 / 5; grid-row: 2;
+    flex-direction: row;
     align-items: center;
-    gap: 10px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin-bottom: 6px;
-    transition: border-color .18s, background .18s;
-    position: relative;
-    overflow: hidden;
-  }
-  .match-card:hover { border-color: #2a3a55; background: #1a2236; }
-  .match-card.spain {
-    border-color: rgba(230,57,70,.35);
-    background: linear-gradient(90deg, rgba(230,57,70,.06) 0%, var(--card) 50%);
-  }
-  .match-card.spain::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--accent2);
-    border-radius: 3px 0 0 3px;
-  }
-  .match-card.hidden { display: none !important; }
-
-  /* time column */
-  .match-time {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 21px;
-    color: var(--accent);
-    line-height: 1;
-    text-align: right;
-  }
-  .match-time-zone {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 1px;
-    text-align: right;
-    margin-top: 2px;
-  }
-
-  /* team columns */
-  .team { text-align: right; min-width: 0; }
-  .team-b { text-align: left; }
-  .team-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    letter-spacing: .2px;
-    color: var(--text);
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .team-name.spain-team { color: #e8737d; }
-  .team-flag {
-    font-size: 20px;
-    display: block;
-    margin-bottom: 2px;
-    line-height: 1;
-  }
-
-  .vs {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  /* meta column */
-  .match-meta { text-align: right; min-width: 0; }
-  .meta-group {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    background: var(--group-tag);
-    color: var(--muted);
-    padding: 2px 7px;
-    border-radius: 3px;
-    display: inline-block;
-    margin-bottom: 3px;
-    white-space: nowrap;
-  }
-  .meta-venue {
-    font-size: 11px;
-    color: var(--muted);
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* ── MATCH CARD — MOBILE ── */
-  @media (max-width: 560px) {
-    .controls { gap: 6px; padding: 8px 12px; }
-    .controls-label { display: none; }
-    .filter-btn { font-size: 11px; padding: 5px 10px; }
-    .search-wrap { width: 100%; margin-left: 0; margin-top: 4px; }
-    .search-wrap input { width: 100%; }
-
-    .match-card {
-      /* Stack: time | flag+name vs flag+name | meta */
-      grid-template-columns: 56px 1fr 24px 1fr;
-      grid-template-rows: auto auto;
-      gap: 6px 8px;
-      padding: 10px 12px;
-    }
-    /* time: row 1 col 1, spans 1 row */
-    .match-card > div:first-child { grid-column: 1; grid-row: 1 / 3; align-self: center; }
-    /* team A: row 1 col 2 */
-    .team:not(.team-b) { grid-column: 2; grid-row: 1; }
-    /* vs: row 1 col 3 */
-    .vs { grid-column: 3; grid-row: 1; align-self: center; }
-    /* team B: row 1 col 4 */
-    .team-b { grid-column: 4; grid-row: 1; }
-    /* meta: row 2 col 2-4 */
-    .match-meta { grid-column: 2 / 5; grid-row: 2; text-align: left; }
-
-    .match-time { font-size: 17px; text-align: center; }
-    .match-time-zone { text-align: center; }
-    .team { text-align: right; }
-    .team-b { text-align: left; }
-    .team-flag { font-size: 17px; }
-    .team-name { font-size: 13px; }
-    .meta-venue { white-space: normal; }
-  }
-
-  /* ── LEGEND ── */
-  .legend {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--muted);
-    padding: 20px 0 0;
+    justify-content: flex-start;
+    border-left: none;
     border-top: 1px solid var(--border);
-    margin-top: 40px;
-    flex-wrap: wrap;
+    padding: 5px 12px 8px;
+    text-align: left;
+    gap: 8px;
   }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .meta-venue { text-align: left; }
+  .t-flag { font-size: 17px; }
+  .t-name { font-size: 12px; }
+  .foot-tz { display: none; }
+}
 
-  /* ── NO RESULTS ── */
-  .no-results {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--muted);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px;
-    letter-spacing: 2px;
-    display: none;
-  }
+/* ─── RESPONSIVE: 480px ─── */
+@media (max-width: 480px) {
+  .nav-inner    { gap: 6px; padding: 8px 12px 10px; }
+  .filter-btn   { font-size: 11px; padding: 4px 10px; }
+  .search-wrap  { width: 100%; margin-left: 0; }
+  .search-wrap input { width: 100%; }
+  .match-card   { border-radius: 6px; margin-bottom: 2px; }
+  .card-time    { padding: 10px 6px; }
+  .time-digits  { font-size: 12px; }
+  .t-flag       { font-size: 15px; }
+  .t-name       { font-size: 11px; }
+  .card-team.right { padding: 8px 6px 2px 10px; gap: 6px; }
+  .card-team.left  { padding: 8px 10px 2px 6px; gap: 6px; }
+  .card-meta    { padding: 4px 10px 7px; }
+  .meta-venue   { display: none; }
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.07); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.12); }
+
+
+/* ─── MATCH STATES ─── */
+.match-past {
+  opacity: 0.38;
+  filter: saturate(0.3);
+  transition: opacity .2s, filter .2s;
+}
+.match-past:hover {
+  opacity: 0.65;
+  filter: saturate(0.6);
+}
+.match-live {
+  border-color: rgba(229,62,69,.5) !important;
+  background: rgba(229,62,69,.06) !important;
+  animation: live-pulse 2s ease-in-out infinite;
+}
+.match-live::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(229,62,69,.4);
+  animation: live-ring 2s ease-out infinite;
+  pointer-events: none;
+}
+.match-live .card-time .time-digits { color: var(--red); }
+.match-live .card-time::after {
+  content: '● EN VIVO';
+  display: block;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  margin-top: 4px;
+  line-height: 1;
+}
+@keyframes live-pulse {
+  0%,100% { background: rgba(229,62,69,.06) !important; }
+  50%      { background: rgba(229,62,69,.11) !important; }
+}
+@keyframes live-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(229,62,69,.35); }
+  70%  { box-shadow: 0 0 0 8px rgba(229,62,69,0); }
+  100% { box-shadow: 0 0 0 0 rgba(229,62,69,0); }
+}
+
+/* ─── PAST TOGGLE BAR ─── */
+#past-toggle {
+  margin-bottom: 4px;
+}
+#past-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  text-align: left;
+  letter-spacing: 0.01em;
+}
+#past-toggle-btn:hover {
+  background: rgba(255,255,255,.05);
+  border-color: var(--border-hi);
+  color: var(--text-hi);
+}
+#past-toggle-btn svg {
+  flex-shrink: 0;
+  transition: transform .25s var(--ease-spring);
+  color: var(--gold);
+}
+#past-toggle-btn.expanded svg { transform: rotate(180deg); }
+#past-toggle-label {
+  font-weight: 600;
+  color: var(--gold);
+}
+.past-toggle-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: .7;
+}
+
+/* ─── TODAY BLOCK HIGHLIGHT ─── */
+.day-today > .day-label .day-text {
+  color: var(--gold);
+}
+.day-today > .day-label .day-rule {
+  background: linear-gradient(90deg, var(--gold-border) 0%, transparent 100%);
+}
+
 </style>
 </head>
 <body>
 
+<!-- ─── HERO ─── -->
 <header class="hero">
-  <div class="hero-eyebrow">Copa Mundial FIFA · Horario Peninsular (CEST UTC+2)</div>
-  <h1>Mundial <span>2026</span></h1>
-  <p class="hero-sub">11 jun – 19 jul &nbsp;·&nbsp; USA · México · Canadá &nbsp;·&nbsp; 104 partidos</p>
+  <div class="hero-gradient"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-watermark" aria-hidden="true">2026</div>
+  <div class="hero-inner">
+    <div class="hero-pill">
+      <span class="hero-pill-dot"></span>
+      Copa Mundial FIFA
+    </div>
+    <h1>Mundial <em>2026</em></h1>
+    <p class="hero-sub">
+      <span>11 jun &ndash; 19 jul</span>
+      <span class="hero-sub-dot">&middot;</span>
+      <span>Estados Unidos &middot; México &middot; Canadá</span>
+      <span class="hero-sub-dot">&middot;</span>
+      <span>104 partidos</span>
+    </p>
+  </div>
+  <div class="hero-border"></div>
 </header>
 
-<div class="controls">
-  <span class="controls-label">Ver</span>
-  <button class="filter-btn active" data-filter="all">Todos</button>
-  <button class="filter-btn spain-btn" data-filter="spain">🇪🇸 España</button>
-  <button class="filter-btn" data-filter="grupos">Grupos</button>
-  <button class="filter-btn" data-filter="eliminatoria">Eliminatoria</button>
-  <div class="search-wrap">
-    <input type="text" id="search" placeholder="Buscar equipo…" autocomplete="off">
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="filter-group">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn btn-spain" data-filter="spain">🇪🇸 España</button>
+    </div>
+    <div class="nav-sep"></div>
+    <div class="filter-group">
+      <button class="filter-btn" data-filter="grupos">Grupos</button>
+      <button class="filter-btn" data-filter="eliminatoria">Eliminatoria</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+          <circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
+        </svg>
+      </span>
+      <input type="search" id="search" placeholder="Buscar equipo…" autocomplete="off" spellcheck="false">
+    </div>
   </div>
-</div>
+</nav>
 
+<!-- ─── CONTENT ─── -->
 <div class="container" id="main">
 
-<!-- ══════════════════════════════════════════════
-     FASE DE GRUPOS
-═══════════════════════════════════════════════ -->
 <div class="phase-header"><span class="phase-title">Fase de Grupos</span><div class="phase-line"></div></div>
 
-<!-- JUE 11 JUN -->
-<div class="day-block">
-  <div class="day-label">Jue 11 jun <span class="today-badge">HOY</span></div>
+<div class="day-block" data-date="2026-06-11">
+  <div class="day-label"><span class="day-text">Jue 11 jun</span><span class="today-badge">HOY</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="México Sudáfrica">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇲🇽</span><div class="team-name">México</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇿🇦</span><div class="team-name">Sudáfrica</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo A</span><span class="meta-venue">Ciudad de México</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇲🇽</span><span class="t-name">México</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇿🇦</span><span class="t-name">Sudáfrica</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo A</span><span class="meta-venue">Ciudad de México</span></div>
   </div>
 </div>
 
-<!-- VIE 12 JUN -->
-<div class="day-block">
-  <div class="day-label">Vie 12 jun</div>
+<div class="day-block" data-date="2026-06-12">
+  <div class="day-label"><span class="day-text">Vie 12 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Corea del Sur República Checa">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇰🇷</span><div class="team-name">Corea del Sur</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇿</span><div class="team-name">Rep. Checa</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo A</span><span class="meta-venue">Guadalajara</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇰🇷</span><span class="t-name">Corea del Sur</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇿</span><span class="t-name">Chequia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo A</span><span class="meta-venue">Guadalajara</span></div>
   </div>
   <div class="match-card grupos" data-teams="Canadá Bosnia Herzegovina">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇦</span><div class="team-name">Canadá</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇧🇦</span><div class="team-name">Bosnia Herz.</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo B</span><span class="meta-venue">Toronto</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇦</span><span class="t-name">Canadá</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇧🇦</span><span class="t-name">Bosnia y Herz.</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo B</span><span class="meta-venue">Toronto</span></div>
   </div>
 </div>
 
-<!-- SÁB 13 JUN -->
-<div class="day-block">
-  <div class="day-label">Sáb 13 jun</div>
+<div class="day-block" data-date="2026-06-13">
+  <div class="day-label"><span class="day-text">Sáb 13 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Estados Unidos Turquía">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇺🇸</span><div class="team-name">Estados Unidos</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇹🇷</span><div class="team-name">Turquía</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo D</span><span class="meta-venue">Los Ángeles</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇺🇸</span><span class="t-name">Estados Unidos</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇹🇷</span><span class="t-name">Turquía</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo D</span><span class="meta-venue">Los Ángeles</span></div>
   </div>
   <div class="match-card grupos" data-teams="Australia Paraguay">
-    <div><div class="match-time">06:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇦🇺</span><div class="team-name">Australia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇵🇾</span><div class="team-name">Paraguay</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo D</span><span class="meta-venue">Vancouver</span></div>
+    <div class="card-time"><span class="time-digits">06:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇦🇺</span><span class="t-name">Australia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇵🇾</span><span class="t-name">Paraguay</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo D</span><span class="meta-venue">Vancouver</span></div>
   </div>
   <div class="match-card grupos" data-teams="Qatar Suiza">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇶🇦</span><div class="team-name">Qatar</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇭</span><div class="team-name">Suiza</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo B</span><span class="meta-venue">San Francisco</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇶🇦</span><span class="t-name">Qatar</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇭</span><span class="t-name">Suiza</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo B</span><span class="meta-venue">San Francisco</span></div>
   </div>
 </div>
 
-<!-- DOM 14 JUN -->
-<div class="day-block">
-  <div class="day-label">Dom 14 jun</div>
+<div class="day-block" data-date="2026-06-14">
+  <div class="day-label"><span class="day-text">Dom 14 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Brasil Marruecos">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇧🇷</span><div class="team-name">Brasil</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇲🇦</span><div class="team-name">Marruecos</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo C</span><span class="meta-venue">Boston</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇧🇷</span><span class="t-name">Brasil</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇲🇦</span><span class="t-name">Marruecos</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo C</span><span class="meta-venue">Boston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Haití Escocia">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇭🇹</span><div class="team-name">Haití</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><div class="team-name">Escocia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo C</span><span class="meta-venue">Nueva York</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇭🇹</span><span class="t-name">Haití</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span class="t-name">Escocia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo C</span><span class="meta-venue">Nueva York</span></div>
   </div>
   <div class="match-card grupos" data-teams="Alemania Curazao">
-    <div><div class="match-time">19:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇩🇪</span><div class="team-name">Alemania</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇼</span><div class="team-name">Curazao</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo E</span><span class="meta-venue">Philadelphia</span></div>
+    <div class="card-time"><span class="time-digits">19:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇩🇪</span><span class="t-name">Alemania</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇼</span><span class="t-name">Curazao</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo E</span><span class="meta-venue">Philadelphia</span></div>
   </div>
   <div class="match-card grupos" data-teams="Países Bajos Japón">
-    <div><div class="match-time">22:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇳🇱</span><div class="team-name">Países Bajos</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇯🇵</span><div class="team-name">Japón</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo F</span><span class="meta-venue">Dallas</span></div>
+    <div class="card-time"><span class="time-digits">22:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇳🇱</span><span class="t-name">Países Bajos</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇯🇵</span><span class="t-name">Japón</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo F</span><span class="meta-venue">Dallas</span></div>
   </div>
 </div>
 
-<!-- LUN 15 JUN -->
-<div class="day-block">
-  <div class="day-label">Lun 15 jun</div>
+<div class="day-block" data-date="2026-06-15">
+  <div class="day-label"><span class="day-text">Lun 15 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Costa de Marfil Ecuador">
-    <div><div class="match-time">01:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇮</span><div class="team-name">Costa de Marfil</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇪🇨</span><div class="team-name">Ecuador</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo E</span><span class="meta-venue">Houston</span></div>
+    <div class="card-time"><span class="time-digits">01:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇮</span><span class="t-name">Costa de Marfil</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇪🇨</span><span class="t-name">Ecuador</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo E</span><span class="meta-venue">Houston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Suecia Túnez">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇸🇪</span><div class="team-name">Suecia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇹🇳</span><div class="team-name">Túnez</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo F</span><span class="meta-venue">Monterrey</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇸🇪</span><span class="t-name">Suecia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇹🇳</span><span class="t-name">Túnez</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo F</span><span class="meta-venue">Monterrey</span></div>
   </div>
   <div class="match-card grupos spain" data-teams="España Cabo Verde">
-    <div><div class="match-time">18:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇪🇸</span><div class="team-name spain-team">España</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇻</span><div class="team-name">Cabo Verde</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo H</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">18:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇪🇸</span><span class="t-name is-spain">España</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇻</span><span class="t-name">Cabo Verde</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo H</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="Bélgica Egipto">
-    <div><div class="match-time">23:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇧🇪</span><div class="team-name">Bélgica</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇪🇬</span><div class="team-name">Egipto</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo G</span><span class="meta-venue">Los Ángeles</span></div>
+    <div class="card-time"><span class="time-digits">23:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇧🇪</span><span class="t-name">Bélgica</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇪🇬</span><span class="t-name">Egipto</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo G</span><span class="meta-venue">Los Ángeles</span></div>
   </div>
 </div>
 
-<!-- MAR 16 JUN -->
-<div class="day-block">
-  <div class="day-label">Mar 16 jun</div>
+<div class="day-block" data-date="2026-06-16">
+  <div class="day-label"><span class="day-text">Mar 16 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Arabia Saudí Uruguay">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇸🇦</span><div class="team-name">Arabia Saudí</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇺🇾</span><div class="team-name">Uruguay</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo H</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇸🇦</span><span class="t-name">Arabia Saudí</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇺🇾</span><span class="t-name">Uruguay</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo H</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="Irán Nueva Zelanda">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇮🇷</span><div class="team-name">Irán</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇳🇿</span><div class="team-name">Nueva Zelanda</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo G</span><span class="meta-venue">Seattle</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇮🇷</span><span class="t-name">Irán</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇳🇿</span><span class="t-name">Nueva Zelanda</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo G</span><span class="meta-venue">Seattle</span></div>
   </div>
   <div class="match-card grupos" data-teams="Austria Jordania">
-    <div><div class="match-time">06:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇦🇹</span><div class="team-name">Austria</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇯🇴</span><div class="team-name">Jordania</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo J</span><span class="meta-venue">San Francisco</span></div>
+    <div class="card-time"><span class="time-digits">06:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇦🇹</span><span class="t-name">Austria</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇯🇴</span><span class="t-name">Jordania</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo J</span><span class="meta-venue">San Francisco</span></div>
   </div>
   <div class="match-card grupos" data-teams="Francia Senegal">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇫🇷</span><div class="team-name">Francia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇸🇳</span><div class="team-name">Senegal</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo I</span><span class="meta-venue">Nueva York</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇫🇷</span><span class="t-name">Francia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇸🇳</span><span class="t-name">Senegal</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo I</span><span class="meta-venue">Nueva York</span></div>
   </div>
 </div>
 
-<!-- MIÉ 17 JUN -->
-<div class="day-block">
-  <div class="day-label">Mié 17 jun</div>
+<div class="day-block" data-date="2026-06-17">
+  <div class="day-label"><span class="day-text">Mié 17 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Irak Noruega">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇮🇶</span><div class="team-name">Irak</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇳🇴</span><div class="team-name">Noruega</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo I</span><span class="meta-venue">Boston</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇮🇶</span><span class="t-name">Irak</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇳🇴</span><span class="t-name">Noruega</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo I</span><span class="meta-venue">Boston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Argentina Argelia">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇦🇷</span><div class="team-name">Argentina</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇩🇿</span><div class="team-name">Argelia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo J</span><span class="meta-venue">Kansas City</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇦🇷</span><span class="t-name">Argentina</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇩🇿</span><span class="t-name">Argelia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo J</span><span class="meta-venue">Kansas City</span></div>
   </div>
   <div class="match-card grupos" data-teams="Portugal República Democrática del Congo">
-    <div><div class="match-time">19:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇵🇹</span><div class="team-name">Portugal</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇩</span><div class="team-name">RD Congo</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo K</span><span class="meta-venue">Houston</span></div>
+    <div class="card-time"><span class="time-digits">19:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇵🇹</span><span class="t-name">Portugal</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇩</span><span class="t-name">Rep. Dem. Congo</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo K</span><span class="meta-venue">Houston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Inglaterra Croacia">
-    <div><div class="match-time">22:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><div class="team-name">Inglaterra</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇭🇷</span><div class="team-name">Croacia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo L</span><span class="meta-venue">Toronto</span></div>
+    <div class="card-time"><span class="time-digits">22:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="t-name">Inglaterra</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇭🇷</span><span class="t-name">Croacia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo L</span><span class="meta-venue">Toronto</span></div>
   </div>
 </div>
 
-<!-- JUE 18 JUN -->
-<div class="day-block">
-  <div class="day-label">Jue 18 jun</div>
+<div class="day-block" data-date="2026-06-18">
+  <div class="day-label"><span class="day-text">Jue 18 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Ghana Panamá">
-    <div><div class="match-time">01:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇬🇭</span><div class="team-name">Ghana</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇵🇦</span><div class="team-name">Panamá</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo L</span><span class="meta-venue">Dallas</span></div>
+    <div class="card-time"><span class="time-digits">01:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇬🇭</span><span class="t-name">Ghana</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇵🇦</span><span class="t-name">Panamá</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo L</span><span class="meta-venue">Dallas</span></div>
   </div>
   <div class="match-card grupos" data-teams="Uzbekistán Colombia">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇺🇿</span><div class="team-name">Uzbekistán</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇴</span><div class="team-name">Colombia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo K</span><span class="meta-venue">Ciudad de México</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇺🇿</span><span class="t-name">Uzbekistán</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇴</span><span class="t-name">Colombia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo K</span><span class="meta-venue">Ciudad de México</span></div>
   </div>
   <div class="match-card grupos" data-teams="República Checa Sudáfrica">
-    <div><div class="match-time">18:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇿</span><div class="team-name">Rep. Checa</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇿🇦</span><div class="team-name">Sudáfrica</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo A</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">18:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇿</span><span class="t-name">Chequia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇿🇦</span><span class="t-name">Sudáfrica</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo A</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="Suiza Bosnia Herzegovina">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇭</span><div class="team-name">Suiza</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇧🇦</span><div class="team-name">Bosnia Herz.</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo B</span><span class="meta-venue">Los Ángeles</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇭</span><span class="t-name">Suiza</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇧🇦</span><span class="t-name">Bosnia y Herz.</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo B</span><span class="meta-venue">Los Ángeles</span></div>
   </div>
 </div>
 
-<!-- VIE 19 JUN -->
-<div class="day-block">
-  <div class="day-label">Vie 19 jun</div>
+<div class="day-block" data-date="2026-06-19">
+  <div class="day-label"><span class="day-text">Vie 19 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Canadá Qatar">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇦</span><div class="team-name">Canadá</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇶🇦</span><div class="team-name">Qatar</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo B</span><span class="meta-venue">Vancouver</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇦</span><span class="t-name">Canadá</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇶🇦</span><span class="t-name">Qatar</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo B</span><span class="meta-venue">Vancouver</span></div>
   </div>
   <div class="match-card grupos" data-teams="México Corea del Sur">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇲🇽</span><div class="team-name">México</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇰🇷</span><div class="team-name">Corea del Sur</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo A</span><span class="meta-venue">Guadalajara</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇲🇽</span><span class="t-name">México</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇰🇷</span><span class="t-name">Corea del Sur</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo A</span><span class="meta-venue">Guadalajara</span></div>
   </div>
   <div class="match-card grupos" data-teams="Estados Unidos Australia">
-    <div><div class="match-time">06:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇺🇸</span><div class="team-name">Estados Unidos</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇦🇺</span><div class="team-name">Australia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo D</span><span class="meta-venue">Seattle</span></div>
+    <div class="card-time"><span class="time-digits">06:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇺🇸</span><span class="t-name">Estados Unidos</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇦🇺</span><span class="t-name">Australia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo D</span><span class="meta-venue">Seattle</span></div>
   </div>
   <div class="match-card grupos" data-teams="Turquía Paraguay">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇹🇷</span><div class="team-name">Turquía</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇵🇾</span><div class="team-name">Paraguay</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo D</span><span class="meta-venue">San Francisco</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇹🇷</span><span class="t-name">Turquía</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇵🇾</span><span class="t-name">Paraguay</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo D</span><span class="meta-venue">San Francisco</span></div>
   </div>
 </div>
 
-<!-- SÁB 20 JUN -->
-<div class="day-block">
-  <div class="day-label">Sáb 20 jun</div>
+<div class="day-block" data-date="2026-06-20">
+  <div class="day-label"><span class="day-text">Sáb 20 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Brasil Haití">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇧🇷</span><div class="team-name">Brasil</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇭🇹</span><div class="team-name">Haití</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo C</span><span class="meta-venue">Philadelphia</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇧🇷</span><span class="t-name">Brasil</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇭🇹</span><span class="t-name">Haití</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo C</span><span class="meta-venue">Philadelphia</span></div>
   </div>
   <div class="match-card grupos" data-teams="Escocia Marruecos">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><div class="team-name">Escocia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇲🇦</span><div class="team-name">Marruecos</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo C</span><span class="meta-venue">Boston</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span class="t-name">Escocia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇲🇦</span><span class="t-name">Marruecos</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo C</span><span class="meta-venue">Boston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Japón Túnez">
-    <div><div class="match-time">06:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇯🇵</span><div class="team-name">Japón</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇹🇳</span><div class="team-name">Túnez</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo F</span><span class="meta-venue">Monterrey</span></div>
+    <div class="card-time"><span class="time-digits">06:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇯🇵</span><span class="t-name">Japón</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇹🇳</span><span class="t-name">Túnez</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo F</span><span class="meta-venue">Monterrey</span></div>
   </div>
   <div class="match-card grupos" data-teams="Países Bajos Suecia">
-    <div><div class="match-time">19:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇳🇱</span><div class="team-name">Países Bajos</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇸🇪</span><div class="team-name">Suecia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo F</span><span class="meta-venue">Houston</span></div>
+    <div class="card-time"><span class="time-digits">19:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇳🇱</span><span class="t-name">Países Bajos</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇸🇪</span><span class="t-name">Suecia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo F</span><span class="meta-venue">Houston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Alemania Costa de Marfil">
-    <div><div class="match-time">22:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇩🇪</span><div class="team-name">Alemania</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇮</span><div class="team-name">Costa de Marfil</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo E</span><span class="meta-venue">Toronto</span></div>
+    <div class="card-time"><span class="time-digits">22:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇩🇪</span><span class="t-name">Alemania</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇮</span><span class="t-name">Costa de Marfil</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo E</span><span class="meta-venue">Toronto</span></div>
   </div>
 </div>
 
-<!-- DOM 21 JUN -->
-<div class="day-block">
-  <div class="day-label">Dom 21 jun</div>
+<div class="day-block" data-date="2026-06-21">
+  <div class="day-label"><span class="day-text">Dom 21 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Curazao Ecuador">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇼</span><div class="team-name">Curazao</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇪🇨</span><div class="team-name">Ecuador</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo E</span><span class="meta-venue">Kansas City</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇼</span><span class="t-name">Curazao</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇪🇨</span><span class="t-name">Ecuador</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo E</span><span class="meta-venue">Kansas City</span></div>
   </div>
   <div class="match-card grupos spain" data-teams="España Arabia Saudí">
-    <div><div class="match-time">18:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇪🇸</span><div class="team-name spain-team">España</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇸🇦</span><div class="team-name">Arabia Saudí</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo H</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">18:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇪🇸</span><span class="t-name is-spain">España</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇸🇦</span><span class="t-name">Arabia Saudí</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo H</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="Bélgica Irán">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇧🇪</span><div class="team-name">Bélgica</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇮🇷</span><div class="team-name">Irán</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo G</span><span class="meta-venue">Los Ángeles</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇧🇪</span><span class="t-name">Bélgica</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇮🇷</span><span class="t-name">Irán</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo G</span><span class="meta-venue">Los Ángeles</span></div>
   </div>
 </div>
 
-<!-- LUN 22 JUN -->
-<div class="day-block">
-  <div class="day-label">Lun 22 jun</div>
+<div class="day-block" data-date="2026-06-22">
+  <div class="day-label"><span class="day-text">Lun 22 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Cabo Verde Uruguay">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇻</span><div class="team-name">Cabo Verde</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇺🇾</span><div class="team-name">Uruguay</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo H</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇻</span><span class="t-name">Cabo Verde</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇺🇾</span><span class="t-name">Uruguay</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo H</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="Egipto Nueva Zelanda">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇪🇬</span><div class="team-name">Egipto</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇳🇿</span><div class="team-name">Nueva Zelanda</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo G</span><span class="meta-venue">Vancouver</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇪🇬</span><span class="t-name">Egipto</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇳🇿</span><span class="t-name">Nueva Zelanda</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo G</span><span class="meta-venue">Vancouver</span></div>
   </div>
   <div class="match-card grupos" data-teams="Jordania Argelia">
-    <div><div class="match-time">05:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇯🇴</span><div class="team-name">Jordania</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇩🇿</span><div class="team-name">Argelia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo J</span><span class="meta-venue">San Francisco</span></div>
+    <div class="card-time"><span class="time-digits">05:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇯🇴</span><span class="t-name">Jordania</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇩🇿</span><span class="t-name">Argelia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo J</span><span class="meta-venue">San Francisco</span></div>
   </div>
   <div class="match-card grupos" data-teams="Argentina Austria">
-    <div><div class="match-time">19:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇦🇷</span><div class="team-name">Argentina</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇦🇹</span><div class="team-name">Austria</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo J</span><span class="meta-venue">Dallas</span></div>
+    <div class="card-time"><span class="time-digits">19:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇦🇷</span><span class="t-name">Argentina</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇦🇹</span><span class="t-name">Austria</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo J</span><span class="meta-venue">Dallas</span></div>
   </div>
   <div class="match-card grupos" data-teams="Francia Irak">
-    <div><div class="match-time">23:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇫🇷</span><div class="team-name">Francia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇮🇶</span><div class="team-name">Irak</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo I</span><span class="meta-venue">Nueva York</span></div>
+    <div class="card-time"><span class="time-digits">23:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇫🇷</span><span class="t-name">Francia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇮🇶</span><span class="t-name">Irak</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo I</span><span class="meta-venue">Nueva York</span></div>
   </div>
 </div>
 
-<!-- MAR 23 JUN -->
-<div class="day-block">
-  <div class="day-label">Mar 23 jun</div>
+<div class="day-block" data-date="2026-06-23">
+  <div class="day-label"><span class="day-text">Mar 23 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Noruega Senegal">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇳🇴</span><div class="team-name">Noruega</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇸🇳</span><div class="team-name">Senegal</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo I</span><span class="meta-venue">Philadelphia</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇳🇴</span><span class="t-name">Noruega</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇸🇳</span><span class="t-name">Senegal</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo I</span><span class="meta-venue">Philadelphia</span></div>
   </div>
   <div class="match-card grupos" data-teams="Portugal Uzbekistán">
-    <div><div class="match-time">19:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇵🇹</span><div class="team-name">Portugal</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇺🇿</span><div class="team-name">Uzbekistán</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo K</span><span class="meta-venue">Houston</span></div>
+    <div class="card-time"><span class="time-digits">19:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇵🇹</span><span class="t-name">Portugal</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇺🇿</span><span class="t-name">Uzbekistán</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo K</span><span class="meta-venue">Houston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Inglaterra Ghana">
-    <div><div class="match-time">22:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><div class="team-name">Inglaterra</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇬🇭</span><div class="team-name">Ghana</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo L</span><span class="meta-venue">Boston</span></div>
+    <div class="card-time"><span class="time-digits">22:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="t-name">Inglaterra</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇬🇭</span><span class="t-name">Ghana</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo L</span><span class="meta-venue">Boston</span></div>
   </div>
 </div>
 
-<!-- MIÉ 24 JUN -->
-<div class="day-block">
-  <div class="day-label">Mié 24 jun</div>
+<div class="day-block" data-date="2026-06-24">
+  <div class="day-label"><span class="day-text">Mié 24 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Croacia Panamá">
-    <div><div class="match-time">01:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇭🇷</span><div class="team-name">Croacia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇵🇦</span><div class="team-name">Panamá</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo L</span><span class="meta-venue">Toronto</span></div>
+    <div class="card-time"><span class="time-digits">01:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇭🇷</span><span class="t-name">Croacia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇵🇦</span><span class="t-name">Panamá</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo L</span><span class="meta-venue">Toronto</span></div>
   </div>
   <div class="match-card grupos" data-teams="República Democrática del Congo Colombia">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇩</span><div class="team-name">RD Congo</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇴</span><div class="team-name">Colombia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo K</span><span class="meta-venue">Guadalajara</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇩</span><span class="t-name">Rep. Dem. Congo</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇴</span><span class="t-name">Colombia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo K</span><span class="meta-venue">Guadalajara</span></div>
   </div>
   <div class="match-card grupos" data-teams="Suiza Canadá">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇭</span><div class="team-name">Suiza</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇦</span><div class="team-name">Canadá</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo B</span><span class="meta-venue">Vancouver</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇭</span><span class="t-name">Suiza</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇦</span><span class="t-name">Canadá</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo B</span><span class="meta-venue">Vancouver</span></div>
   </div>
   <div class="match-card grupos" data-teams="Bosnia Herzegovina Qatar">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇧🇦</span><div class="team-name">Bosnia Herz.</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇶🇦</span><div class="team-name">Qatar</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo B</span><span class="meta-venue">Seattle</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇧🇦</span><span class="t-name">Bosnia y Herz.</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇶🇦</span><span class="t-name">Qatar</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo B</span><span class="meta-venue">Seattle</span></div>
   </div>
 </div>
 
-<!-- JUE 25 JUN -->
-<div class="day-block">
-  <div class="day-label">Jue 25 jun</div>
+<div class="day-block" data-date="2026-06-25">
+  <div class="day-label"><span class="day-text">Jue 25 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Escocia Brasil">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><div class="team-name">Escocia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇧🇷</span><div class="team-name">Brasil</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo C</span><span class="meta-venue">Miami</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span class="t-name">Escocia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇧🇷</span><span class="t-name">Brasil</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo C</span><span class="meta-venue">Miami</span></div>
   </div>
   <div class="match-card grupos" data-teams="Marruecos Haití">
-    <div><div class="match-time">00:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇲🇦</span><div class="team-name">Marruecos</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇭🇹</span><div class="team-name">Haití</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo C</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">00:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇲🇦</span><span class="t-name">Marruecos</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇭🇹</span><span class="t-name">Haití</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo C</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="República Checa México">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇿</span><div class="team-name">Rep. Checa</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇲🇽</span><div class="team-name">México</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo A</span><span class="meta-venue">Ciudad de México</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇿</span><span class="t-name">Chequia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇲🇽</span><span class="t-name">México</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo A</span><span class="meta-venue">Ciudad de México</span></div>
   </div>
   <div class="match-card grupos" data-teams="Sudáfrica Corea del Sur">
-    <div><div class="match-time">03:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇿🇦</span><div class="team-name">Sudáfrica</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇰🇷</span><div class="team-name">Corea del Sur</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo A</span><span class="meta-venue">Monterrey</span></div>
+    <div class="card-time"><span class="time-digits">03:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇿🇦</span><span class="t-name">Sudáfrica</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇰🇷</span><span class="t-name">Corea del Sur</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo A</span><span class="meta-venue">Monterrey</span></div>
   </div>
   <div class="match-card grupos" data-teams="Ecuador Alemania">
-    <div><div class="match-time">22:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇪🇨</span><div class="team-name">Ecuador</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇩🇪</span><div class="team-name">Alemania</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo E</span><span class="meta-venue">Philadelphia</span></div>
+    <div class="card-time"><span class="time-digits">22:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇪🇨</span><span class="t-name">Ecuador</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇩🇪</span><span class="t-name">Alemania</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo E</span><span class="meta-venue">Philadelphia</span></div>
   </div>
   <div class="match-card grupos" data-teams="Curazao Costa de Marfil">
-    <div><div class="match-time">22:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇼</span><div class="team-name">Curazao</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇨🇮</span><div class="team-name">Costa de Marfil</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo E</span><span class="meta-venue">Nueva York</span></div>
+    <div class="card-time"><span class="time-digits">22:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇼</span><span class="t-name">Curazao</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇨🇮</span><span class="t-name">Costa de Marfil</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo E</span><span class="meta-venue">Nueva York</span></div>
   </div>
 </div>
 
-<!-- VIE 26 JUN -->
-<div class="day-block">
-  <div class="day-label">Vie 26 jun</div>
+<div class="day-block" data-date="2026-06-26">
+  <div class="day-label"><span class="day-text">Vie 26 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Túnez Países Bajos">
-    <div><div class="match-time">01:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇹🇳</span><div class="team-name">Túnez</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇳🇱</span><div class="team-name">Países Bajos</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo F</span><span class="meta-venue">Dallas</span></div>
+    <div class="card-time"><span class="time-digits">01:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇹🇳</span><span class="t-name">Túnez</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇳🇱</span><span class="t-name">Países Bajos</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo F</span><span class="meta-venue">Dallas</span></div>
   </div>
   <div class="match-card grupos" data-teams="Japón Suecia">
-    <div><div class="match-time">01:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇯🇵</span><div class="team-name">Japón</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇸🇪</span><div class="team-name">Suecia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo F</span><span class="meta-venue">Kansas City</span></div>
+    <div class="card-time"><span class="time-digits">01:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇯🇵</span><span class="t-name">Japón</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇸🇪</span><span class="t-name">Suecia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo F</span><span class="meta-venue">Kansas City</span></div>
   </div>
   <div class="match-card grupos" data-teams="Turquía Estados Unidos">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇹🇷</span><div class="team-name">Turquía</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇺🇸</span><div class="team-name">Estados Unidos</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo D</span><span class="meta-venue">Los Ángeles</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇹🇷</span><span class="t-name">Turquía</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇺🇸</span><span class="t-name">Estados Unidos</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo D</span><span class="meta-venue">Los Ángeles</span></div>
   </div>
   <div class="match-card grupos" data-teams="Paraguay Australia">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇵🇾</span><div class="team-name">Paraguay</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇦🇺</span><div class="team-name">Australia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo D</span><span class="meta-venue">San Francisco</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇵🇾</span><span class="t-name">Paraguay</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇦🇺</span><span class="t-name">Australia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo D</span><span class="meta-venue">San Francisco</span></div>
   </div>
   <div class="match-card grupos" data-teams="Egipto Irán">
-    <div><div class="match-time">05:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇪🇬</span><div class="team-name">Egipto</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇮🇷</span><div class="team-name">Irán</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo G</span><span class="meta-venue">Vancouver</span></div>
+    <div class="card-time"><span class="time-digits">05:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇪🇬</span><span class="t-name">Egipto</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇮🇷</span><span class="t-name">Irán</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo G</span><span class="meta-venue">Vancouver</span></div>
   </div>
   <div class="match-card grupos" data-teams="Noruega Francia">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇳🇴</span><div class="team-name">Noruega</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇫🇷</span><div class="team-name">Francia</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo I</span><span class="meta-venue">Boston</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇳🇴</span><span class="t-name">Noruega</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇫🇷</span><span class="t-name">Francia</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo I</span><span class="meta-venue">Boston</span></div>
   </div>
   <div class="match-card grupos" data-teams="Senegal Irak">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇸🇳</span><div class="team-name">Senegal</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇮🇶</span><div class="team-name">Irak</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo I</span><span class="meta-venue">Toronto</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇸🇳</span><span class="t-name">Senegal</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇮🇶</span><span class="t-name">Irak</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo I</span><span class="meta-venue">Toronto</span></div>
   </div>
 </div>
 
-<!-- SÁB 27 JUN -->
-<div class="day-block">
-  <div class="day-label">Sáb 27 jun</div>
+<div class="day-block" data-date="2026-06-27">
+  <div class="day-label"><span class="day-text">Sáb 27 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Nueva Zelanda Bélgica">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇳🇿</span><div class="team-name">Nueva Zelanda</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇧🇪</span><div class="team-name">Bélgica</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo G</span><span class="meta-venue">Seattle</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇳🇿</span><span class="t-name">Nueva Zelanda</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇧🇪</span><span class="t-name">Bélgica</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo G</span><span class="meta-venue">Seattle</span></div>
   </div>
   <div class="match-card grupos spain" data-teams="Uruguay España">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇺🇾</span><div class="team-name">Uruguay</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇪🇸</span><div class="team-name spain-team">España</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo H</span><span class="meta-venue">Guadalajara</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇺🇾</span><span class="t-name is-spain">Uruguay</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇪🇸</span><span class="t-name">España</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo H</span><span class="meta-venue">Guadalajara</span></div>
   </div>
   <div class="match-card grupos" data-teams="Cabo Verde Arabia Saudí">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇻</span><div class="team-name">Cabo Verde</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇸🇦</span><div class="team-name">Arabia Saudí</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo H</span><span class="meta-venue">Guadalajara</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇻</span><span class="t-name">Cabo Verde</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇸🇦</span><span class="t-name">Arabia Saudí</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo H</span><span class="meta-venue">Guadalajara</span></div>
   </div>
   <div class="match-card grupos" data-teams="Panamá Inglaterra">
-    <div><div class="match-time">23:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇵🇦</span><div class="team-name">Panamá</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><div class="team-name">Inglaterra</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo L</span><span class="meta-venue">Nueva York</span></div>
+    <div class="card-time"><span class="time-digits">23:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇵🇦</span><span class="t-name">Panamá</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="t-name">Inglaterra</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo L</span><span class="meta-venue">Nueva York</span></div>
   </div>
   <div class="match-card grupos" data-teams="Croacia Ghana">
-    <div><div class="match-time">23:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇭🇷</span><div class="team-name">Croacia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇬🇭</span><div class="team-name">Ghana</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo L</span><span class="meta-venue">Philadelphia</span></div>
+    <div class="card-time"><span class="time-digits">23:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇭🇷</span><span class="t-name">Croacia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇬🇭</span><span class="t-name">Ghana</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo L</span><span class="meta-venue">Philadelphia</span></div>
   </div>
 </div>
 
-<!-- DOM 28 JUN -->
-<div class="day-block">
-  <div class="day-label">Dom 28 jun</div>
+<div class="day-block" data-date="2026-06-28">
+  <div class="day-label"><span class="day-text">Dom 28 jun</span><div class="day-rule"></div></div>
   <div class="match-card grupos" data-teams="Colombia Portugal">
-    <div><div class="match-time">01:30</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇴</span><div class="team-name">Colombia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇵🇹</span><div class="team-name">Portugal</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo K</span><span class="meta-venue">Miami</span></div>
+    <div class="card-time"><span class="time-digits">01:30</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇴</span><span class="t-name">Colombia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇵🇹</span><span class="t-name">Portugal</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo K</span><span class="meta-venue">Miami</span></div>
   </div>
   <div class="match-card grupos" data-teams="República Democrática del Congo Uzbekistán">
-    <div><div class="match-time">01:30</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇨🇩</span><div class="team-name">RD Congo</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇺🇿</span><div class="team-name">Uzbekistán</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo K</span><span class="meta-venue">Atlanta</span></div>
+    <div class="card-time"><span class="time-digits">01:30</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇨🇩</span><span class="t-name">Rep. Dem. Congo</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇺🇿</span><span class="t-name">Uzbekistán</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo K</span><span class="meta-venue">Atlanta</span></div>
   </div>
   <div class="match-card grupos" data-teams="Jordania Argentina">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇯🇴</span><div class="team-name">Jordania</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇦🇷</span><div class="team-name">Argentina</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo J</span><span class="meta-venue">Dallas</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇯🇴</span><span class="t-name">Jordania</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇦🇷</span><span class="t-name">Argentina</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo J</span><span class="meta-venue">Dallas</span></div>
   </div>
   <div class="match-card grupos" data-teams="Argelia Austria">
-    <div><div class="match-time">04:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🇩🇿</span><div class="team-name">Argelia</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🇦🇹</span><div class="team-name">Austria</div></div>
-    <div class="match-meta"><span class="meta-group">Grupo J</span><span class="meta-venue">Kansas City</span></div>
+    <div class="card-time"><span class="time-digits">04:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🇩🇿</span><span class="t-name">Argelia</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🇦🇹</span><span class="t-name">Austria</span></div>
+    <div class="card-meta"><span class="meta-tag">Grupo J</span><span class="meta-venue">Kansas City</span></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     DIECISEISAVOS DE FINAL
-═══════════════════════════════════════════════ -->
 <div class="phase-header"><span class="phase-title">Dieciseisavos de Final</span><div class="phase-line"></div></div>
-<div class="day-block">
-  <div class="day-label">Dom 28 jun – Vie 3 jul</div>
 
+<div class="day-block" data-date="2026-06-28">
+  <div class="day-label"><span class="day-text">Dom 28 jun – Vie 3 jul</span><div class="day-rule"></div></div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">2º Grupo A</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo B</div></div>
-    <div class="match-meta"><span class="meta-group">P73 · 16avos</span><span class="meta-venue">Los Ángeles · 28 jun</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">2º Grupo A</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo B</span></div>
+    <div class="card-meta"><span class="meta-tag">P73 · 16avos</span><span class="meta-venue">Los Ángeles · 28 jun</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo E</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P74 · 16avos</span><span class="meta-venue">Boston · 29 jun</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo E</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P74 · 16avos</span><span class="meta-venue">Boston · 29 jun</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo F</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo C</div></div>
-    <div class="match-meta"><span class="meta-group">P75 · 16avos</span><span class="meta-venue">Monterrey · 29 jun</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo F</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo C</span></div>
+    <div class="card-meta"><span class="meta-tag">P75 · 16avos</span><span class="meta-venue">Monterrey · 29 jun</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo C</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo F</div></div>
-    <div class="match-meta"><span class="meta-group">P76 · 16avos</span><span class="meta-venue">Houston · 30 jun</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo C</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo F</span></div>
+    <div class="card-meta"><span class="meta-tag">P76 · 16avos</span><span class="meta-venue">Houston · 30 jun</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo I</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P77 · 16avos</span><span class="meta-venue">Nueva York · 30 jun</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo I</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P77 · 16avos</span><span class="meta-venue">Nueva York · 30 jun</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">2º Grupo E</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo I</div></div>
-    <div class="match-meta"><span class="meta-group">P78 · 16avos</span><span class="meta-venue">Dallas · 30 jun</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">2º Grupo E</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo I</span></div>
+    <div class="card-meta"><span class="meta-tag">P78 · 16avos</span><span class="meta-venue">Dallas · 30 jun</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo A</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P79 · 16avos</span><span class="meta-venue">Ciudad de México · 1 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo A</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P79 · 16avos</span><span class="meta-venue">Ciudad de México · 1 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo L</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P80 · 16avos</span><span class="meta-venue">Atlanta · 1 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo L</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P80 · 16avos</span><span class="meta-venue">Atlanta · 1 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo D</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P81 · 16avos</span><span class="meta-venue">San Francisco · 1 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo D</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P81 · 16avos</span><span class="meta-venue">San Francisco · 1 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">2º Grupo D</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo L</div></div>
-    <div class="match-meta"><span class="meta-group">P82 · 16avos</span><span class="meta-venue">Seattle · 2 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">2º Grupo D</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo L</span></div>
+    <div class="card-meta"><span class="meta-tag">P82 · 16avos</span><span class="meta-venue">Seattle · 2 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo H</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P83 · 16avos</span><span class="meta-venue">Los Ángeles · 2 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo H</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P83 · 16avos</span><span class="meta-venue">Los Ángeles · 2 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">2º Grupo G</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo H</div></div>
-    <div class="match-meta"><span class="meta-group">P84 · 16avos</span><span class="meta-venue">Vancouver · 2 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">2º Grupo G</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo H</span></div>
+    <div class="card-meta"><span class="meta-tag">P84 · 16avos</span><span class="meta-venue">Vancouver · 2 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo G</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Mejor 3º</div></div>
-    <div class="match-meta"><span class="meta-group">P85 · 16avos</span><span class="meta-venue">Toronto · 3 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo G</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Mejor 3º</span></div>
+    <div class="card-meta"><span class="meta-tag">P85 · 16avos</span><span class="meta-venue">Toronto · 3 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo B</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo J</div></div>
-    <div class="match-meta"><span class="meta-group">P86 · 16avos</span><span class="meta-venue">Philadelphia · 3 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo B</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo J</span></div>
+    <div class="card-meta"><span class="meta-tag">P86 · 16avos</span><span class="meta-venue">Philadelphia · 3 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo J</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo B</div></div>
-    <div class="match-meta"><span class="meta-group">P87 · 16avos</span><span class="meta-venue">Guadalajara · 3 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo J</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo B</span></div>
+    <div class="card-meta"><span class="meta-tag">P87 · 16avos</span><span class="meta-venue">Guadalajara · 3 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Dieciseisavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">1º Grupo K</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">2º Grupo K</div></div>
-    <div class="match-meta"><span class="meta-group">P88 · 16avos</span><span class="meta-venue">Kansas City · 3 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">1º Grupo K</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">2º Grupo K</span></div>
+    <div class="card-meta"><span class="meta-tag">P88 · 16avos</span><span class="meta-venue">Kansas City · 3 jul</span></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     OCTAVOS DE FINAL
-═══════════════════════════════════════════════ -->
 <div class="phase-header"><span class="phase-title">Octavos de Final</span><div class="phase-line"></div></div>
-<div class="day-block">
-  <div class="day-label">Sáb 4 jul – Mar 7 jul</div>
+
+<div class="day-block" data-date="2026-07-04">
+  <div class="day-label"><span class="day-text">Sáb 4 jul – Mar 7 jul</span><div class="day-rule"></div></div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P73</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P74</div></div>
-    <div class="match-meta"><span class="meta-group">P89 · 8avos</span><span class="meta-venue">Kansas City · 4 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P73</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P74</span></div>
+    <div class="card-meta"><span class="meta-tag">P89 · 8avos</span><span class="meta-venue">Kansas City · 4 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P75</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P76</div></div>
-    <div class="match-meta"><span class="meta-group">P90 · 8avos</span><span class="meta-venue">Seattle · 4 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P75</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P76</span></div>
+    <div class="card-meta"><span class="meta-tag">P90 · 8avos</span><span class="meta-venue">Seattle · 4 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P77</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P78</div></div>
-    <div class="match-meta"><span class="meta-group">P91 · 8avos</span><span class="meta-venue">Dallas · 5 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P77</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P78</span></div>
+    <div class="card-meta"><span class="meta-tag">P91 · 8avos</span><span class="meta-venue">Dallas · 5 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P79</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P80</div></div>
-    <div class="match-meta"><span class="meta-group">P92 · 8avos</span><span class="meta-venue">Houston · 5 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P79</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P80</span></div>
+    <div class="card-meta"><span class="meta-tag">P92 · 8avos</span><span class="meta-venue">Houston · 5 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P81</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P82</div></div>
-    <div class="match-meta"><span class="meta-group">P93 · 8avos</span><span class="meta-venue">Boston · 6 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P81</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P82</span></div>
+    <div class="card-meta"><span class="meta-tag">P93 · 8avos</span><span class="meta-venue">Boston · 6 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P83</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P84</div></div>
-    <div class="match-meta"><span class="meta-group">P94 · 8avos</span><span class="meta-venue">Atlanta · 6 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P83</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P84</span></div>
+    <div class="card-meta"><span class="meta-tag">P94 · 8avos</span><span class="meta-venue">Atlanta · 6 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P85</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P86</div></div>
-    <div class="match-meta"><span class="meta-group">P95 · 8avos</span><span class="meta-venue">Los Ángeles · 7 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P85</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P86</span></div>
+    <div class="card-meta"><span class="meta-tag">P95 · 8avos</span><span class="meta-venue">Los Ángeles · 7 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Octavos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P87</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P88</div></div>
-    <div class="match-meta"><span class="meta-group">P96 · 8avos</span><span class="meta-venue">Nueva York · 7 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P87</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P88</span></div>
+    <div class="card-meta"><span class="meta-tag">P96 · 8avos</span><span class="meta-venue">Nueva York · 7 jul</span></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     CUARTOS DE FINAL
-═══════════════════════════════════════════════ -->
 <div class="phase-header"><span class="phase-title">Cuartos de Final</span><div class="phase-line"></div></div>
-<div class="day-block">
-  <div class="day-label">Jue 9 jul – Sáb 11 jul</div>
+
+<div class="day-block" data-date="2026-07-09">
+  <div class="day-label"><span class="day-text">Jue 9 jul – Sáb 11 jul</span><div class="day-rule"></div></div>
   <div class="match-card eliminatoria" data-teams="Cuartos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P89</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P90</div></div>
-    <div class="match-meta"><span class="meta-group">P97 · 1/4</span><span class="meta-venue">Los Ángeles · 9 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P89</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P90</span></div>
+    <div class="card-meta"><span class="meta-tag">P97 · 1/4</span><span class="meta-venue">Los Ángeles · 9 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Cuartos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P91</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P92</div></div>
-    <div class="match-meta"><span class="meta-group">P98 · 1/4</span><span class="meta-venue">Kansas City · 9 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P91</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P92</span></div>
+    <div class="card-meta"><span class="meta-tag">P98 · 1/4</span><span class="meta-venue">Kansas City · 9 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Cuartos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P93</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P94</div></div>
-    <div class="match-meta"><span class="meta-group">P99 · 1/4</span><span class="meta-venue">Dallas · 10 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P93</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P94</span></div>
+    <div class="card-meta"><span class="meta-tag">P99 · 1/4</span><span class="meta-venue">Dallas · 10 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Cuartos">
-    <div><div class="match-time">21:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P95</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P96</div></div>
-    <div class="match-meta"><span class="meta-group">P100 · 1/4</span><span class="meta-venue">Houston · 11 jul</span></div>
+    <div class="card-time"><span class="time-digits">21:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P95</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P96</span></div>
+    <div class="card-meta"><span class="meta-tag">P100 · 1/4</span><span class="meta-venue">Houston · 11 jul</span></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     SEMIFINALES
-═══════════════════════════════════════════════ -->
 <div class="phase-header"><span class="phase-title">Semifinales</span><div class="phase-line"></div></div>
-<div class="day-block">
-  <div class="day-label">Mar 14 jul · Mié 15 jul</div>
+
+<div class="day-block" data-date="2026-07-14">
+  <div class="day-label"><span class="day-text">Mar 14 jul – Mié 15 jul</span><div class="day-rule"></div></div>
   <div class="match-card eliminatoria" data-teams="Semifinal">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P97</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P98</div></div>
-    <div class="match-meta"><span class="meta-group">P101 · SF</span><span class="meta-venue">Dallas · 14 jul</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P97</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P98</span></div>
+    <div class="card-meta"><span class="meta-tag">P101 · SF</span><span class="meta-venue">Dallas · 14 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Semifinal">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">⚽</span><div class="team-name">Gan. P99</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">⚽</span><div class="team-name">Gan. P100</div></div>
-    <div class="match-meta"><span class="meta-group">P102 · SF</span><span class="meta-venue">Atlanta · 15 jul</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">⚽</span><span class="t-name">Gan. P99</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">⚽</span><span class="t-name">Gan. P100</span></div>
+    <div class="card-meta"><span class="meta-tag">P102 · SF</span><span class="meta-venue">Atlanta · 15 jul</span></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     FINAL
-═══════════════════════════════════════════════ -->
 <div class="phase-header"><span class="phase-title">Final</span><div class="phase-line"></div></div>
-<div class="day-block">
-  <div class="day-label">Vie 18 jul · Dom 19 jul</div>
+
+<div class="day-block" data-date="2026-07-18">
+  <div class="day-label"><span class="day-text">Vie 18 jul – Dom 19 jul</span><div class="day-rule"></div></div>
   <div class="match-card eliminatoria" data-teams="Tercer puesto">
-    <div><div class="match-time">02:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🥉</span><div class="team-name">3er Puesto</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🥉</span><div class="team-name">3er Puesto</div></div>
-    <div class="match-meta"><span class="meta-group">P103 · 3º lugar</span><span class="meta-venue">Miami · 18 jul</span></div>
+    <div class="card-time"><span class="time-digits">02:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🥉</span><span class="t-name">3er Puesto</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🥉</span><span class="t-name">3er Puesto</span></div>
+    <div class="card-meta"><span class="meta-tag">P103 · 3º lugar</span><span class="meta-venue">Miami · 18 jul</span></div>
   </div>
   <div class="match-card eliminatoria" data-teams="Final">
-    <div><div class="match-time">16:00</div><div class="match-time-zone">CEST</div></div>
-    <div class="team"><span class="team-flag">🏆</span><div class="team-name">Finalista</div></div>
-    <div class="vs">vs</div>
-    <div class="team team-b"><span class="team-flag">🏆</span><div class="team-name">Finalista</div></div>
-    <div class="match-meta"><span class="meta-group">P104 · FINAL</span><span class="meta-venue">Nueva York · 19 jul</span></div>
+    <div class="card-time"><span class="time-digits">16:00</span><span class="time-zone">CEST</span></div>
+    <div class="card-team right"><span class="t-flag">🏆</span><span class="t-name">Finalista</span></div>
+    <div class="card-vs"><span class="vs-text">vs</span></div>
+    <div class="card-team left"><span class="t-flag">🏆</span><span class="t-name">Finalista</span></div>
+    <div class="card-meta"><span class="meta-tag">P104 · FINAL</span><span class="meta-venue">Nueva York · 19 jul</span></div>
   </div>
 </div>
 
-<div class="no-results" id="no-results">Sin resultados para esa búsqueda</div>
-
-<div class="legend">
-  <span style="color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-weight:600;">Leyenda</span>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div><span>Partidos de España</span></div>
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div><span>Fase de grupos</span></div>
-  <div class="legend-item"><div class="legend-dot" style="background:#2a3a55"></div><span>Fase eliminatoria</span></div>
-  <div class="legend-item" style="margin-left:auto;font-size:11px;">Horarios en CEST (UTC+2) — hora peninsular española</div>
+<div class="no-results" id="no-results" style="display:none;">
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+  Sin resultados para tu búsqueda
 </div>
+
+<div class="foot">
+  <div class="foot-item">
+    <div class="foot-dot" style="background:var(--red)"></div>
+    Partidos de España
+  </div>
+  <div class="foot-item">
+    <div class="foot-dot" style="background:rgba(255,255,255,.08);outline:1px solid var(--border-hi)"></div>
+    Fase de grupos
+  </div>
+  <div class="foot-item">
+    <div class="foot-dot" style="background:rgba(255,255,255,.04);outline:1px solid var(--border)"></div>
+    Fase eliminatoria
+  </div>
+  <div class="foot-tz">Horarios en CEST (UTC+2) &mdash; hora peninsular española</div>
+</div>
+
 </div><!-- /container -->
 
 <script>
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const searchInput = document.getElementById('search');
-  const allCards   = document.querySelectorAll('.match-card');
-  const noResults  = document.getElementById('no-results');
-  let activeFilter = 'all', searchQuery = '';
+// ═══════════════════════════════════════════════════
+//  MUNDIAL 2026 — SMART SCHEDULE LOGIC (Improved)
+//  CEST = UTC+2
+// ═══════════════════════════════════════════════════
 
-  function applyFilters() {
-    let visible = 0;
-    allCards.forEach(card => {
-      const isSpain       = card.classList.contains('spain');
-      const isGrupos      = card.classList.contains('grupos');
-      const isElim        = card.classList.contains('eliminatoria');
-      const teams         = (card.dataset.teams || '').toLowerCase();
-      let showFilter = activeFilter === 'all'
-        || (activeFilter === 'spain' && isSpain)
-        || (activeFilter === 'grupos' && isGrupos)
-        || (activeFilter === 'eliminatoria' && isElim);
-      const showSearch = !searchQuery || teams.includes(searchQuery);
-      if (showFilter && showSearch) { card.classList.remove('hidden'); visible++; }
-      else card.classList.add('hidden');
-    });
-    noResults.style.display = visible === 0 ? 'block' : 'none';
-    document.querySelectorAll('.day-block').forEach(b => {
-      b.style.display = b.querySelectorAll('.match-card:not(.hidden)').length === 0 ? 'none' : '';
-    });
-    document.querySelectorAll('.phase-header').forEach(h => {
-      let next = h.nextElementSibling, has = false;
-      while (next && !next.classList.contains('phase-header')) {
-        if (next.classList.contains('day-block') && next.style.display !== 'none') has = true;
-        next = next.nextElementSibling;
+// ── Utilities ──────────────────────────────────────
+function nowCEST() {
+  return new Date();
+}
+
+function blockEndDate(isoDate, block) {
+  const cards = block.querySelectorAll('.match-card');
+  let latestMinutes = 0;
+  cards.forEach(c => {
+    const t = c.querySelector('.time-digits');
+    if (!t) return;
+    const [hh, mm] = t.textContent.split(':').map(Number);
+    const mins = (hh * 60 + mm);
+    if (mins > latestMinutes) latestMinutes = mins;
+  });
+  const [y, mo, d] = isoDate.split('-').map(Number);
+  const latestHour = Math.floor(latestMinutes / 60);
+  const latestMin  = latestMinutes % 60;
+  // Match end + ~2 hours buffer
+  const endUTC = Date.UTC(y, mo - 1, d, latestHour, latestMin + 120);
+  return new Date(endUTC);
+}
+
+function matchStartUTC(isoDate, timeStr) {
+  const [y, mo, d] = isoDate.split('-').map(Number);
+  const [hh, mm]   = timeStr.split(':').map(Number);
+  // CEST → UTC
+  return new Date(Date.UTC(y, mo - 1, d, hh - 2, mm));
+}
+
+// ── Main Init ──────────────────────────────────────
+(function init() {
+  const now    = nowCEST();
+  const blocks = Array.from(document.querySelectorAll('.day-block[data-date]'));
+
+  let firstFutureBlock = null;
+  let foundToday       = false;
+
+  blocks.forEach(block => {
+    const iso    = block.dataset.date;
+    if (!iso) return;
+
+    const endDt  = blockEndDate(iso, block);
+    const isPast = endDt < now;
+
+    if (isPast) {
+      block.classList.add('day-past');
+    } else if (!firstFutureBlock) {
+      firstFutureBlock = block;
+    }
+
+    // Mark individual matches
+    block.querySelectorAll('.match-card').forEach(card => {
+      const td = card.querySelector('.time-digits');
+      if (!td) return;
+      const startUTC = matchStartUTC(iso, td.textContent.trim());
+      const endUTC   = new Date(startUTC.getTime() + 2 * 60 * 60 * 1000);
+
+      if (endUTC < now) {
+        card.classList.add('match-past');
+      } else if (startUTC <= now && now < endUTC) {
+        card.classList.add('match-live');
       }
-      h.style.display = has ? '' : 'none';
+    });
+
+    // Today detection (local date comparison)
+    const [y, mo, d] = iso.split('-').map(Number);
+    const blockDate = new Date(y, mo - 1, d);
+    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    if (blockDate.getTime() === todayDate.getTime()) {
+      foundToday = true;
+      block.classList.add('day-today');
+      // Ensure badge
+      if (!block.querySelector('.today-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'today-badge';
+        badge.textContent = 'HOY';
+        const dayText = block.querySelector('.day-text');
+        if (dayText) dayText.after(badge);
+      }
+    }
+  });
+
+  // ── Collapse past blocks ─────────────
+  const pastBlocks = blocks.filter(b => b.classList.contains('day-past'));
+  const wrapper = document.getElementById('main');
+
+  if (pastBlocks.length > 0) {
+    const toggleBar = document.createElement('div');
+    toggleBar.id = 'past-toggle';
+    toggleBar.innerHTML = `
+      <button id="past-toggle-btn" aria-expanded="false">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4.5L6 8.5L10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="past-toggle-label">${pastBlocks.length} ${pastBlocks.length === 1 ? 'jornada jugada' : 'jornadas jugadas'}</span>
+        <span class="past-toggle-hint">Ver resultados anteriores</span>
+      </button>
+    `;
+
+    const firstPhase = wrapper.querySelector('.phase-header');
+    if (firstPhase) wrapper.insertBefore(toggleBar, firstPhase);
+
+    pastBlocks.forEach(b => {
+      b.dataset.collapsedByPast = '1';
+      b.style.display = 'none';
+    });
+
+    // Hide fully-past phase headers
+    document.querySelectorAll('.phase-header').forEach(ph => {
+      let allPast = true;
+      let hasBlocks = false;
+      let el = ph.nextElementSibling;
+      while (el && !el.classList.contains('phase-header')) {
+        if (el.classList.contains('day-block')) {
+          hasBlocks = true;
+          if (!el.classList.contains('day-past')) allPast = false;
+        }
+        el = el.nextElementSibling;
+      }
+      if (hasBlocks && allPast) {
+        ph.dataset.collapsedByPast = '1';
+        ph.style.display = 'none';
+      }
+    });
+
+    let expanded = false;
+    const toggleBtn = document.getElementById('past-toggle-btn');
+    toggleBtn.addEventListener('click', () => {
+      expanded = !expanded;
+      toggleBtn.setAttribute('aria-expanded', expanded);
+      toggleBtn.classList.toggle('expanded', expanded);
+
+      const label = document.getElementById('past-toggle-label');
+      label.textContent = expanded 
+        ? 'Ocultar jornadas anteriores' 
+        : `${pastBlocks.length} ${pastBlocks.length === 1 ? 'jornada jugada' : 'jornadas jugadas'}`;
+
+      document.querySelector('.past-toggle-hint').textContent = expanded ? '' : 'Ver resultados anteriores';
+
+      pastBlocks.forEach(b => b.style.display = expanded ? '' : 'none');
+      document.querySelectorAll('.phase-header[data-collapsed-by-past]').forEach(ph => {
+        ph.style.display = expanded ? '' : 'none';
+      });
     });
   }
 
-  filterBtns.forEach(btn => btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeFilter = btn.dataset.filter;
-    applyFilters();
-  }));
+  // ── Auto-scroll to today / next match ───────────
+  const target = firstFutureBlock || blocks[blocks.length - 1];
+  if (target) {
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const navH = document.querySelector('.nav')?.offsetHeight || 52;
+        const toggleH = document.getElementById('past-toggle')?.offsetHeight || 0;
+        const y = target.getBoundingClientRect().top + window.scrollY - navH - toggleH - 24;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }, 180);
+    });
+  }
+})();
 
-  searchInput.addEventListener('input', e => {
-    searchQuery = e.target.value.toLowerCase().trim();
-    applyFilters();
+// ── Filter + Search ────────────────────────────────
+const btns  = document.querySelectorAll('.filter-btn');
+const inp   = document.getElementById('search');
+const cards = document.querySelectorAll('.match-card');
+const noRes = document.getElementById('no-results');
+let flt = 'all', q = '';
+
+function run() {
+  let n = 0;
+  cards.forEach(c => {
+    const teams = (c.dataset.teams || '').toLowerCase();
+    const show = 
+      (flt === 'all' ||
+       (flt === 'spain' && c.classList.contains('spain')) ||
+       (flt === 'grupos' && c.classList.contains('grupos')) ||
+       (flt === 'eliminatoria' && c.classList.contains('eliminatoria')))
+      && (!q || teams.includes(q));
+    c.classList.toggle('hidden', !show);
+    if (show) n++;
   });
+  noRes.style.display = n === 0 ? 'flex' : 'none';
+
+  document.querySelectorAll('.day-block').forEach(b => {
+    const visible = b.querySelectorAll('.match-card:not(.hidden)');
+    if (visible.length === 0) {
+      b.style.display = 'none';
+    } else if (!b.dataset.collapsedByPast || document.getElementById('past-toggle-btn')?.classList.contains('expanded')) {
+      b.style.display = '';
+    }
+  });
+
+  document.querySelectorAll('.phase-header').forEach(h => {
+    let vis = false;
+    let el = h.nextElementSibling;
+    while (el && !el.classList.contains('phase-header')) {
+      if (el.classList.contains('day-block') && el.style.display !== 'none') vis = true;
+      el = el.nextElementSibling;
+    }
+    h.style.display = vis ? '' : 'none';
+  });
+}
+
+btns.forEach(b => b.addEventListener('click', () => {
+  btns.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  flt = b.dataset.filter;
+  run();
+}));
+
+inp.addEventListener('input', e => {
+  q = e.target.value.toLowerCase().trim();
+  run();
+});
 </script>
 </body>
 </html>
