@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudor vs. Cena | Sweat vs. Supper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EE;
+    --ink:#2B2B26;
+    --ink-soft:#5C5A4F;
+    --coral:#FF7A52;
+    --coral-deep:#E25C34;
+    --olive:#6B8E4E;
+    --olive-deep:#516E39;
+    --tan:#F0E6D2;
+    --white:#FFFFFF;
+    --line:#E2D6B8;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Outfit', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* Language Toggle Logic */
+  html[lang="en"] .es { display: none !important; }
+  html[lang="es"] .en { display: none !important; }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  a{color:inherit;}
+
+  :focus-visible{
+    outline:3px solid var(--coral-deep);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* ---------- TYPE ---------- */
+  h1,h2,h3,.display{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    line-height:1.05;
+    letter-spacing:-0.01em;
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+
+  .num{
+    font-family:'JetBrains Mono', monospace;
+    font-variant-numeric:tabular-nums;
+  }
+
+  p{ color:var(--ink-soft); line-height:1.65; font-size:1.02rem; }
+
+  /* ---------- NAV ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 0 0;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+  }
+  .brand-dot{
+    width:10px;height:10px;border-radius:50%;
+    background:linear-gradient(135deg, var(--coral) 50%, var(--olive) 50%);
+    display:inline-block;
+  }
+  .topbar-actions {
+    display:flex;
+    align-items:center;
+    gap: 22px;
+  }
+  .topbar nav{
+    display:flex; gap:22px; font-size:0.88rem; color:var(--ink-soft);
+  }
+  .topbar nav a{text-decoration:none; transition:color .15s;}
+  .topbar nav a:hover{color:var(--ink);}
+
+  .lang-btn {
+    background: var(--ink);
+    color: var(--white);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .lang-btn:hover {
+    background: var(--ink-soft);
+  }
+  .lang-btn:active {
+    transform: scale(0.96);
+  }
+
+  /* ---------- HERO (MOBILE FIRST) ---------- */
+  .hero{
+    padding:36px 0 24px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.3rem, 4.6vw, 3.6rem);
+    margin-bottom:18px;
+  }
+  .hero h1 .hl-coral{color:var(--coral-deep);}
+  .hero h1 .hl-olive{color:var(--olive-deep);}
+  .hero p.lede{
+    font-size:1.12rem;
+    max-width:480px;
+    margin-bottom:26px;
+  }
+  .hero-tags{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.74rem;
+    padding:7px 12px;
+    border-radius:100px;
+    background:var(--tan);
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+  }
+
+  .scale-wrap{ display:flex; justify-content:center; order:-1; max-width:260px; margin:0 auto 12px;}
+  .scale-wrap svg{ width:100%; height:auto; }
+
+  @keyframes settle{
+    0%{ transform:rotate(0deg); }
+    100%{ transform:rotate(var(--tilt)); }
+  }
+  .beam{
+    transform-origin:200px 96px;
+    animation:settle 1.4s cubic-bezier(.34,1.4,.4,1) 0.3s forwards;
+    --tilt:5deg;
+  }
+  .float-shoe{ animation:bob 3.4s ease-in-out infinite; transform-origin:120px 170px;}
+  .float-bowl{ animation:bob 3.4s ease-in-out infinite 0.4s; transform-origin:280px 178px;}
+  @keyframes bob{
+    0%,100%{ transform:translateY(0px); }
+    50%{ transform:translateY(-4px); }
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{ padding:48px 0; }
+  .section-head{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 40px;
+  }
+  .section-head .eyebrow{ color:var(--coral-deep); margin-bottom:10px; display:block; }
+  .section-head h2{ font-size:clamp(1.6rem, 3vw, 2.1rem); margin-bottom:12px; }
+
+  /* ---------- SPLIT CARDS (MOBILE FIRST) ---------- */
+  .split{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:22px;
+  }
+  .lane{
+    border-radius:22px;
+    padding:30px 28px;
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .lane.move{ background:linear-gradient(165deg, #FFF1EA 0%, var(--tan) 100%); }
+  .lane.fuel{ background:linear-gradient(165deg, #F0F4E9 0%, var(--tan) 100%); }
+
+  .lane-icon{
+    width:46px; height:46px;
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+  }
+  .lane.move .lane-icon{ background:var(--coral); }
+  .lane.fuel .lane-icon{ background:var(--olive); }
+  .lane-icon svg{ width:24px; height:24px; }
+
+  .lane h3{ font-size:1.35rem; margin-bottom:6px; }
+  .lane .lane-sub{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:20px; }
+
+  .stat-row{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    padding:14px 0;
+    border-top:1px dashed var(--line);
+  }
+  .stat-row:first-of-type{ border-top:none; padding-top:0; }
+  .stat-num{ font-size:1.9rem; font-weight:600; }
+  .lane.move .stat-num{ color:var(--coral-deep); }
+  .lane.fuel .stat-num{ color:var(--olive-deep); }
+  .stat-label{ font-size:0.85rem; color:var(--ink-soft); }
+
+  /* ---------- SCOREBOARD (MOBILE FIRST) ---------- */
+  .scoreboard{
+    background:var(--ink);
+    border-radius:28px;
+    padding:34px 22px;
+    color:var(--paper);
+    position:relative;
+  }
+  .scoreboard .section-head h2{ color:var(--paper); }
+  .scoreboard .section-head .eyebrow{ color:#FFB199; }
+  .scoreboard .section-head p{ color:#C9C6BA; }
+
+  .vs-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    align-items:center;
+    gap:18px;
+    margin-top:8px;
+  }
+  .vs-col{ text-align:center; }
+  .vs-col .big-num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:clamp(2.6rem, 6vw, 4rem);
+    font-weight:600;
+    line-height:1;
+  }
+  .vs-col.move .big-num{ color:var(--coral); }
+  .vs-col.fuel .big-num{ color:#9BC97A; }
+  .vs-col .unit{ font-size:0.95rem; color:#C9C6BA; margin-top:6px; }
+  .vs-col .who{ font-family:'Fredoka', sans-serif; font-size:1.1rem; margin-top:14px; }
+  .vs-divider{
+    font-family:'Fredoka', sans-serif;
+    font-size:1.4rem;
+    color:#8A877C;
+    width:46px;height:46px;
+    border:1px solid #4A483F;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto;
+  }
+  .score-note{
+    margin-top:30px;
+    padding-top:24px;
+    border-top:1px solid #4A483F;
+    font-size:0.92rem;
+    color:#C9C6BA;
+    text-align:center;
+  }
+  .score-note b{ color:var(--paper); }
+
+  /* ---------- SCIENCE & CONTEXT (MOBILE FIRST) ---------- */
+  .science-grid, .context-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+    align-items:start;
+  }
+  .science-grid h3, .context-grid h3{ font-size:1.3rem; margin-bottom:14px; color:var(--ink); }
+  .formula-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:26px 24px;
+    margin-top:18px;
+  }
+  .formula{
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.0rem;
+    background:var(--tan);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:14px;
+    text-align:center;
+  }
+  .formula-card p{ font-size:0.92rem; margin:0; }
+
+  .copy p{ margin-bottom:16px; }
+  .copy p:last-child{ margin-bottom:0; }
+  .copy ul { margin: 0 0 20px 20px; color: var(--ink-soft); font-size: 1.02rem; line-height: 1.65; }
+  .copy li { margin-bottom: 12px; }
+  .copy li strong { color: var(--ink); }
+  
+  .inline-coral{ color:var(--coral-deep); font-weight:600; }
+  .inline-olive{ color:var(--olive-deep); font-weight:600; }
+
+  /* ---------- TABLE: REAL SWAPS ---------- */
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 32px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: var(--white);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 700px;
+  }
+  th, td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  th {
+    background: var(--tan);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
+    color: var(--ink);
+    font-size: 1.05rem;
+  }
+  tr:last-child td { border-bottom: none; }
+  .td-bad { color: var(--coral-deep); font-weight: 600; }
+  .td-good { color: var(--olive-deep); font-weight: 600; }
+  .td-diff { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; }
+  .td-diff span { display: block; font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 400; color: var(--ink-soft); margin-top: 4px; }
+  .table-note {
+    background: #F0F4E9;
+    border-left: 4px solid var(--olive);
+    padding: 16px 20px;
+    margin-top: 24px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+  }
+
+  /* ---------- VERDICT ---------- */
+  .verdict{
+    background:var(--tan);
+    border-radius:28px;
+    padding:34px 22px;
+    text-align:center;
+    border:1px solid var(--line);
+  }
+  .verdict-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--olive);
+    color:var(--white);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.74rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:8px 16px;
+    border-radius:100px;
+    margin-bottom:20px;
+  }
+  .verdict h2{ font-size:clamp(1.5rem,3vw,2rem); max-width:640px; margin:0 auto 16px; }
+  .verdict p{ max-width:560px; margin:0 auto; }
+  .verdict .small-print{
+    margin-top:22px;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:36px 0 50px;
+    text-align:center;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+  }
+  footer .brand{ justify-content:center; margin-bottom:10px; }
+
+  /* ---------- RESPONSIVE DESKTOP ---------- */
+  @media (min-width: 768px){
+    .hero{ grid-template-columns:1.1fr 0.9fr; padding-top:56px; }
+    .hero .scale-wrap{ order:0; max-width:380px; margin:0; }
+    .split{ grid-template-columns:1fr 1fr; }
+    .vs-grid{ grid-template-columns:1fr auto 1fr; gap:24px; }
+    .vs-divider{ margin:0; }
+    .science-grid{ grid-template-columns:0.85fr 1.15fr; gap:48px; }
+    .context-grid { grid-template-columns:1fr; max-width: 800px; margin: 0 auto; }
+    .section{ padding:64px 0; }
+    .scoreboard, .verdict{ padding:46px 40px; }
+    .topbar { flex-wrap: nowrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span class="es">Sudor vs. Cena</span>
+      <span class="en">Sweat vs. Supper</span>
+    </div>
+    <div class="topbar-actions">
+      <nav>
+        <a href="#scoreboard">
+          <span class="es">Números</span>
+          <span class="en">Numbers</span>
+        </a>
+        <a href="#science">
+          <span class="es">Ciencia</span>
+          <span class="en">Science</span>
+        </a>
+        <a href="#context">
+          <span class="es">Ejemplos</span>
+          <span class="en">Examples</span>
+        </a>
+      </nav>
+      <button class="lang-btn" id="lang-toggle">English</button>
+    </div>
+  </div>
+</div>
+
+<header class="wrap hero">
+  <div>
+    <h1>
+      <span class="es">¿30 minutos de <span class="hl-coral">trote</span><br>o una mejor <span class="hl-olive">comida</span>?</span>
+      <span class="en">30&nbsp;minutes of <span class="hl-coral">jogging</span><br>or one better <span class="hl-olive">meal</span>?</span>
+    </h1>
+    <p class="lede">
+      <span class="es">Ambos te ayudan a perder peso. Pero no tienen el mismo impacto. Aquí tienes las matemáticas reales detrás de un trote y un plato, y cuál mueve la aguja más rápido.</span>
+      <span class="en">Both help you lose weight. But they don't pull the same weight. Here's the actual math behind a jog and a plate — and which one moves the needle faster.</span>
+    </p>
+    <div class="hero-tags">
+      <span class="tag">
+        <span class="es">🏃 ~3.1 km a ritmo de 6:00/km</span>
+        <span class="en">🏃 ~3.1 km @ 6:00/km pace</span>
+      </span>
+      <span class="tag">
+        <span class="es">🥗 una comida reemplazada</span>
+        <span class="en">🥗 one swapped meal</span>
+      </span>
+      <span class="tag">
+        <span class="es">⚖️ objetivo: pérdida de grasa</span>
+        <span class="en">⚖️ goal: fat loss</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="scale-wrap">
+    <svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An illustration of a balance scale with a running shoe on one side and a salad bowl on the other, tipped slightly toward the salad bowl.">
+      <rect x="194" y="96" width="12" height="92" rx="4" fill="#D8CCA8"/>
+      <ellipse cx="200" cy="192" rx="56" ry="9" fill="#E2D6B8"/>
+      <circle cx="200" cy="92" r="9" fill="#2B2B26"/>
+      <g class="beam">
+        <rect x="40" y="90" width="320" height="8" rx="4" fill="#2B2B26"/>
+        <line x1="120" y1="94" x2="120" y2="150" stroke="#B9AE8E" stroke-width="3"/>
+        <line x1="80" y1="150" x2="160" y2="150" stroke="#B9AE8E" stroke-width="3"/>
+        <g class="float-shoe">
+          <ellipse cx="120" cy="178" rx="62" ry="10" fill="#FFE2D2"/>
+          <path d="M82 178c0-14 10-26 26-30l38-9c10-2 18 3 18 12v18c0 6-5 11-11 11H93c-6 0-11-5-11-11z" fill="var(--coral)"/>
+          <path d="M82 178c4-10 14-17 26-19" stroke="#E25C34" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="100" cy="170" r="3" fill="#FFF3EC"/>
+          <circle cx="110" cy="170" r="3" fill="#FFF3EC"/>
+          <circle cx="120" cy="170" r="3" fill="#FFF3EC"/>
+        </g>
+        <line x1="280" y1="94" x2="280" y2="158" stroke="#B9AE8E" stroke-width="3"/>
+        <line x1="240" y1="158" x2="320" y2="158" stroke="#B9AE8E" stroke-width="3"/>
+        <g class="float-bowl">
+          <ellipse cx="280" cy="183" rx="58" ry="9" fill="#E4EEDA"/>
+          <path d="M232 178c0 17 21 31 48 31s48-14 48-31z" fill="#FAF6EC" stroke="#D8CCA8" stroke-width="2"/>
+          <ellipse cx="280" cy="176" rx="48" ry="13" fill="#FAF6EC" stroke="#D8CCA8" stroke-width="2"/>
+          <circle cx="262" cy="172" r="8" fill="var(--olive)"/>
+          <circle cx="280" cy="168" r="9" fill="#8FAE63"/>
+          <circle cx="298" cy="173" r="7" fill="var(--olive)"/>
+          <circle cx="272" cy="178" r="6" fill="#E8543F"/>
+          <circle cx="291" cy="180" r="5" fill="#F4C84B"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+</header>
+
+<main>
+
+  <section class="section" id="lanes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">
+          <span class="es">dos caminos, un objetivo</span>
+          <span class="en">two paths, one goal</span>
+        </span>
+        <h2>
+          <span class="es">Lo que cada uno realmente cuesta y devuelve</span>
+          <span class="en">What each one actually costs and gives back</span>
+        </h2>
+        <p>
+          <span class="es">La misma media hora de tu día, dos intercambios completamente diferentes.</span>
+          <span class="en">Same half hour of your day, two completely different trades.</span>
+        </p>
+      </div>
+
+      <div class="split">
+        <div class="lane move">
+          <div class="lane-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 4a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="#fff"/><path d="M17 21l-2-7-3 1-2-4 4-3 3 3 3-1" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 14l-3 2-2 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>
+            <span class="es">Movimiento: el trote</span>
+            <span class="en">Move: the jog</span>
+          </h3>
+          <p class="lane-sub">
+            <span class="es">30 minutos, ritmo fácil a moderado, adulto promedio (≈70 kg / 154 lb)</span>
+            <span class="en">30 minutes, easy-to-moderate pace, average adult (≈70 kg / 154 lb)</span>
+          </p>
+
+          <div class="stat-row">
+            <span class="stat-num num">~300</span>
+            <span class="stat-label">
+              <span class="es">calorías quemadas en la carrera misma</span>
+              <span class="en">calories burned in the run itself</span>
+            </span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-num num">1</span>
+            <span class="stat-label">
+              <span class="es">energía equivalente a una galleta pequeña, aproximadamente</span>
+              <span class="en">small cookie's worth of energy, roughly speaking</span>
+            </span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-num num">
+              <span class="es">+corazón, +ánimo</span>
+              <span class="en">+heart, +mood</span>
+            </span>
+            <span class="stat-label">
+              <span class="es">beneficios cardiovasculares y de salud mental que la dieta por sí sola no te puede dar</span>
+              <span class="en">cardiovascular and mental-health gains diet alone can't give you</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="lane fuel">
+          <div class="lane-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3v18M5 3a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 3v18M19 3c-2 0-3 2-3 5s1 4 3 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>
+            <span class="es">Combustible: el reemplazo</span>
+            <span class="en">Fuel: the swap</span>
+          </h3>
+          <p class="lane-sub">
+            <span class="es">Cambiar una típica comida rápida por un plato más simple de alimentos integrales</span>
+            <span class="en">Trading one typical fast-food meal for a simpler, whole-food plate</span>
+          </p>
+
+          <div class="stat-row">
+            <span class="stat-num num">~500–700</span>
+            <span class="stat-label">
+              <span class="es">calorías evitadas con una elección de comida más inteligente</span>
+              <span class="en">calories avoided with one smarter meal choice</span>
+            </span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-num num">0 min</span>
+            <span class="stat-label">
+              <span class="es">tiempo extra requerido — de todos modos ibas a comer</span>
+              <span class="en">extra time required — you were eating anyway</span>
+            </span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-num num">3×</span>
+            <span class="stat-label">
+              <span class="es">aproximadamente el triple del impacto calórico del trote</span>
+              <span class="en">roughly the calorie impact of the jog, in this example</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="scoreboard">
+    <div class="wrap">
+      <div class="scoreboard">
+        <div class="section-head">
+          <span class="eyebrow">
+            <span class="es">el marcador</span>
+            <span class="en">the scoreboard</span>
+          </span>
+          <h2>
+            <span class="es">Los mismos 30 minutos, una influencia muy diferente</span>
+            <span class="en">Same 30 minutes, very different leverage</span>
+          </h2>
+          <p>
+            <span class="es">Las calorías son la moneda común. Así es como puntúa realmente cada opción.</span>
+            <span class="en">Calories are the common currency. Here's how each option actually scores.</span>
+          </p>
+        </div>
+
+        <div class="vs-grid">
+          <div class="vs-col move">
+            <div class="big-num">300</div>
+            <div class="unit">
+              <span class="es">kcal quemadas al trotar</span>
+              <span class="en">kcal burned by jogging</span>
+            </div>
+            <div class="who">
+              <span class="es">🏃 El Trote</span>
+              <span class="en">🏃 The Jog</span>
+            </div>
+          </div>
+          <div class="vs-divider">vs</div>
+          <div class="vs-col fuel">
+            <div class="big-num">600</div>
+            <div class="unit">
+              <span class="es">kcal evitadas al comer mejor</span>
+              <span class="en">kcal avoided by eating better</span>
+            </div>
+            <div class="who">
+              <span class="es">🥗 El Reemplazo</span>
+              <span class="en">🥗 The Swap</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="score-note">
+          <span class="es">Es mucho más fácil <b>no comer</b> 600 calorías extra que <b>quemarlas</b> corriendo — quemar eso tomaría aproximadamente una hora, no treinta minutos. Ese no es un argumento en contra del trote; es por qué los dos funcionan mejor como equipo, no como rivales.</span>
+          <span class="en">It's far easier to <b>not eat</b> 600 extra calories than to <b>burn off</b> 600 through running — burning that off would take roughly an hour, not thirty minutes. That's not an argument against jogging; it's why the two work best as teammates, not rivals.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="science">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">
+          <span class="es">la ciencia</span>
+          <span class="en">the science</span>
+        </span>
+        <h2>
+          <span class="es">Por qué la dieta generalmente supera al ejercicio para perder peso</span>
+          <span class="en">Why diet usually edges out exercise for weight loss</span>
+        </h2>
+        <p>
+          <span class="es">Todo se reduce a aritmética simple, la biología del apetito y cuánto tiempo tienes realmente.</span>
+          <span class="en">It comes down to simple arithmetic, appetite biology, and how much time you actually have.</span>
+        </p>
+      </div>
+
+      <div class="science-grid">
+        <div class="formula-card">
+          <h3>
+            <span class="es">La ecuación del balance energético</span>
+            <span class="en">The energy balance equation</span>
+          </h3>
+          <div class="formula">
+            <span class="es">grasa perdida = calorías ingeridas − calorías quemadas</span>
+            <span class="en">fat lost = calories in − calories out</span>
+          </div>
+          <p>
+            <span class="es">El cambio de peso se rige por la brecha entre lo que comes y lo que tu cuerpo quema. Una libra (aprox. 0.45 kg) de grasa almacena alrededor de 3,500 kcal, por lo que cualquier brecha diaria consistente, desde cualquier lado de la ecuación, eventualmente se refleja en la balanza.</span>
+            <span class="en">Weight change is governed by the gap between what you eat and what your body burns. One pound of fat stores about 3,500 kcal, so any consistent daily gap, from either side of the equation, eventually shows up on the scale.</span>
+          </p>
+        </div>
+
+        <div class="copy">
+          <h3>
+            <span class="es">Por qué un trote de 30 minutos mueve la aguja lentamente</span>
+            <span class="en">Why a 30-minute jog moves the needle slowly</span>
+          </h3>
+          <p>
+            <span class="es">Correr quema aproximadamente <span class="inline-coral">8–10 kcal por minuto</span> para la mayoría de los adultos, por lo que media hora suma alrededor de 250–350 kcal. Eso es real y vale la pena, pero es una pequeña porción de una ingesta diaria típica de 2,000–2,500 kcal, alrededor del <span class="inline-coral">12–15%</span> de la energía de un día.</span>
+            <span class="en">Running burns roughly <span class="inline-coral">8–10 kcal per minute</span> for most adults, so half an hour lands around 250–350 kcal. That's real and worthwhile, but it's a small slice of a typical 2,000–2,500 kcal daily intake, around <span class="inline-coral">12–15%</span> of one day's energy.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="context">
+    <div class="wrap">
+      <div class="context-grid copy">
+        <div>
+          <h3>
+            <span class="es">Por qué tu cuerpo "hace trampa" con el ejercicio</span>
+            <span class="en">Why your body "cheats" with exercise</span>
+          </h3>
+          <p>
+            <span class="es">El concepto de "Sudor vs. Cena" a menudo resulta frustrante porque nuestro cerebro asume instintivamente que el esfuerzo físico duro debería recompensarse con una gran pérdida de peso. Sin embargo, la biología humana evolucionó para aferrarse a la energía, no para deshacerse de ella fácilmente. Cuando intentas perder peso solo haciendo ejercicio, te enfrentas a tres mecanismos de supervivencia:</span>
+            <span class="en">The "Sweat vs. Supper" concept is often frustrating because our brains instinctively assume hard physical effort should be rewarded with massive weight loss. However, human biology evolved to hold onto energy, not shed it easily. When you try to lose weight through exercise alone, you face three survival mechanisms:</span>
+          </p>
+          <ul>
+            <li>
+              <span class="es"><strong>La trampa de la compensación (NEAT):</strong> Cuando haces un entrenamiento duro de 30 minutos, tu cuerpo suele reaccionar volviéndose más perezoso el resto del día de forma inconsciente. Pasas más tiempo en el sofá o evitas las escaleras, borrando hasta la mitad de las calorías quemadas.</span>
+              <span class="en"><strong>The compensation trap (NEAT):</strong> After a hard 30-minute workout, your body often reacts by subconsciously making you lazier the rest of the day. You spend more time on the couch or avoid stairs, erasing up to half the calories you just burned.</span>
+            </li>
+            <li>
+              <span class="es"><strong>El efecto en el apetito:</strong> El ejercicio cardiovascular estimula la producción de grelina (la hormona del hambre). Es fácil terminar tu trote sintiendo un hambre voraz y comerte un snack de 400 kcal "porque te lo has ganado".</span>
+              <span class="en"><strong>The appetite effect:</strong> Cardio stimulates the production of ghrelin (the hunger hormone). It's easy to finish your run feeling ravenous and eat a 400 kcal snack "because you earned it".</span>
+            </li>
+            <li>
+              <span class="es"><strong>Eficiencia metabólica:</strong> A medida que te pones en forma, tu cuerpo se vuelve más eficiente. Un trote que quemaba 350 calorías el primer mes, podría quemar solo 280 tres meses después haciendo el mismo trabajo.</span>
+              <span class="en"><strong>Metabolic efficiency:</strong> As you get fitter, your body gets more efficient. A jog that burned 350 calories month one might only burn 280 calories three months later for the exact same work.</span>
+            </li>
+          </ul>
+
+          <h3 style="margin-top: 32px;">
+            <span class="es">La ventaja injusta de la dieta: Densidad vs. Saciedad</span>
+            <span class="en">Diet's unfair advantage: Density vs. Satiety</span>
+          </h3>
+          <p>
+            <span class="es">La razón por la que la dieta gana matemáticamente es por la <span class="inline-olive">densidad calórica</span>. Los alimentos ultraprocesados están diseñados para ser deliciosos y muy densos en energía, pero ocupan poco espacio en tu estómago. Un alimento integral (como verduras o carne magra) contiene mucha agua y fibra, enviando señales de saciedad a tu cerebro mucho antes de que te acerques a las calorías de una comida rápida.</span>
+            <span class="en">The reason diet wins mathematically is <span class="inline-olive">caloric density</span>. Ultra-processed foods are engineered to be delicious and highly energy-dense, yet they take up very little space in your stomach. Whole foods (like veggies or lean meats) contain lots of water and fiber, sending fullness signals to your brain long before you approach the calorie count of fast food.</span>
+          </p>
+        </div>
+
+        <div>
+          <h3>
+            <span class="es">3 Intercambios Reales: No Saludable vs. Saludable</span>
+            <span class="en">3 Real Swaps: Unhealthy vs. Healthy</span>
+          </h3>
+          <p>
+            <span class="es">Aquí tienes tres ejemplos de cómo un simple intercambio crea un déficit calórico masivo sin dejarte con hambre, logrando en un instante lo que te tomaría horas de ejercicio continuo.</span>
+            <span class="en">Here are three examples of how a simple swap creates a massive caloric deficit without leaving you hungry, achieving in an instant what would take hours of continuous exercise.</span>
+          </p>
+          
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><span class="es">Comida</span><span class="en">Meal</span></th>
+                  <th><span class="es">Típica (No Saludable)</span><span class="en">Typical (Unhealthy)</span></th>
+                  <th><span class="es">El Intercambio Saludable</span><span class="en">The Healthy Swap</span></th>
+                  <th><span class="es">Diferencia</span><span class="en">Difference</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><span class="es">Desayuno</span><span class="en">Breakfast</span></strong></td>
+                  <td>
+                    <span class="es">Cruasán + Café grande con leche entera y sirope</span>
+                    <span class="en">Croissant + Large coffee with whole milk & syrup</span>
+                    <br><span class="td-bad">~700 kcal</span>
+                  </td>
+                  <td>
+                    <span class="es">Dos tostadas integrales con tomate y aceite + Café solo</span>
+                    <span class="en">Two whole wheat toasts with tomato & olive oil + Black coffee</span>
+                    <br><span class="td-good">~250 kcal</span>
+                  </td>
+                  <td class="td-diff">
+                    -450 kcal
+                    <span><span class="es">(~45 min de trote)</span><span class="en">(~45 min jog)</span></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><span class="es">Comida</span><span class="en">Lunch</span></strong></td>
+                  <td>
+                    <span class="es">Hamburguesa doble, patatas fritas medianas, refresco</span>
+                    <span class="en">Double burger, medium fries, regular soda</span>
+                    <br><span class="td-bad">~1,200 kcal</span>
+                  </td>
+                  <td>
+                    <span class="es">Pechuga a la plancha, patata asada, ensalada variada, agua</span>
+                    <span class="en">Grilled chicken, baked potato, mixed salad, water</span>
+                    <br><span class="td-good">~450 kcal</span>
+                  </td>
+                  <td class="td-diff">
+                    -750 kcal
+                    <span><span class="es">(~1.5h de trote)</span><span class="en">(~1.5h jog)</span></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><span class="es">Cena</span><span class="en">Dinner</span></strong></td>
+                  <td>
+                    <span class="es">Pizza procesada de supermercado (entera)</span>
+                    <span class="en">Supermarket processed pizza (whole)</span>
+                    <br><span class="td-bad">~1,000 kcal</span>
+                  </td>
+                  <td>
+                    <span class="es">Filete de salmón al horno con espárragos y calabacín</span>
+                    <span class="en">Baked salmon fillet with asparagus and zucchini</span>
+                    <br><span class="td-good">~400 kcal</span>
+                  </td>
+                  <td class="td-diff">
+                    -600 kcal
+                    <span><span class="es">(~1h de trote)</span><span class="en">(~1h jog)</span></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-note">
+            <span class="es"><strong>La conclusión clave:</strong> No tienes que pasar hambre para perder peso, solo tienes que cambiar el <em>tipo</em> de combustible. Si combinas la opción de comida saludable con el trote de 30 minutos (para proteger tu masa muscular y mejorar tu estado de ánimo), tienes la fórmula exacta y sostenible para el éxito.</span>
+            <span class="en"><strong>The key takeaway:</strong> You don't have to starve to lose weight, you just have to change the <em>type</em> of fuel. If you combine the healthy food option with the 30-minute jog (to protect your muscle mass and boost your mood), you have the exact, sustainable formula for success.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="verdict">
+    <div class="wrap">
+      <div class="verdict">
+        <div class="verdict-badge">
+          <span class="es">🏆 el veredicto</span>
+          <span class="en">🏆 the verdict</span>
+        </div>
+        <h2>
+          <span class="es">Para la pura pérdida de peso, la dieta es la palanca más grande, pero la jugada ganadora es usar ambas.</span>
+          <span class="en">For pure weight loss, diet is the bigger lever — but the winning move is using both.</span>
+        </h2>
+        <p>
+          <span class="es">La nutrición controla el tamaño de tu déficit calórico mucho más fácilmente que el ejercicio. Trotar, mientras tanto, protege el músculo, fortalece el corazón y hace que el déficit sea más fácil de sostener sin sufrimiento. Come con intención, corre porque se siente bien y deja que la balanza te siga.</span>
+          <span class="en">Nutrition controls the size of your calorie deficit far more easily than exercise does. Jogging, meanwhile, protects muscle, strengthens your heart, and makes the deficit easier to sustain without misery. Eat with intention, run because it feels good — and let the scale follow.</span>
+        </p>
+        <div class="small-print">
+          <span class="es">Las cifras son promedios generales para un adulto de condición física moderada y tienen como objetivo ilustrar el concepto, no reemplazar el consejo médico o nutricional personalizado.</span>
+          <span class="en">Figures are general averages for an adult of moderate fitness and are meant to illustrate the concept, not replace personalized medical or nutritional advice.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span class="es">Sudor vs. Cena</span>
+    <span class="en">Sweat vs. Supper</span>
+  </div>
+  <div>
+    <span class="es">Hecho para hacer que las matemáticas parezcan simples. Muévete porque te encanta, come porque te respetas.</span>
+    <span class="en">Made to make the math feel simple. Move because you love it, eat because you respect yourself.</span>
+  </div>
+</footer>
+
+<script>
+  const toggleBtn = document.getElementById('lang-toggle');
+  const htmlDoc = document.documentElement;
+
+  toggleBtn.addEventListener('click', () => {
+    if (htmlDoc.getAttribute('lang') === 'es') {
+      htmlDoc.setAttribute('lang', 'en');
+      toggleBtn.textContent = 'Español';
+    } else {
+      htmlDoc.setAttribute('lang', 'es');
+      toggleBtn.textContent = 'English';
+    }
+  });
+</script>
+</body>
+</html>
