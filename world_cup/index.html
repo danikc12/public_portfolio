@@ -1,673 +1,612 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mundial 2026 - Centro de Partidos</title>
-    <style>
-        /* BASE & TYPOGRAPHY */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copa Mundial de la FIFA 2026 — Cuadro de Eliminatorias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fifa-navy:#022540;
+    --fifa-blue:#045694;
+    --fifa-black:#000000;
+    --fifa-gray:#7a7a7a;
+    --bg:#eef1f4;
+    --card-bg:#ffffff;
+    --line:rgba(2,37,64,0.12);
+    --line-strong:rgba(2,37,64,0.26);
+    --ink:#0a1420;
+    --ink-dim:rgba(10,20,32,0.60);
+    --ink-faint:rgba(10,20,32,0.36);
+    --accent:var(--fifa-blue);
+    --accent-soft:rgba(4,86,148,0.38);
+    --accent-wash:rgba(4,86,148,0.08);
+    --card-w:250px;
+    --card-w-final:250px;
+    --col-gap:64px;
+  }
 
-        /* PREMIUM DARK MODE (DEFAULT) */
-        :root {
-            --bg-color: #0f172a; /* Slate 900 */
-            --surface: #1e293b; /* Slate 800 */
-            --surface-hover: #334155; /* Slate 700 */
-            --text-main: #f8fafc; /* Slate 50 */
-            --text-muted: #94a3b8; /* Slate 400 */
-            --border: #334155; /* Slate 700 */
-            --primary: #3b82f6; /* Blue 500 */
-            --primary-bg: rgba(59, 130, 246, 0.15);
-            --live: #ef4444; /* Red 500 */
-            --live-bg: rgba(239, 68, 68, 0.15);
-            --finished: #10b981; /* Emerald 500 */
-            --finished-bg: rgba(16, 185, 129, 0.15);
-            --scheduled: #cbd5e1; /* Slate 300 */
-            --scheduled-bg: rgba(148, 163, 184, 0.2);
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
-        }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
 
-        /* PREMIUM LIGHT MODE OVERRIDE */
-        body.light-mode {
-            --bg-color: #f8fafc; /* Slate 50 */
-            --surface: #ffffff;
-            --surface-hover: #f1f5f9; /* Slate 100 */
-            --text-main: #0f172a; /* Slate 900 */
-            --text-muted: #64748b; /* Slate 500 */
-            --border: #e2e8f0; /* Slate 200 */
-            --primary: #2563eb; /* Blue 600 */
-            --primary-bg: #eff6ff;
-            --live: #dc2626; /* Red 600 */
-            --live-bg: #fee2e2;
-            --finished: #059669; /* Emerald 600 */
-            --finished-bg: #d1fae5;
-            --scheduled: #475569; /* Slate 600 */
-            --scheduled-bg: #f1f5f9;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.025);
-        }
+  .pitch-texture{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:repeating-linear-gradient(90deg, rgba(2,37,64,0.025) 0 1px, transparent 1px 90px);
+  }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+  header{
+    position:relative; z-index:1;
+    background:var(--fifa-navy);
+    padding:56px 32px 40px;
+    text-align:center;
+    box-shadow:0 12px 30px -18px rgba(2,37,64,0.5);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; letter-spacing:0.32em; font-size:11px;
+    color:#8fc1e8; text-transform:uppercase; display:inline-flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:rgba(143,193,232,0.5);}
+  h1{
+    font-family:'Oswald',sans-serif; font-weight:700; text-transform:uppercase;
+    font-size:clamp(32px,6vw,64px); margin:16px 0 6px; line-height:0.95; color:#ffffff;
+  }
+  h1 span{color:#8fc1e8;}
+  .subtitle{color:rgba(255,255,255,0.68); font-size:14px; margin:0 0 6px;}
+  .tz-note{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.03em;
+    color:#ffffff; background:rgba(4,86,148,0.35); border:1px solid rgba(143,193,232,0.5);
+    padding:6px 14px; border-radius:100px; margin-top:6px;
+  }
+  .tz-note::before{content:'🕒';font-size:12px;}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 20px 16px;
-            line-height: 1.5;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+  main{ position:relative; z-index:1; padding:10px 24px 100px; }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+  .scroll-wrap{ max-width:1680px; margin:0 auto; overflow-x:auto; padding-bottom:8px; position:relative; }
 
-        /* TOP NAVIGATION */
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
+  /* shrinks to the bracket's natural width, then centers that box —
+     if it's wider than the viewport it hugs the left edge instead of
+     bleeding off both sides, so nothing gets scrolled out of reach */
+  .bracket-inner{ width:max-content; margin:0 auto; }
 
-        .toggle-btn {
-            background: var(--surface);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+  .col-headers, .bracket-row{
+    display:flex; align-items:flex-start; justify-content:flex-start; gap:var(--col-gap);
+  }
 
-        .toggle-btn:hover {
-            border-color: var(--primary);
-            transform: translateY(-1px);
-        }
+  .scroll-hint{
+    text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    letter-spacing:0.06em; color:var(--accent); opacity:0; transition:opacity 0.3s ease;
+    padding-top:6px; pointer-events:none;
+  }
+  .scroll-hint.visible{ opacity:0.85; }
+  .col-headers{ margin-bottom:22px; }
+  .col-headers .head{
+    width:var(--card-w);
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--ink-faint); text-align:center;
+    padding-bottom:10px; border-bottom:1px solid var(--line);
+  }
+  .col-headers .head.final-head{ width:var(--card-w-final); color:var(--accent); border-bottom-color:var(--accent-soft); font-weight:600; }
 
-        header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 24px;
-            text-align: center;
-        }
+  .bracket-row{ position:relative; }
 
-        /* CONTROLS (Search & Filters) */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            background: var(--surface);
-            padding: 20px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            margin-bottom: 40px;
-            border: 1px solid var(--border);
-        }
+  .col{ display:flex; flex-direction:column; gap:56px; width:var(--card-w); flex-shrink:0; }
+  .col.stack-col{ position:relative; }
+  .col.final-col{ width:var(--card-w-final); position:relative; gap:26px; }
 
-        .search-wrapper {
-            position: relative;
-            width: 100%;
-        }
+  .pair{ display:flex; flex-direction:column; gap:16px; }
 
-        .search-bar {
-            width: 100%;
-            padding: 14px 16px 14px 44px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            background: var(--bg-color);
-            color: var(--text-main);
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
+  svg.connectors{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:visible; }
+  svg.connectors path{ fill:none; stroke:var(--line-strong); stroke-width:1.5; stroke-linecap:round; }
+  svg.connectors path.lit{ stroke:var(--accent-soft); }
 
-        .search-bar:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-bg);
-        }
+  /* ---------- cards ---------- */
+  .match-card{
+    position:relative; width:var(--card-w);
+    background:var(--card-bg);
+    box-shadow:0 2px 10px -6px rgba(2,37,64,0.18);
+    border:1px solid var(--line); border-radius:10px; padding:0 0 10px;
+    opacity:0; transform:translateY(14px); animation:rise 0.6s cubic-bezier(.2,.8,.2,1) forwards;
+    overflow:hidden;
+    transition:box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  }
+  .match-card.done{ border-color:var(--accent-soft); }
+  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
 
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.2rem;
-        }
+  @media (hover:hover){
+    .match-card:hover{
+      box-shadow:0 14px 30px -14px rgba(2,37,64,0.35);
+      transform:translateY(-3px);
+      border-color:var(--accent-soft);
+      z-index:2;
+    }
+  }
 
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
+  .card-time{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--accent-wash);
+    border-bottom:1px solid var(--line);
+    padding:9px 14px;
+  }
+  .card-time .cd-left{ display:flex; flex-direction:column; gap:1px; }
+  .card-time .cd-date{
+    font-family:'Oswald',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:0.02em; color:var(--ink); text-transform:capitalize;
+  }
+  .card-time .cd-time{
+    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:17px; color:var(--accent); letter-spacing:0.01em;
+  }
+  .card-time .tag-stack{ display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+  .card-time .match-tag{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-faint);
+    border:1px solid var(--line-strong); border-radius:5px; padding:3px 7px;
+  }
+  .today-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase;
+    color:#ffffff; background:var(--fifa-navy); border-radius:5px; padding:2px 6px;
+  }
 
-        .filter-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
+  .card-body{ padding:10px 14px 0; }
+  .team-row{ display:flex; align-items:center; justify-content:space-between; padding:7px 0; }
+  .team-row + .team-row{ border-top:1px solid var(--line); }
+  .team-name{ display:flex; align-items:center; gap:9px; font-family:'Oswald',sans-serif; font-size:15.5px; color:var(--ink-dim); }
+  .team-row.winner .team-name{ color:var(--ink); font-weight:600; }
+  .team-name.placeholder{ color:var(--ink-faint); font-style:italic; font-family:'IBM Plex Mono',monospace; font-size:13px; }
+  .flag{ font-size:16px; line-height:1; }
+  .flag.placeholder-flag{
+    width:16px; height:12px; border-radius:2px; background:var(--line-strong); display:inline-block;
+  }
+  .score{ font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--ink-faint); min-width:18px; text-align:right; }
+  .team-row.winner .score{ color:var(--accent); font-weight:700; }
 
-        .filter-btn:hover {
-            background: var(--surface-hover);
-            color: var(--text-main);
-        }
+  .card-footer{
+    margin-top:8px; padding:8px 14px 0; border-top:1px dashed var(--line);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-faint);
+    display:flex; justify-content:space-between; gap:8px; align-items:center;
+  }
+  .card-footer .venue{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .status-pill{
+    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.05em; text-transform:uppercase;
+    padding:2px 8px; border-radius:100px; border:1px solid var(--line-strong); color:var(--ink-dim);
+    white-space:nowrap; flex-shrink:0;
+  }
+  .status-pill.done{ border-color:var(--accent-soft); color:var(--accent); background:var(--accent-wash); }
 
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
+  /* projected (QF/SF/Final/Third) cards are a touch quieter until decided */
+  .match-card.projected{ border-style:dashed; }
+  .match-card.projected .card-time{ background:rgba(2,37,64,0.035); }
+  .match-card.projected .card-time .cd-time{ color:var(--ink-dim); }
 
-        /* MATCH GRID */
-        .date-group {
-            margin-bottom: 48px;
-        }
+  .match-card.final-card{ border-color:var(--accent-soft); border-style:solid; box-shadow:0 0 0 1px var(--accent-soft), 0 20px 40px -20px rgba(4,86,148,0.35); }
+  .match-card.final-card .card-time{ background:var(--accent-wash); }
+  .match-card.final-card .card-time .cd-time{ color:var(--accent); font-size:18px; }
+  .final-crown{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); padding:8px 0 0; }
 
-        .date-header {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-transform: capitalize;
-        }
+  .match-card.third-card{ opacity:0.88; }
+  .third-label{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); padding:8px 0 0; }
 
-        .date-header::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
+  footer{
+    position:relative; z-index:1; text-align:center; padding:0 32px 56px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint); letter-spacing:0.02em;
+  }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
+  .mobile-section-label{
+    display:none;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--accent); text-align:center; width:100%;
+    padding-bottom:4px; margin-bottom:2px; border-bottom:1px solid var(--accent-soft);
+  }
 
-        /* MATCH CARD */
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            transition: transform 0.2s ease, border-color 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
+  /* tighten columns on laptop-sized screens before dropping to the stacked view */
+  @media (max-width:1500px) and (min-width:1101px){
+    :root{ --card-w:220px; --card-w-final:220px; --col-gap:40px; }
+    .card-time .cd-time{ font-size:15.5px; }
+    .team-name{ font-size:14.5px; }
+  }
 
-        .card:hover {
-            transform: translateY(-3px);
-            border-color: var(--text-muted);
-        }
+  @media (max-width: 1100px){
+    .scroll-hint{ display:none; }
+    .col-headers{ display:none; }
+    svg.connectors{ display:none; }
+    .bracket-inner{ width:100%; margin:0; }
+    .bracket-row{ flex-direction:column; align-items:center; gap:36px; }
+    .col{ position:static !important; width:100%; max-width:var(--card-w); align-items:center; gap:16px; margin:0 auto; }
+    .col.final-col{ width:100%; max-width:var(--card-w-final); }
+    .match-card{ position:static !important; top:auto !important; margin:0 auto; }
+    .match-card:hover{ transform:none; }
+    .mobile-section-label{ display:block; }
+    main{ padding:0 16px 72px; }
+    header{ padding:44px 20px 26px; }
+  }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
+  @media (max-width:420px){
+    :root{ --card-w:100%; --card-w-final:100%; }
+    .match-card{ width:100%; max-width:340px; }
+  }
 
-        .badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-        }
-
-        .badge.live {
-            background: var(--live-bg);
-            color: var(--live);
-            animation: pulse 2s infinite;
-        }
-
-        .badge.finished {
-            background: var(--finished-bg);
-            color: var(--finished);
-        }
-
-        .badge.scheduled {
-            background: var(--scheduled-bg);
-            color: var(--scheduled);
-        }
-
-        /* TEAMS UI */
-        .teams {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .team-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .team-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .flag {
-            font-size: 1.5rem;
-            line-height: 1;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-        }
-
-        .team-name {
-            font-size: 1.15rem;
-            font-weight: 500;
-        }
-
-        .team-name.winner {
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .team-name.loser {
-            color: var(--text-muted);
-        }
-
-        .score {
-            font-weight: 700;
-            font-size: 1.25rem;
-            min-width: 30px;
-            text-align: right;
-        }
-
-        /* STATUS / TIME FOOTER */
-        .time-box {
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.1rem;
-            background: var(--bg-color);
-            padding: 14px;
-            border-radius: var(--radius-md);
-            margin-top: 24px;
-            border: 1px solid var(--border);
-        }
-
-        .time-box.live-status {
-            background: var(--live-bg);
-            color: var(--live);
-            border-color: rgba(239, 68, 68, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--live);
-            border-radius: 50%;
-            display: inline-block;
-            animation: blink 1.5s infinite ease-in-out;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            border: 1px dashed var(--border);
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* TABLET & DESKTOP ENHANCEMENTS */
-        @media (min-width: 768px) {
-            body { padding: 40px; }
-            .controls {
-                flex-direction: row;
-                align-items: center;
-                padding: 16px;
-            }
-            .search-wrapper { flex: 1; margin-bottom: 0; }
-            .filters { 
-                flex: 2; 
-                display: flex; 
-                gap: 8px;
-            }
-            .filter-btn { flex: 1; }
-            .grid {
-                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            }
-        }
-    </style>
+  @media (prefers-reduced-motion: reduce){
+    .match-card{ animation:none !important; opacity:1 !important; transform:none !important; }
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <nav class="top-nav">
-        <button id="themeToggle" class="toggle-btn">☀️ Claro</button>
-        <button id="langToggle" class="toggle-btn">🇬🇧 English</button>
-    </nav>
+<div class="pitch-texture"></div>
 
-    <header>
-        <h1 id="pageTitle">Mundial 2026 - Centro de Partidos</h1>
-        <div class="controls">
-            <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" class="search-bar" placeholder="Buscar por país...">
-            </div>
-            <div class="filters">
-                <button class="filter-btn active" data-filter="all" id="btnAll">Todos</button>
-                <button class="filter-btn" data-filter="live" id="btnLive">En Directo</button>
-                <button class="filter-btn" data-filter="scheduled" id="btnScheduled">Programados</button>
-                <button class="filter-btn" data-filter="finished" id="btnFinished">Finalizados</button>
-            </div>
-        </div>
-    </header>
+<header>
+  <div class="eyebrow">Copa Mundial de la FIFA 2026</div>
+  <h1>Cuadro de <span>Eliminatorias</span></h1>
+  <p class="subtitle">De Octavos de Final a la Gran Final · Estados Unidos, México y Canadá</p>
+  <div class="tz-note">Todos los horarios en hora de España peninsular (CEST, UTC+02:00)</div>
+</header>
 
-    <main id="matchContainer"></main>
-</div>
+<main>
+  <div class="scroll-wrap" id="scrollWrap">
+    <div class="bracket-inner">
+      <div class="col-headers">
+        <div class="head">Octavos de Final</div>
+        <div class="head">Cuartos de Final</div>
+        <div class="head">Semifinal</div>
+        <div class="head final-head">Final</div>
+        <div class="head">Semifinal</div>
+        <div class="head">Cuartos de Final</div>
+        <div class="head">Octavos de Final</div>
+      </div>
+
+      <div class="bracket-row" id="bracket">
+        <div class="col" id="r16l"></div>
+        <div class="col stack-col" id="qfl"></div>
+        <div class="col stack-col" id="sfl"></div>
+        <svg class="connectors" id="connectors"></svg>
+        <div class="col final-col" id="finalcol"></div>
+        <div class="col stack-col" id="sfr"></div>
+        <div class="col stack-col" id="qfr"></div>
+        <div class="col" id="r16r"></div>
+      </div>
+    </div>
+  </div>
+  <p class="scroll-hint" id="scrollHint">← desliza para ver el cuadro completo →</p>
+</main>
+
+<footer>Los ganadores avanzan de ronda · Los perdedores de ambas semifinales disputan el partido por el tercer puesto</footer>
 
 <script>
-    // JSON DATA
-    const matchesData = [
-        { "match": 1, "date": "2026-06-28", "time_spain": "21:00", "home": "South Africa", "away": "Canada", "status": "finished", "score": "0-1", "winner": "Canada" },
-        { "match": 2, "date": "2026-06-29", "time_spain": "19:00", "home": "Brazil", "away": "Japan", "status": "finished", "score": "2-1", "winner": "Brazil" },
-        { "match": 3, "date": "2026-06-29", "time_spain": "22:30", "home": "Germany", "away": "Paraguay", "status": "finished", "score": "1(3)-1(4)", "winner": "Paraguay" },
-        { "match": 4, "date": "2026-06-30", "time_spain": "03:00", "home": "Netherlands", "away": "Morocco", "status": "finished", "score": "1(2)-1(3)", "winner": "Morocco" },
-        { "match": 5, "date": "2026-06-30", "time_spain": "19:00", "home": "Ivory Coast", "away": "Norway", "status": "finished", "score": "1-2", "winner": "Norway" },
-        { "match": 6, "date": "2026-06-30", "time_spain": "23:00", "home": "France", "away": "Sweden", "status": "finished", "score": "3-0", "winner": "France" },
-        { "match": 7, "date": "2026-07-01", "time_spain": "03:00", "home": "Mexico", "away": "Ecuador", "status": "finished", "score": "2-0", "winner": "Mexico" },
-        { "match": 8, "date": "2026-07-01", "time_spain": "18:00", "home": "England", "away": "DR Congo", "status": "finished", "score": "2-1", "winner": "England" },
-        { "match": 9, "date": "2026-07-01", "time_spain": "22:00", "home": "Belgium", "away": "Senegal", "status": "scheduled" },
-        { "match": 10, "date": "2026-07-02", "time_spain": "02:00", "home": "United States", "away": "Bosnia and Herzegovina", "status": "scheduled" },
-        { "match": 11, "date": "2026-07-02", "time_spain": "21:00", "home": "Spain", "away": "Austria", "status": "scheduled" },
-        { "match": 12, "date": "2026-07-03", "time_spain": "01:00", "home": "Portugal", "away": "Croatia", "status": "scheduled" },
-        { "match": 13, "date": "2026-07-03", "time_spain": "05:00", "home": "Switzerland", "away": "Algeria", "status": "scheduled" },
-        { "match": 14, "date": "2026-07-03", "time_spain": "20:00", "home": "Australia", "away": "Egypt", "status": "scheduled" },
-        { "match": 15, "date": "2026-07-04", "time_spain": "00:00", "home": "Argentina", "away": "Cape Verde", "status": "scheduled" },
-        { "match": 16, "date": "2026-07-04", "time_spain": "03:30", "home": "Colombia", "away": "Ghana", "status": "scheduled" }
-    ];
+/* ---------------- data ---------------- */
+const TODAY = "2026-07-05";
 
-    // FLAG DICTIONARY (Mapped to English source names)
-    const flags = {
-        "South Africa": "🇿🇦", "Canada": "🇨🇦", "Brazil": "🇧🇷", "Japan": "🇯🇵",
-        "Germany": "🇩🇪", "Paraguay": "🇵🇾", "Netherlands": "🇳🇱", "Morocco": "🇲🇦",
-        "Ivory Coast": "🇨🇮", "Norway": "🇳🇴", "France": "🇫🇷", "Sweden": "🇸🇪",
-        "Mexico": "🇲🇽", "Ecuador": "🇪🇨", "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "DR Congo": "🇨🇩",
-        "Belgium": "🇧🇪", "Senegal": "🇸🇳", "United States": "🇺🇸", "Bosnia and Herzegovina": "🇧🇦",
-        "Spain": "🇪🇸", "Austria": "🇦🇹", "Portugal": "🇵🇹", "Croatia": "🇭🇷",
-        "Switzerland": "🇨🇭", "Algeria": "🇩🇿", "Australia": "🇦🇺", "Egypt": "🇪🇬",
-        "Argentina": "🇦🇷", "Cape Verde": "🇨🇻", "Colombia": "🇨🇴", "Ghana": "🇬🇭"
-    };
+const R16 = [
+  { id:89, date:"2026-07-04", time:"23:00", teams:{home:"Paraguay",away:"Francia"}, status:"Completed", result:{home:0,away:1,winner:"Francia"},
+    venue:{stadium:"Estadio de Filadelfia", city:"Filadelfia"} },
+  { id:90, date:"2026-07-04", time:"19:00", teams:{home:"Canadá",away:"Marruecos"}, status:"Completed", result:{home:0,away:3,winner:"Marruecos"},
+    venue:{stadium:"Estadio de Houston", city:"Houston"} },
+  { id:93, date:"2026-07-06", time:"21:00", teams:{home:"Portugal",away:"España"}, status:"Scheduled",
+    venue:{stadium:"Estadio de Dallas", city:"Arlington"} },
+  { id:94, date:"2026-07-07", time:"02:00", teams:{home:"Estados Unidos",away:"Bélgica"}, status:"Scheduled",
+    venue:{stadium:"Estadio de Seattle", city:"Seattle"} },
+  { id:91, date:"2026-07-05", time:"22:00", teams:{home:"Brasil",away:"Noruega"}, status:"Scheduled",
+    venue:{stadium:"Estadio de Nueva York-Nueva Jersey", city:"East Rutherford"} },
+  { id:92, date:"2026-07-06", time:"02:00", teams:{home:"México",away:"Inglaterra"}, status:"Scheduled",
+    venue:{stadium:"Estadio Ciudad de México", city:"Ciudad de México"} },
+  { id:95, date:"2026-07-07", time:"18:00", teams:{home:"Argentina",away:"Egipto"}, status:"Scheduled",
+    venue:{stadium:"Estadio de Atlanta", city:"Atlanta"} },
+  { id:96, date:"2026-07-07", time:"22:00", teams:{home:"Suiza",away:"Colombia"}, status:"Scheduled",
+    venue:{stadium:"BC Place", city:"Vancouver"} }
+];
 
-    // TRANSLATIONS & STATE
-    const i18n = {
-        es: {
-            title: "Mundial 2026 - Centro de Partidos",
-            searchPlaceholder: "Buscar por país...",
-            filterAll: "Todos",
-            filterLive: "En Directo",
-            filterScheduled: "Programados",
-            filterFinished: "Finalizados",
-            matchLabel: "Partido",
-            statusLive: "Directo",
-            statusScheduled: "Programado",
-            statusFinished: "Finalizado",
-            inProgress: "En Juego",
-            emptyState: "No se encontraron partidos.",
-            themeLight: "☀️ Claro",
-            themeDark: "🌙 Oscuro",
-            langNext: "🇬🇧 English",
-            countries: {
-                "South Africa": "Sudáfrica", "Canada": "Canadá", "Brazil": "Brasil", "Japan": "Japón",
-                "Germany": "Alemania", "Paraguay": "Paraguay", "Netherlands": "Países Bajos",
-                "Morocco": "Marruecos", "Ivory Coast": "Costa de Marfil", "Norway": "Noruega",
-                "France": "Francia", "Sweden": "Suecia", "Mexico": "México", "Ecuador": "Ecuador",
-                "England": "Inglaterra", "DR Congo": "RD Congo", "Belgium": "Bélgica",
-                "Senegal": "Senegal", "United States": "Estados Unidos", "Bosnia and Herzegovina": "Bosnia y Herzegovina",
-                "Spain": "España", "Austria": "Austria", "Portugal": "Portugal", "Croatia": "Croacia",
-                "Switzerland": "Suiza", "Algeria": "Argelia", "Australia": "Australia", "Egypt": "Egipto",
-                "Argentina": "Argentina", "Cape Verde": "Cabo Verde", "Colombia": "Colombia", "Ghana": "Ghana"
-            }
-        },
-        en: {
-            title: "World Cup 2026 - Match Center",
-            searchPlaceholder: "Search by country...",
-            filterAll: "All",
-            filterLive: "Live",
-            filterScheduled: "Scheduled",
-            filterFinished: "Finished",
-            matchLabel: "Match",
-            statusLive: "Live",
-            statusScheduled: "Scheduled",
-            statusFinished: "Finished",
-            inProgress: "In Progress",
-            emptyState: "No matches found matching your criteria.",
-            themeLight: "☀️ Light",
-            themeDark: "🌙 Dark",
-            langNext: "🇪🇸 Español",
-            countries: {} 
-        }
-    };
+const LEFT_R16_PAIRS  = [[89,90],[93,94]];
+const RIGHT_R16_PAIRS = [[91,92],[95,96]];
 
-    let currentLang = 'es';
-    let isDarkMode = true;
-    let currentFilter = 'all';
-    let searchQuery = '';
+const PROJECTED = [
+  { id:97,  round:"Cuartos de Final", date:"2026-07-09", time:"22:00", home:{of:89,role:"winner"}, away:{of:90,role:"winner"} },
+  { id:98,  round:"Cuartos de Final", date:"2026-07-10", time:"21:00", home:{of:93,role:"winner"}, away:{of:94,role:"winner"} },
+  { id:99,  round:"Cuartos de Final", date:"2026-07-11", time:"23:00", home:{of:91,role:"winner"}, away:{of:92,role:"winner"} },
+  { id:100, round:"Cuartos de Final", date:"2026-07-12", time:"03:00", home:{of:95,role:"winner"}, away:{of:96,role:"winner"} },
+  { id:101, round:"Semifinal",        date:"2026-07-14", time:"21:00", home:{of:97,role:"winner"}, away:{of:98,role:"winner"} },
+  { id:102, round:"Semifinal",        date:"2026-07-15", time:"21:00", home:{of:99,role:"winner"}, away:{of:100,role:"winner"} },
+  { id:104, round:"Final",            date:"2026-07-19", time:"21:00", home:{of:101,role:"winner"}, away:{of:102,role:"winner"} },
+  { id:103, round:"Tercer y cuarto puesto", date:"2026-07-18", time:"23:00", home:{of:101,role:"loser"}, away:{of:102,role:"loser"} }
+];
 
-    // DOM ELEMENTS
-    const container = document.getElementById('matchContainer');
-    const searchInput = document.getElementById('searchInput');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const themeToggle = document.getElementById('themeToggle');
-    const langToggle = document.getElementById('langToggle');
+const ALL = [
+  ...R16.map(m => ({...m, kind:"real"})),
+  ...PROJECTED.map(m => ({...m, kind:"proj"}))
+];
+function byId(id){ return ALL.find(m => m.id === id); }
 
-    // UTILITIES
-    function getCountryName(enName) {
-        if (currentLang === 'es' && i18n.es.countries[enName]) {
-            return i18n.es.countries[enName];
-        }
-        return enName;
-    }
+const FLAGS = {
+  "Paraguay":"🇵🇾","Francia":"🇫🇷","Canadá":"🇨🇦","Marruecos":"🇲🇦","Brasil":"🇧🇷","Noruega":"🇳🇴",
+  "México":"🇲🇽","Inglaterra":"🏴","Portugal":"🇵🇹","España":"🇪🇸","Estados Unidos":"🇺🇸","Bélgica":"🇧🇪",
+  "Argentina":"🇦🇷","Egipto":"🇪🇬","Suiza":"🇨🇭","Colombia":"🇨🇴"
+};
 
-    function getFlag(enName) {
-        return flags[enName] || "🏳️";
-    }
+/* ---------------- helpers ---------------- */
+function fmtDate(dateStr){
+  const [y,m,d] = dateStr.split('-');
+  const dt = new Date(Date.UTC(+y, +m-1, +d));
+  return dt.toLocaleDateString('es-ES', { weekday:'short', day:'numeric', month:'short', timeZone:'UTC' }).replace('.', '');
+}
 
-    function formatDate(dateString) {
-        const locale = currentLang === 'es' ? 'es-ES' : 'en-US';
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        return new Intl.DateTimeFormat(locale, options).format(new Date(dateString));
-    }
+function resolveSlot(slot){
+  const src = byId(slot.of);
+  if (src.kind === "real" && src.status === "Completed"){
+    const winner = src.result.winner;
+    const loser  = winner === src.teams.home ? src.teams.away : src.teams.home;
+    return { name: slot.role === "winner" ? winner : loser, known:true };
+  }
+  const prefix = slot.role === "loser" ? "PP" : "G";
+  return { name: `${prefix}${slot.of}`, known:false };
+}
 
-    function updateStaticUIText() {
-        document.documentElement.lang = currentLang;
-        const t = i18n[currentLang];
-        
-        document.title = t.title;
-        document.getElementById('pageTitle').textContent = t.title;
-        searchInput.placeholder = t.searchPlaceholder;
-        
-        document.getElementById('btnAll').textContent = t.filterAll;
-        document.getElementById('btnLive').textContent = t.filterLive;
-        document.getElementById('btnScheduled').textContent = t.filterScheduled;
-        document.getElementById('btnFinished').textContent = t.filterFinished;
-        
-        langToggle.textContent = t.langNext;
-        updateThemeButtonText();
-    }
+function teamRowReal(name, score, isWinner, hasResult){
+  return `<div class="team-row ${isWinner ? 'winner' : ''}">
+      <span class="team-name"><span class="flag" aria-hidden="true">${FLAGS[name]||''}</span>${name}</span>
+      <span class="score">${hasResult ? score : ''}</span>
+    </div>`;
+}
 
-    function updateThemeButtonText() {
-        const t = i18n[currentLang];
-        themeToggle.innerHTML = isDarkMode ? t.themeLight : t.themeDark;
-    }
+function teamRowProjected(resolved){
+  if (resolved.known){
+    return `<div class="team-row winner">
+        <span class="team-name"><span class="flag" aria-hidden="true">${FLAGS[resolved.name]||''}</span>${resolved.name}</span>
+      </div>`;
+  }
+  return `<div class="team-row">
+      <span class="team-name placeholder"><span class="flag placeholder-flag" aria-hidden="true"></span>${resolved.name}</span>
+    </div>`;
+}
 
-    // RENDER LOGIC
-    function renderMatches() {
-        container.innerHTML = '';
-        const t = i18n[currentLang];
+/* ---------------- card builders ---------------- */
+function buildRealCard(m, delay){
+  const done = m.status === "Completed";
+  const homeWin = done && m.result.winner === m.teams.home;
+  const awayWin = done && m.result.winner === m.teams.away;
+  const isToday = m.date === TODAY;
+  const card = document.createElement('div');
+  card.className = `match-card ${done ? 'done' : ''}`;
+  card.style.animationDelay = `${delay}ms`;
+  card.innerHTML = `
+    <div class="card-time">
+      <div class="cd-left">
+        <span class="cd-date">${fmtDate(m.date)}</span>
+        <span class="cd-time">${m.time}</span>
+      </div>
+      <div class="tag-stack">
+        ${!done && isToday ? '<span class="today-badge">HOY</span>' : ''}
+        <span class="match-tag">P${m.id}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      ${teamRowReal(m.teams.home, done ? m.result.home : '', homeWin, done)}
+      ${teamRowReal(m.teams.away, done ? m.result.away : '', awayWin, done)}
+    </div>
+    <div class="card-footer">
+      <span class="venue">${m.venue.stadium}, ${m.venue.city}</span>
+      <span class="status-pill ${done ? 'done' : ''}">${done ? 'Finalizado' : 'Programado'}</span>
+    </div>
+  `;
+  return card;
+}
 
-        // Search & Filter
-        const filteredMatches = matchesData.filter(match => {
-            const homeName = getCountryName(match.home).toLowerCase();
-            const awayName = getCountryName(match.away).toLowerCase();
-            const query = searchQuery.toLowerCase();
-            
-            const matchesSearch = homeName.includes(query) || awayName.includes(query);
-            const matchesStatus = currentFilter === 'all' || match.status === currentFilter;
-            
-            return matchesSearch && matchesStatus;
-        });
+function buildProjectedCard(m, delay){
+  const home = resolveSlot(m.home);
+  const away = resolveSlot(m.away);
+  const isFinal = m.id === 104;
+  const isThird = m.id === 103;
+  const card = document.createElement('div');
+  card.className = `match-card projected ${isFinal ? 'final-card' : ''} ${isThird ? 'third-card' : ''}`;
+  card.style.animationDelay = `${delay}ms`;
+  card.innerHTML = `
+    <div class="card-time">
+      <div class="cd-left">
+        <span class="cd-date">${fmtDate(m.date)}</span>
+        <span class="cd-time">${m.time}</span>
+      </div>
+      <span class="match-tag">${isFinal ? 'FINAL' : isThird ? '3º/4º' : 'P'+m.id}</span>
+    </div>
+    ${isFinal ? '<div class="final-crown">★ Partido por el título ★</div>' : ''}
+    ${isThird ? '<div class="third-label">Partido por el tercer puesto</div>' : ''}
+    <div class="card-body">
+      ${teamRowProjected(home)}
+      ${teamRowProjected(away)}
+    </div>
+    <div class="card-footer">
+      <span class="venue">${m.round}</span>
+      <span class="status-pill">Por definir</span>
+    </div>
+  `;
+  return card;
+}
 
-        if (filteredMatches.length === 0) {
-            container.innerHTML = `<div class="empty-state">${t.emptyState}</div>`;
-            return;
-        }
+/* ---------------- render ---------------- */
+const r16l = document.getElementById('r16l');
+const r16r = document.getElementById('r16r');
+const qfl  = document.getElementById('qfl');
+const qfr  = document.getElementById('qfr');
+const sfl  = document.getElementById('sfl');
+const sfr  = document.getElementById('sfr');
+const finalcol = document.getElementById('finalcol');
+const svg = document.getElementById('connectors');
 
-        // Group by Date
-        const grouped = filteredMatches.reduce((acc, match) => {
-            if (!acc[match.date]) acc[match.date] = [];
-            acc[match.date].push(match);
-            return acc;
-        }, {});
+let delayCounter = 0;
 
-        // Build HTML
-        for (const [date, matches] of Object.entries(grouped)) {
-            const dateGroup = document.createElement('div');
-            dateGroup.className = 'date-group';
-            
-            dateGroup.innerHTML = `
-                <h2 class="date-header">${formatDate(date)}</h2>
-                <div class="grid">
-                    ${matches.map(m => createMatchCard(m, t)).join('')}
-                </div>
-            `;
-            container.appendChild(dateGroup);
-        }
-    }
-
-    function createMatchCard(match, t) {
-        let scores = { home: '-', away: '-' };
-        if (match.score) {
-            const parts = match.score.split('-');
-            scores.home = parts[0];
-            scores.away = parts[1];
-        }
-
-        const homeName = getCountryName(match.home);
-        const awayName = getCountryName(match.away);
-        const homeFlag = getFlag(match.home);
-        const awayFlag = getFlag(match.away);
-        
-        const isHomeWinner = match.winner === match.home;
-        const isAwayWinner = match.winner === match.away;
-
-        let statusBadge = match.status;
-        if (match.status === 'live') statusBadge = t.statusLive;
-        if (match.status === 'scheduled') statusBadge = t.statusScheduled;
-        if (match.status === 'finished') statusBadge = t.statusFinished;
-
-        return `
-            <div class="card">
-                <div class="card-header">
-                    <span>${t.matchLabel} ${match.match}</span>
-                    <span class="badge ${match.status}">${statusBadge}</span>
-                </div>
-                <div class="teams">
-                    <div class="team-row">
-                        <div class="team-info">
-                            <span class="flag">${homeFlag}</span>
-                            <span class="team-name ${match.status === 'finished' ? (isHomeWinner ? 'winner' : 'loser') : ''}">${homeName}</span>
-                        </div>
-                        <span class="score ${match.status === 'finished' && isHomeWinner ? 'winner' : ''}">${match.status === 'scheduled' ? '' : scores.home}</span>
-                    </div>
-                    <div class="team-row">
-                        <div class="team-info">
-                            <span class="flag">${awayFlag}</span>
-                            <span class="team-name ${match.status === 'finished' ? (isAwayWinner ? 'winner' : 'loser') : ''}">${awayName}</span>
-                        </div>
-                        <span class="score ${match.status === 'finished' && isAwayWinner ? 'winner' : ''}">${match.status === 'scheduled' ? '' : scores.away}</span>
-                    </div>
-                </div>
-                ${match.status === 'scheduled' ? `<div class="time-box">⌚ ${match.time_spain} CEST</div>` : ''}
-                ${match.status === 'live' ? `<div class="time-box live-status"><span class="live-dot"></span> ${t.inProgress}</div>` : ''}
-            </div>
-        `;
-    }
-
-    // EVENT LISTENERS
-    searchInput.addEventListener('input', (e) => {
-        searchQuery = e.target.value;
-        renderMatches();
+function renderR16(container, pairs){
+  pairs.forEach(pair => {
+    const pairEl = document.createElement('div');
+    pairEl.className = 'pair';
+    pair.forEach(id => {
+      pairEl.appendChild(buildRealCard(byId(id), delayCounter));
+      delayCounter += 70;
     });
+    container.appendChild(pairEl);
+  });
+}
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            currentFilter = e.target.dataset.filter;
-            renderMatches();
-        });
+function addMobileLabel(container, text){
+  const label = document.createElement('div');
+  label.className = 'mobile-section-label';
+  label.textContent = text;
+  container.appendChild(label);
+}
+
+function renderAll(){
+  r16l.innerHTML = ''; r16r.innerHTML = '';
+  qfl.innerHTML = '';  qfr.innerHTML = '';
+  sfl.innerHTML = '';  sfr.innerHTML = '';
+  finalcol.innerHTML = '';
+  delayCounter = 0;
+
+  addMobileLabel(r16l, 'Octavos de Final · Llave Izquierda');
+  addMobileLabel(qfl,  'Cuartos de Final · Llave Izquierda');
+  addMobileLabel(sfl,  'Semifinal · Llave Izquierda');
+  addMobileLabel(sfr,  'Semifinal · Llave Derecha');
+  addMobileLabel(qfr,  'Cuartos de Final · Llave Derecha');
+  addMobileLabel(r16r, 'Octavos de Final · Llave Derecha');
+
+  renderR16(r16l, LEFT_R16_PAIRS);
+  renderR16(r16r, RIGHT_R16_PAIRS);
+
+  [97,98].forEach(id => { qfl.appendChild(buildProjectedCard(byId(id), 400)); qfl.lastChild.style.position='absolute'; qfl.lastChild.style.left='0'; });
+  [99,100].forEach(id => { qfr.appendChild(buildProjectedCard(byId(id), 400)); qfr.lastChild.style.position='absolute'; qfr.lastChild.style.left='0'; });
+
+  const sflCard = buildProjectedCard(byId(101), 600);
+  sflCard.style.position='absolute'; sflCard.style.left='0'; sfl.appendChild(sflCard);
+  const sfrCard = buildProjectedCard(byId(102), 600);
+  sfrCard.style.position='absolute'; sfrCard.style.left='0'; sfr.appendChild(sfrCard);
+
+  const finalCard = buildProjectedCard(byId(104), 800);
+  finalCard.style.position='absolute'; finalCard.style.left='0'; finalcol.appendChild(finalCard);
+  const thirdCard = buildProjectedCard(byId(103), 900);
+  thirdCard.style.position='absolute'; thirdCard.style.left='0'; finalcol.appendChild(thirdCard);
+
+  requestAnimationFrame(() => requestAnimationFrame(layoutAndDraw));
+}
+
+/* ---------------- geometry ---------------- */
+function centerY(el, bracketRect){
+  const r = el.getBoundingClientRect();
+  return r.top + r.height/2 - bracketRect.top;
+}
+
+function elbowPair(rectA, rectB, target, bracketRect, dir){
+  const yA = rectA.top + rectA.height/2 - bracketRect.top;
+  const yB = rectB.top + rectB.height/2 - bracketRect.top;
+  const midY = (yA + yB) / 2;
+  const x1 = (dir === 'ltr' ? rectA.right : rectA.left) - bracketRect.left;
+  const x2 = (dir === 'ltr' ? target.getBoundingClientRect().left : target.getBoundingClientRect().right) - bracketRect.left;
+  const midX = (x1 + x2) / 2;
+  return [
+    `M ${x1} ${yA} H ${midX} V ${yB} H ${x1}`,
+    `M ${midX} ${midY} H ${x2}`
+  ];
+}
+function singleLine(srcEl, tgtEl, bracketRect, dir){
+  const rs = srcEl.getBoundingClientRect();
+  const rt = tgtEl.getBoundingClientRect();
+  const ys = rs.top + rs.height/2 - bracketRect.top;
+  const yt = rt.top + rt.height/2 - bracketRect.top;
+  const x1 = (dir === 'ltr' ? rs.right : rs.left) - bracketRect.left;
+  const x2 = (dir === 'ltr' ? rt.left : rt.right) - bracketRect.left;
+  const midX = (x1 + x2) / 2;
+  return `M ${x1} ${ys} H ${midX} V ${yt} H ${x2}`;
+}
+
+function layoutAndDraw(){
+  const bracketEl = document.getElementById('bracket');
+  const bracketRect = bracketEl.getBoundingClientRect();
+  svg.setAttribute('width', bracketRect.width);
+  svg.setAttribute('height', bracketRect.height);
+
+  if (window.innerWidth <= 1100){ svg.innerHTML=''; return; }
+
+  const qflCards = qfl.querySelectorAll('.match-card');
+  const qfrCards = qfr.querySelectorAll('.match-card');
+  const sflCard = sfl.querySelector('.match-card');
+  const sfrCard = sfr.querySelector('.match-card');
+  const finalCard = finalcol.querySelector('.final-card');
+  const thirdCard = finalcol.querySelector('.third-card');
+
+  const leftPairs = r16l.querySelectorAll('.pair');
+  const rightPairs = r16r.querySelectorAll('.pair');
+
+  leftPairs.forEach((pairEl, i) => {
+    const [c1, c2] = pairEl.querySelectorAll('.match-card');
+    const y1 = centerY(c1, bracketRect), y2 = centerY(c2, bracketRect);
+    const mid = (y1 + y2) / 2;
+    qflCards[i].style.top = `${mid - qflCards[i].offsetHeight/2}px`;
+  });
+  rightPairs.forEach((pairEl, i) => {
+    const [c1, c2] = pairEl.querySelectorAll('.match-card');
+    const y1 = centerY(c1, bracketRect), y2 = centerY(c2, bracketRect);
+    const mid = (y1 + y2) / 2;
+    qfrCards[i].style.top = `${mid - qfrCards[i].offsetHeight/2}px`;
+  });
+
+  const qflMid = (centerY(qflCards[0], bracketRect) + centerY(qflCards[1], bracketRect)) / 2;
+  sflCard.style.top = `${qflMid - sflCard.offsetHeight/2}px`;
+  const qfrMid = (centerY(qfrCards[0], bracketRect) + centerY(qfrCards[1], bracketRect)) / 2;
+  sfrCard.style.top = `${qfrMid - sfrCard.offsetHeight/2}px`;
+
+  const finalMid = (centerY(sflCard, bracketRect) + centerY(sfrCard, bracketRect)) / 2;
+  finalCard.style.top = `${finalMid - finalCard.offsetHeight/2}px`;
+  thirdCard.style.top = `${finalCard.offsetTop + finalCard.offsetHeight + 30}px`;
+
+  let paths = [];
+  leftPairs.forEach((pairEl, i) => {
+    const [c1, c2] = pairEl.querySelectorAll('.match-card');
+    paths.push(...elbowPair(c1.getBoundingClientRect(), c2.getBoundingClientRect(), qflCards[i], bracketRect, 'ltr'));
+  });
+  rightPairs.forEach((pairEl, i) => {
+    const [c1, c2] = pairEl.querySelectorAll('.match-card');
+    paths.push(...elbowPair(c1.getBoundingClientRect(), c2.getBoundingClientRect(), qfrCards[i], bracketRect, 'rtl'));
+  });
+  paths.push(...elbowPair(qflCards[0].getBoundingClientRect(), qflCards[1].getBoundingClientRect(), sflCard, bracketRect, 'ltr'));
+  paths.push(...elbowPair(qfrCards[0].getBoundingClientRect(), qfrCards[1].getBoundingClientRect(), sfrCard, bracketRect, 'rtl'));
+  paths.push(singleLine(sflCard, finalCard, bracketRect, 'ltr'));
+  paths.push(singleLine(sfrCard, finalCard, bracketRect, 'rtl'));
+
+  svg.innerHTML = paths.map(d => `<path d="${d}"></path>`).join('');
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    svg.querySelectorAll('path').forEach((p, idx) => {
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+      p.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+        { duration: 600, delay: idx * 50, easing: 'ease-out', fill: 'forwards' });
     });
+  }
+}
 
-    themeToggle.addEventListener('click', () => {
-        isDarkMode = !isDarkMode;
-        document.body.classList.toggle('light-mode', !isDarkMode);
-        updateThemeButtonText();
-    });
+function updateScrollHint(){
+  const wrap = document.getElementById('scrollWrap');
+  const hint = document.getElementById('scrollHint');
+  if (window.innerWidth <= 1100){ hint.classList.remove('visible'); return; }
+  hint.classList.toggle('visible', wrap.scrollWidth > wrap.clientWidth + 4);
+}
 
-    langToggle.addEventListener('click', () => {
-        currentLang = currentLang === 'es' ? 'en' : 'es';
-        updateStaticUIText();
-        renderMatches();
-    });
+renderAll();
+updateScrollHint();
 
-    // INIT
-    updateStaticUIText();
-    renderMatches();
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(() => { layoutAndDraw(); updateScrollHint(); });
+}
+
+document.getElementById('scrollWrap').addEventListener('scroll', () => {
+  document.getElementById('scrollHint').classList.remove('visible');
+}, { once:true });
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { layoutAndDraw(); updateScrollHint(); }, 150);
+});
 </script>
-
 </body>
 </html>
