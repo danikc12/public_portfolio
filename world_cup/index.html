@@ -8,231 +8,234 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --fifa-navy:#022540;
-    --fifa-blue:#045694;
-    --fifa-black:#000000;
-    --fifa-gray:#7a7a7a;
-    --bg:#eef1f4;
-    --card-bg:#ffffff;
-    --line:rgba(2,37,64,0.12);
-    --line-strong:rgba(2,37,64,0.26);
-    --ink:#0a1420;
-    --ink-dim:rgba(10,20,32,0.60);
-    --ink-faint:rgba(10,20,32,0.36);
-    --accent:var(--fifa-blue);
-    --accent-soft:rgba(4,86,148,0.38);
-    --accent-wash:rgba(4,86,148,0.08);
-    --card-w:250px;
-    --card-w-final:250px;
-    --col-gap:64px;
+  :root {
+    --fifa-navy: #022540;
+    --fifa-blue: #045694;
+    --fifa-black: #000000;
+    --fifa-gray: #7a7a7a;
+    --bg: #eef1f4;
+    --card-bg: #ffffff;
+    --line: rgba(2,37,64,0.12);
+    --line-strong: rgba(2,37,64,0.26);
+    --ink: #0a1420;
+    --ink-dim: rgba(10,20,32,0.60);
+    --ink-faint: rgba(10,20,32,0.36);
+    --accent: var(--fifa-blue);
+    --accent-soft: rgba(4,86,148,0.38);
+    --accent-wash: rgba(4,86,148,0.08);
+    --card-w: 250px;
+    --card-w-final: 250px;
+    --col-gap: 64px;
   }
 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    min-height:100vh;
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
   }
 
-  .pitch-texture{
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-    background-image:repeating-linear-gradient(90deg, rgba(2,37,64,0.025) 0 1px, transparent 1px 90px);
+  .pitch-texture {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: repeating-linear-gradient(90deg, rgba(2,37,64,0.025) 0 1px, transparent 1px 90px);
   }
 
-  header{
-    position:relative; z-index:1;
-    background:var(--fifa-navy);
-    padding:56px 32px 40px;
-    text-align:center;
-    box-shadow:0 12px 30px -18px rgba(2,37,64,0.5);
+  header {
+    position: relative; z-index: 1;
+    background: var(--fifa-navy);
+    padding: 56px 32px 40px;
+    text-align: center;
+    box-shadow: 0 12px 30px -18px rgba(2,37,64,0.5);
   }
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace; letter-spacing:0.32em; font-size:11px;
-    color:#8fc1e8; text-transform:uppercase; display:inline-flex; align-items:center; gap:10px;
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.32em; font-size: 11px;
+    color: #8fc1e8; text-transform: uppercase; display: inline-flex; align-items: center; gap: 10px;
   }
-  .eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:rgba(143,193,232,0.5);}
-  h1{
-    font-family:'Oswald',sans-serif; font-weight:700; text-transform:uppercase;
-    font-size:clamp(32px,6vw,64px); margin:16px 0 6px; line-height:0.95; color:#ffffff;
+  .eyebrow::before, .eyebrow::after { content: ''; width: 28px; height: 1px; background: rgba(143,193,232,0.5); }
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase;
+    font-size: clamp(28px, 6vw, 64px); margin: 16px 0 6px; line-height: 0.95; color: #ffffff;
   }
-  h1 span{color:#8fc1e8;}
-  .subtitle{color:rgba(255,255,255,0.68); font-size:14px; margin:0 0 6px;}
-  .tz-note{
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.03em;
-    color:#ffffff; background:rgba(4,86,148,0.35); border:1px solid rgba(143,193,232,0.5);
-    padding:6px 14px; border-radius:100px; margin-top:6px;
+  h1 span { color: #8fc1e8; }
+  .subtitle { color: rgba(255,255,255,0.68); font-size: 14px; margin: 0 0 6px; }
+  .tz-note {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.03em;
+    color: #ffffff; background: rgba(4,86,148,0.35); border: 1px solid rgba(143,193,232,0.5);
+    padding: 6px 14px; border-radius: 100px; margin-top: 6px;
   }
-  .tz-note::before{content:'🕒';font-size:12px;}
+  .tz-note::before { content: '🕒'; font-size: 12px; }
 
-  main{ position:relative; z-index:1; padding:10px 24px 100px; }
+  main { position: relative; z-index: 1; padding: 20px 0 100px; }
 
-  .scroll-wrap{ max-width:1680px; margin:0 auto; overflow-x:auto; padding-bottom:8px; position:relative; }
-
-  /* shrinks to the bracket's natural width, then centers that box —
-     if it's wider than the viewport it hugs the left edge instead of
-     bleeding off both sides, so nothing gets scrolled out of reach */
-  .bracket-inner{ width:max-content; margin:0 auto; }
-
-  .col-headers, .bracket-row{
-    display:flex; align-items:flex-start; justify-content:flex-start; gap:var(--col-gap);
+  /* Contenedor adaptado para scroll horizontal suave en móviles */
+  .scroll-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Scroll fluido en iOS */
+    padding: 10px 24px 20px;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-soft) transparent;
   }
 
-  .scroll-hint{
-    text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11px;
-    letter-spacing:0.06em; color:var(--accent); opacity:0; transition:opacity 0.3s ease;
-    padding-top:6px; pointer-events:none;
+  .scroll-wrap::-webkit-scrollbar { height: 8px; }
+  .scroll-wrap::-webkit-scrollbar-track { background: transparent; }
+  .scroll-wrap::-webkit-scrollbar-thumb { background-color: var(--accent-soft); border-radius: 10px; }
+
+  /* Mantiene el ancho necesario del árbol sin comprimirse */
+  .bracket-inner {
+    width: max-content;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 20px;
   }
-  .scroll-hint.visible{ opacity:0.85; }
-  .col-headers{ margin-bottom:22px; }
-  .col-headers .head{
-    width:var(--card-w);
-    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em;
-    text-transform:uppercase; color:var(--ink-faint); text-align:center;
-    padding-bottom:10px; border-bottom:1px solid var(--line);
+
+  .col-headers, .bracket-row {
+    display: flex; align-items: flex-start; justify-content: flex-start; gap: var(--col-gap);
   }
-  .col-headers .head.final-head{ width:var(--card-w-final); color:var(--accent); border-bottom-color:var(--accent-soft); font-weight:600; }
 
-  .bracket-row{ position:relative; }
-
-  .col{ display:flex; flex-direction:column; gap:56px; width:var(--card-w); flex-shrink:0; }
-  .col.stack-col{ position:relative; }
-  .col.final-col{ width:var(--card-w-final); position:relative; gap:26px; }
-
-  .pair{ display:flex; flex-direction:column; gap:16px; }
-
-  svg.connectors{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:visible; }
-  svg.connectors path{ fill:none; stroke:var(--line-strong); stroke-width:1.5; stroke-linecap:round; }
-  svg.connectors path.lit{ stroke:var(--accent-soft); }
-
-  /* ---------- cards ---------- */
-  .match-card{
-    position:relative; width:var(--card-w);
-    background:var(--card-bg);
-    box-shadow:0 2px 10px -6px rgba(2,37,64,0.18);
-    border:1px solid var(--line); border-radius:10px; padding:0 0 10px;
-    opacity:0; transform:translateY(14px); animation:rise 0.6s cubic-bezier(.2,.8,.2,1) forwards;
-    overflow:hidden;
-    transition:box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  .scroll-hint {
+    text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.06em; color: var(--accent); opacity: 0; transition: opacity 0.3s ease;
+    padding-top: 10px; pointer-events: none;
   }
-  .match-card.done{ border-color:var(--accent-soft); }
-  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
+  .scroll-hint.visible { opacity: 0.85; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.85; } 50% { opacity: 0.4; } }
 
-  @media (hover:hover){
-    .match-card:hover{
-      box-shadow:0 14px 30px -14px rgba(2,37,64,0.35);
-      transform:translateY(-3px);
-      border-color:var(--accent-soft);
-      z-index:2;
+  .col-headers { margin-bottom: 22px; }
+  .col-headers .head {
+    width: var(--card-w);
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-faint); text-align: center;
+    padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .col-headers .head.final-head { width: var(--card-w-final); color: var(--accent); border-bottom-color: var(--accent-soft); font-weight: 600; }
+
+  .bracket-row { position: relative; }
+
+  .col { display: flex; flex-direction: column; gap: 56px; width: var(--card-w); flex-shrink: 0; }
+  .col.stack-col { position: relative; }
+  .col.final-col { width: var(--card-w-final); position: relative; gap: 26px; }
+
+  .pair { display: flex; flex-direction: column; gap: 16px; }
+
+  svg.connectors { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+  svg.connectors path { fill: none; stroke: var(--line-strong); stroke-width: 1.5; stroke-linecap: round; }
+  svg.connectors path.lit { stroke: var(--accent-soft); }
+
+  /* ---------- Cards ---------- */
+  .match-card {
+    position: relative; width: var(--card-w);
+    background: var(--card-bg);
+    box-shadow: 0 2px 10px -6px rgba(2,37,64,0.18);
+    border: 1px solid var(--line); border-radius: 10px; padding: 0 0 10px;
+    opacity: 0; transform: translateY(14px); animation: rise 0.6s cubic-bezier(.2,.8,.2,1) forwards;
+    overflow: hidden;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  }
+  .match-card.done { border-color: var(--accent-soft); }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  @media (hover: hover) {
+    .match-card:hover {
+      box-shadow: 0 14px 30px -14px rgba(2,37,64,0.35);
+      transform: translateY(-3px);
+      border-color: var(--accent-soft);
+      z-index: 2;
     }
   }
 
-  .card-time{
-    display:flex; align-items:center; justify-content:space-between;
-    background:var(--accent-wash);
-    border-bottom:1px solid var(--line);
-    padding:9px 14px;
+  .card-time {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--accent-wash);
+    border-bottom: 1px solid var(--line);
+    padding: 9px 14px;
   }
-  .card-time .cd-left{ display:flex; flex-direction:column; gap:1px; }
-  .card-time .cd-date{
-    font-family:'Oswald',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:0.02em; color:var(--ink); text-transform:capitalize;
+  .card-time .cd-left { display: flex; flex-direction: column; gap: 1px; }
+  .card-time .cd-date {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13.5px; letter-spacing: 0.02em; color: var(--ink); text-transform: capitalize;
   }
-  .card-time .cd-time{
-    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:17px; color:var(--accent); letter-spacing:0.01em;
+  .card-time .cd-time {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 17px; color: var(--accent); letter-spacing: 0.01em;
   }
-  .card-time .tag-stack{ display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
-  .card-time .match-tag{
-    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-faint);
-    border:1px solid var(--line-strong); border-radius:5px; padding:3px 7px;
+  .card-time .tag-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .card-time .match-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--ink-faint);
+    border: 1px solid var(--line-strong); border-radius: 5px; padding: 3px 7px;
   }
-  .today-badge{
-    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase;
-    color:#ffffff; background:var(--fifa-navy); border-radius:5px; padding:2px 6px;
-  }
-
-  .card-body{ padding:10px 14px 0; }
-  .team-row{ display:flex; align-items:center; justify-content:space-between; padding:7px 0; }
-  .team-row + .team-row{ border-top:1px solid var(--line); }
-  .team-name{ display:flex; align-items:center; gap:9px; font-family:'Oswald',sans-serif; font-size:15.5px; color:var(--ink-dim); }
-  .team-row.winner .team-name{ color:var(--ink); font-weight:600; }
-  .team-name.placeholder{ color:var(--ink-faint); font-style:italic; font-family:'IBM Plex Mono',monospace; font-size:13px; }
-  .flag{ font-size:16px; line-height:1; }
-  .flag.placeholder-flag{
-    width:16px; height:12px; border-radius:2px; background:var(--line-strong); display:inline-block;
-  }
-  .score{ font-family:'IBM Plex Mono',monospace; font-size:16px; color:var(--ink-faint); min-width:18px; text-align:right; }
-  .team-row.winner .score{ color:var(--accent); font-weight:700; }
-
-  .card-footer{
-    margin-top:8px; padding:8px 14px 0; border-top:1px dashed var(--line);
-    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-faint);
-    display:flex; justify-content:space-between; gap:8px; align-items:center;
-  }
-  .card-footer .venue{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .status-pill{
-    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.05em; text-transform:uppercase;
-    padding:2px 8px; border-radius:100px; border:1px solid var(--line-strong); color:var(--ink-dim);
-    white-space:nowrap; flex-shrink:0;
-  }
-  .status-pill.done{ border-color:var(--accent-soft); color:var(--accent); background:var(--accent-wash); }
-
-  /* projected (QF/SF/Final/Third) cards are a touch quieter until decided */
-  .match-card.projected{ border-style:dashed; }
-  .match-card.projected .card-time{ background:rgba(2,37,64,0.035); }
-  .match-card.projected .card-time .cd-time{ color:var(--ink-dim); }
-
-  .match-card.final-card{ border-color:var(--accent-soft); border-style:solid; box-shadow:0 0 0 1px var(--accent-soft), 0 20px 40px -20px rgba(4,86,148,0.35); }
-  .match-card.final-card .card-time{ background:var(--accent-wash); }
-  .match-card.final-card .card-time .cd-time{ color:var(--accent); font-size:18px; }
-  .final-crown{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); padding:8px 0 0; }
-
-  .match-card.third-card{ opacity:0.88; }
-  .third-label{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); padding:8px 0 0; }
-
-  footer{
-    position:relative; z-index:1; text-align:center; padding:0 32px 56px;
-    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint); letter-spacing:0.02em;
+  .today-badge {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #ffffff; background: var(--fifa-navy); border-radius: 5px; padding: 2px 6px;
   }
 
-  .mobile-section-label{
-    display:none;
-    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-    color:var(--accent); text-align:center; width:100%;
-    padding-bottom:4px; margin-bottom:2px; border-bottom:1px solid var(--accent-soft);
+  .card-body { padding: 10px 14px 0; }
+  .team-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; }
+  .team-row + .team-row { border-top: 1px solid var(--line); }
+  .team-name { display: flex; align-items: center; gap: 9px; font-family: 'Oswald', sans-serif; font-size: 15.5px; color: var(--ink-dim); }
+  .team-row.winner .team-name { color: var(--ink); font-weight: 600; }
+  .team-name.placeholder { color: var(--ink-faint); font-style: italic; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+  .flag { font-size: 16px; line-height: 1; }
+  .flag.placeholder-flag {
+    width: 16px; height: 12px; border-radius: 2px; background: var(--line-strong); display: inline-block;
+  }
+  .score { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--ink-faint); min-width: 18px; text-align: right; }
+  .team-row.winner .score { color: var(--accent); font-weight: 700; }
+
+  .card-footer {
+    margin-top: 8px; padding: 8px 14px 0; border-top: 1px dashed var(--line);
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-faint);
+    display: flex; justify-content: space-between; gap: 8px; align-items: center;
+  }
+  .card-footer .venue { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .status-pill {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 100px; border: 1px solid var(--line-strong); color: var(--ink-dim);
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .status-pill.done { border-color: var(--accent-soft); color: var(--accent); background: var(--accent-wash); }
+
+  .match-card.projected { border-style: dashed; }
+  .match-card.projected .card-time { background: rgba(2,37,64,0.035); }
+  .match-card.projected .card-time .cd-time { color: var(--ink-dim); }
+
+  .match-card.final-card { border-color: var(--accent-soft); border-style: solid; box-shadow: 0 0 0 1px var(--accent-soft), 0 20px 40px -20px rgba(4,86,148,0.35); }
+  .match-card.final-card .card-time { background: var(--accent-wash); }
+  .match-card.final-card .card-time .cd-time { color: var(--accent); font-size: 18px; }
+  .final-crown { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); padding: 8px 0 0; }
+
+  .match-card.third-card { opacity: 0.88; }
+  .third-label { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); padding: 8px 0 0; }
+
+  footer {
+    position: relative; z-index: 1; text-align: center; padding: 0 32px 56px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.02em;
   }
 
-  /* tighten columns on laptop-sized screens before dropping to the stacked view */
-  @media (max-width:1500px) and (min-width:1101px){
-    :root{ --card-w:220px; --card-w-final:220px; --col-gap:40px; }
-    .card-time .cd-time{ font-size:15.5px; }
-    .team-name{ font-size:14.5px; }
+  /* Adaptabilidad refinada para mantener el layout en árbol */
+  @media (max-width: 1500px) {
+    :root { --card-w: 220px; --card-w-final: 220px; --col-gap: 40px; }
+    .card-time .cd-time { font-size: 15.5px; }
+    .team-name { font-size: 14.5px; }
   }
 
-  @media (max-width: 1100px){
-    .scroll-hint{ display:none; }
-    .col-headers{ display:none; }
-    svg.connectors{ display:none; }
-    .bracket-inner{ width:100%; margin:0; }
-    .bracket-row{ flex-direction:column; align-items:center; gap:36px; }
-    .col{ position:static !important; width:100%; max-width:var(--card-w); align-items:center; gap:16px; margin:0 auto; }
-    .col.final-col{ width:100%; max-width:var(--card-w-final); }
-    .match-card{ position:static !important; top:auto !important; margin:0 auto; }
-    .match-card:hover{ transform:none; }
-    .mobile-section-label{ display:block; }
-    main{ padding:0 16px 72px; }
-    header{ padding:44px 20px 26px; }
+  @media (max-width: 900px) {
+    :root { 
+      --card-w: 200px; 
+      --card-w-final: 200px; 
+      --col-gap: 28px; 
+    }
+    header { padding: 40px 16px 24px; }
+    .card-body { padding: 8px 10px 0; }
+    .card-time { padding: 8px 10px; }
+    .card-footer { padding: 8px 10px 0; }
   }
 
-  @media (max-width:420px){
-    :root{ --card-w:100%; --card-w-final:100%; }
-    .match-card{ width:100%; max-width:340px; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .match-card{ animation:none !important; opacity:1 !important; transform:none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .match-card { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .scroll-hint.visible { animation: none; }
   }
 </style>
 </head>
@@ -272,32 +275,24 @@
       </div>
     </div>
   </div>
-  <p class="scroll-hint" id="scrollHint">← desliza para ver el cuadro completo →</p>
+  <p class="scroll-hint" id="scrollHint">← Desliza horizontalmente para ver el cuadro completo →</p>
 </main>
 
 <footer>Los ganadores avanzan de ronda · Los perdedores de ambas semifinales disputan el partido por el tercer puesto</footer>
 
 <script>
-/* ---------------- data ---------------- */
+/* ---------------- Data ---------------- */
 const TODAY = "2026-07-05";
 
 const R16 = [
-  { id:89, date:"2026-07-04", time:"23:00", teams:{home:"Paraguay",away:"Francia"}, status:"Completed", result:{home:0,away:1,winner:"Francia"},
-    venue:{stadium:"Estadio de Filadelfia", city:"Filadelfia"} },
-  { id:90, date:"2026-07-04", time:"19:00", teams:{home:"Canadá",away:"Marruecos"}, status:"Completed", result:{home:0,away:3,winner:"Marruecos"},
-    venue:{stadium:"Estadio de Houston", city:"Houston"} },
-  { id:93, date:"2026-07-06", time:"21:00", teams:{home:"Portugal",away:"España"}, status:"Scheduled",
-    venue:{stadium:"Estadio de Dallas", city:"Arlington"} },
-  { id:94, date:"2026-07-07", time:"02:00", teams:{home:"Estados Unidos",away:"Bélgica"}, status:"Scheduled",
-    venue:{stadium:"Estadio de Seattle", city:"Seattle"} },
-  { id:91, date:"2026-07-05", time:"22:00", teams:{home:"Brasil",away:"Noruega"}, status:"Scheduled",
-    venue:{stadium:"Estadio de Nueva York-Nueva Jersey", city:"East Rutherford"} },
-  { id:92, date:"2026-07-06", time:"02:00", teams:{home:"México",away:"Inglaterra"}, status:"Scheduled",
-    venue:{stadium:"Estadio Ciudad de México", city:"Ciudad de México"} },
-  { id:95, date:"2026-07-07", time:"18:00", teams:{home:"Argentina",away:"Egipto"}, status:"Scheduled",
-    venue:{stadium:"Estadio de Atlanta", city:"Atlanta"} },
-  { id:96, date:"2026-07-07", time:"22:00", teams:{home:"Suiza",away:"Colombia"}, status:"Scheduled",
-    venue:{stadium:"BC Place", city:"Vancouver"} }
+  { id:89, date:"2026-07-04", time:"23:00", teams:{home:"Paraguay",away:"Francia"}, status:"Completed", result:{home:0,away:1,winner:"Francia"}, venue:{stadium:"Estadio de Filadelfia", city:"Filadelfia"} },
+  { id:90, date:"2026-07-04", time:"19:00", teams:{home:"Canadá",away:"Marruecos"}, status:"Completed", result:{home:0,away:3,winner:"Marruecos"}, venue:{stadium:"Estadio de Houston", city:"Houston"} },
+  { id:93, date:"2026-07-06", time:"21:00", teams:{home:"Portugal",away:"España"}, status:"Scheduled", venue:{stadium:"Estadio de Dallas", city:"Arlington"} },
+  { id:94, date:"2026-07-07", time:"02:00", teams:{home:"Estados Unidos",away:"Bélgica"}, status:"Scheduled", venue:{stadium:"Estadio de Seattle", city:"Seattle"} },
+  { id:91, date:"2026-07-05", time:"22:00", teams:{home:"Brasil",away:"Noruega"}, status:"Scheduled", venue:{stadium:"Estadio de Nueva York-Nueva Jersey", city:"East Rutherford"} },
+  { id:92, date:"2026-07-06", time:"02:00", teams:{home:"México",away:"Inglaterra"}, status:"Scheduled", venue:{stadium:"Estadio Ciudad de México", city:"Ciudad de México"} },
+  { id:95, date:"2026-07-07", time:"18:00", teams:{home:"Argentina",away:"Egipto"}, status:"Scheduled", venue:{stadium:"Estadio de Atlanta", city:"Atlanta"} },
+  { id:96, date:"2026-07-07", time:"22:00", teams:{home:"Suiza",away:"Colombia"}, status:"Scheduled", venue:{stadium:"BC Place", city:"Vancouver"} }
 ];
 
 const LEFT_R16_PAIRS  = [[89,90],[93,94]];
@@ -311,14 +306,11 @@ const PROJECTED = [
   { id:101, round:"Semifinal",        date:"2026-07-14", time:"21:00", home:{of:97,role:"winner"}, away:{of:98,role:"winner"} },
   { id:102, round:"Semifinal",        date:"2026-07-15", time:"21:00", home:{of:99,role:"winner"}, away:{of:100,role:"winner"} },
   { id:104, round:"Final",            date:"2026-07-19", time:"21:00", home:{of:101,role:"winner"}, away:{of:102,role:"winner"} },
-  { id:103, round:"Tercer y cuarto puesto", date:"2026-07-18", time:"23:00", home:{of:101,role:"loser"}, away:{of:102,role:"loser"} }
+  { id:103, round:"Tercer puesto",    date:"2026-07-18", time:"23:00", home:{of:101,role:"loser"}, away:{of:102,role:"loser"} }
 ];
 
-const ALL = [
-  ...R16.map(m => ({...m, kind:"real"})),
-  ...PROJECTED.map(m => ({...m, kind:"proj"}))
-];
-function byId(id){ return ALL.find(m => m.id === id); }
+const ALL = [...R16.map(m => ({...m, kind:"real"})), ...PROJECTED.map(m => ({...m, kind:"proj"}))];
+const byId = id => ALL.find(m => m.id === id);
 
 const FLAGS = {
   "Paraguay":"🇵🇾","Francia":"🇫🇷","Canadá":"🇨🇦","Marruecos":"🇲🇦","Brasil":"🇧🇷","Noruega":"🇳🇴",
@@ -326,7 +318,7 @@ const FLAGS = {
   "Argentina":"🇦🇷","Egipto":"🇪🇬","Suiza":"🇨🇭","Colombia":"🇨🇴"
 };
 
-/* ---------------- helpers ---------------- */
+/* ---------------- Helpers ---------------- */
 function fmtDate(dateStr){
   const [y,m,d] = dateStr.split('-');
   const dt = new Date(Date.UTC(+y, +m-1, +d));
@@ -340,8 +332,7 @@ function resolveSlot(slot){
     const loser  = winner === src.teams.home ? src.teams.away : src.teams.home;
     return { name: slot.role === "winner" ? winner : loser, known:true };
   }
-  const prefix = slot.role === "loser" ? "PP" : "G";
-  return { name: `${prefix}${slot.of}`, known:false };
+  return { name: `${slot.role === "loser" ? "PP" : "G"}${slot.of}`, known:false };
 }
 
 function teamRowReal(name, score, isWinner, hasResult){
@@ -362,7 +353,7 @@ function teamRowProjected(resolved){
     </div>`;
 }
 
-/* ---------------- card builders ---------------- */
+/* ---------------- Builders ---------------- */
 function buildRealCard(m, delay){
   const done = m.status === "Completed";
   const homeWin = done && m.result.winner === m.teams.home;
@@ -424,15 +415,13 @@ function buildProjectedCard(m, delay){
   return card;
 }
 
-/* ---------------- render ---------------- */
-const r16l = document.getElementById('r16l');
-const r16r = document.getElementById('r16r');
-const qfl  = document.getElementById('qfl');
-const qfr  = document.getElementById('qfr');
-const sfl  = document.getElementById('sfl');
-const sfr  = document.getElementById('sfr');
-const finalcol = document.getElementById('finalcol');
-const svg = document.getElementById('connectors');
+/* ---------------- Render & Layout ---------------- */
+const elements = {
+  r16l: document.getElementById('r16l'), r16r: document.getElementById('r16r'),
+  qfl: document.getElementById('qfl'), qfr: document.getElementById('qfr'),
+  sfl: document.getElementById('sfl'), sfr: document.getElementById('sfr'),
+  finalcol: document.getElementById('finalcol'), svg: document.getElementById('connectors')
+};
 
 let delayCounter = 0;
 
@@ -448,47 +437,33 @@ function renderR16(container, pairs){
   });
 }
 
-function addMobileLabel(container, text){
-  const label = document.createElement('div');
-  label.className = 'mobile-section-label';
-  label.textContent = text;
-  container.appendChild(label);
+function placeProjectedCard(container, id, delay) {
+  const card = buildProjectedCard(byId(id), delay);
+  card.style.position = 'absolute';
+  card.style.left = '0';
+  container.appendChild(card);
+  return card;
 }
 
 function renderAll(){
-  r16l.innerHTML = ''; r16r.innerHTML = '';
-  qfl.innerHTML = '';  qfr.innerHTML = '';
-  sfl.innerHTML = '';  sfr.innerHTML = '';
-  finalcol.innerHTML = '';
+  Object.values(elements).forEach(el => el.innerHTML = '');
   delayCounter = 0;
 
-  addMobileLabel(r16l, 'Octavos de Final · Llave Izquierda');
-  addMobileLabel(qfl,  'Cuartos de Final · Llave Izquierda');
-  addMobileLabel(sfl,  'Semifinal · Llave Izquierda');
-  addMobileLabel(sfr,  'Semifinal · Llave Derecha');
-  addMobileLabel(qfr,  'Cuartos de Final · Llave Derecha');
-  addMobileLabel(r16r, 'Octavos de Final · Llave Derecha');
+  renderR16(elements.r16l, LEFT_R16_PAIRS);
+  renderR16(elements.r16r, RIGHT_R16_PAIRS);
 
-  renderR16(r16l, LEFT_R16_PAIRS);
-  renderR16(r16r, RIGHT_R16_PAIRS);
+  [97,98].forEach(id => placeProjectedCard(elements.qfl, id, 400));
+  [99,100].forEach(id => placeProjectedCard(elements.qfr, id, 400));
 
-  [97,98].forEach(id => { qfl.appendChild(buildProjectedCard(byId(id), 400)); qfl.lastChild.style.position='absolute'; qfl.lastChild.style.left='0'; });
-  [99,100].forEach(id => { qfr.appendChild(buildProjectedCard(byId(id), 400)); qfr.lastChild.style.position='absolute'; qfr.lastChild.style.left='0'; });
-
-  const sflCard = buildProjectedCard(byId(101), 600);
-  sflCard.style.position='absolute'; sflCard.style.left='0'; sfl.appendChild(sflCard);
-  const sfrCard = buildProjectedCard(byId(102), 600);
-  sfrCard.style.position='absolute'; sfrCard.style.left='0'; sfr.appendChild(sfrCard);
-
-  const finalCard = buildProjectedCard(byId(104), 800);
-  finalCard.style.position='absolute'; finalCard.style.left='0'; finalcol.appendChild(finalCard);
-  const thirdCard = buildProjectedCard(byId(103), 900);
-  thirdCard.style.position='absolute'; thirdCard.style.left='0'; finalcol.appendChild(thirdCard);
+  placeProjectedCard(elements.sfl, 101, 600);
+  placeProjectedCard(elements.sfr, 102, 600);
+  
+  placeProjectedCard(elements.finalcol, 104, 800);
+  placeProjectedCard(elements.finalcol, 103, 900);
 
   requestAnimationFrame(() => requestAnimationFrame(layoutAndDraw));
 }
 
-/* ---------------- geometry ---------------- */
 function centerY(el, bracketRect){
   const r = el.getBoundingClientRect();
   return r.top + r.height/2 - bracketRect.top;
@@ -506,6 +481,7 @@ function elbowPair(rectA, rectB, target, bracketRect, dir){
     `M ${midX} ${midY} H ${x2}`
   ];
 }
+
 function singleLine(srcEl, tgtEl, bracketRect, dir){
   const rs = srcEl.getBoundingClientRect();
   const rt = tgtEl.getBoundingClientRect();
@@ -520,36 +496,34 @@ function singleLine(srcEl, tgtEl, bracketRect, dir){
 function layoutAndDraw(){
   const bracketEl = document.getElementById('bracket');
   const bracketRect = bracketEl.getBoundingClientRect();
-  svg.setAttribute('width', bracketRect.width);
-  svg.setAttribute('height', bracketRect.height);
+  elements.svg.setAttribute('width', bracketRect.width);
+  elements.svg.setAttribute('height', bracketRect.height);
 
-  if (window.innerWidth <= 1100){ svg.innerHTML=''; return; }
+  const qflCards = elements.qfl.querySelectorAll('.match-card');
+  const qfrCards = elements.qfr.querySelectorAll('.match-card');
+  const sflCard = elements.sfl.querySelector('.match-card');
+  const sfrCard = elements.sfr.querySelector('.match-card');
+  const finalCard = elements.finalcol.querySelector('.final-card');
+  const thirdCard = elements.finalcol.querySelector('.third-card');
 
-  const qflCards = qfl.querySelectorAll('.match-card');
-  const qfrCards = qfr.querySelectorAll('.match-card');
-  const sflCard = sfl.querySelector('.match-card');
-  const sfrCard = sfr.querySelector('.match-card');
-  const finalCard = finalcol.querySelector('.final-card');
-  const thirdCard = finalcol.querySelector('.third-card');
-
-  const leftPairs = r16l.querySelectorAll('.pair');
-  const rightPairs = r16r.querySelectorAll('.pair');
+  const leftPairs = elements.r16l.querySelectorAll('.pair');
+  const rightPairs = elements.r16r.querySelectorAll('.pair');
 
   leftPairs.forEach((pairEl, i) => {
     const [c1, c2] = pairEl.querySelectorAll('.match-card');
-    const y1 = centerY(c1, bracketRect), y2 = centerY(c2, bracketRect);
-    const mid = (y1 + y2) / 2;
+    const mid = (centerY(c1, bracketRect) + centerY(c2, bracketRect)) / 2;
     qflCards[i].style.top = `${mid - qflCards[i].offsetHeight/2}px`;
   });
+  
   rightPairs.forEach((pairEl, i) => {
     const [c1, c2] = pairEl.querySelectorAll('.match-card');
-    const y1 = centerY(c1, bracketRect), y2 = centerY(c2, bracketRect);
-    const mid = (y1 + y2) / 2;
+    const mid = (centerY(c1, bracketRect) + centerY(c2, bracketRect)) / 2;
     qfrCards[i].style.top = `${mid - qfrCards[i].offsetHeight/2}px`;
   });
 
   const qflMid = (centerY(qflCards[0], bracketRect) + centerY(qflCards[1], bracketRect)) / 2;
   sflCard.style.top = `${qflMid - sflCard.offsetHeight/2}px`;
+  
   const qfrMid = (centerY(qfrCards[0], bracketRect) + centerY(qfrCards[1], bracketRect)) / 2;
   sfrCard.style.top = `${qfrMid - sfrCard.offsetHeight/2}px`;
 
@@ -571,10 +545,10 @@ function layoutAndDraw(){
   paths.push(singleLine(sflCard, finalCard, bracketRect, 'ltr'));
   paths.push(singleLine(sfrCard, finalCard, bracketRect, 'rtl'));
 
-  svg.innerHTML = paths.map(d => `<path d="${d}"></path>`).join('');
+  elements.svg.innerHTML = paths.map(d => `<path d="${d}"></path>`).join('');
 
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    svg.querySelectorAll('path').forEach((p, idx) => {
+    elements.svg.querySelectorAll('path').forEach((p, idx) => {
       const len = p.getTotalLength();
       p.style.strokeDasharray = len;
       p.style.strokeDashoffset = len;
@@ -587,15 +561,16 @@ function layoutAndDraw(){
 function updateScrollHint(){
   const wrap = document.getElementById('scrollWrap');
   const hint = document.getElementById('scrollHint');
-  if (window.innerWidth <= 1100){ hint.classList.remove('visible'); return; }
-  hint.classList.toggle('visible', wrap.scrollWidth > wrap.clientWidth + 4);
+  // Se muestra la pista si el contenido es más ancho que la ventana de scroll
+  hint.classList.toggle('visible', wrap.scrollWidth > wrap.clientWidth + 5);
 }
 
 renderAll();
-updateScrollHint();
 
 if (document.fonts && document.fonts.ready){
   document.fonts.ready.then(() => { layoutAndDraw(); updateScrollHint(); });
+} else {
+  setTimeout(() => { layoutAndDraw(); updateScrollHint(); }, 300);
 }
 
 document.getElementById('scrollWrap').addEventListener('scroll', () => {
