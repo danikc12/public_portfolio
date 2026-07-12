@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f8fafc">
+    <title>Test Vocacional EBAU | Móvil Optimizado</title>
+    <!-- Incluimos Chart.js para el gráfico de radar -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-active: #3730a3;
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 0.75rem;
+            --radius-lg: 1.25rem;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            --transition: all 0.25s ease;
+        }
+
+        .dark {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --primary: #6366f1;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: var(--font-sans); 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            line-height: 1.5; 
+            transition: background-color 0.3s, color 0.3s; 
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        header { 
+            background-color: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); 
+            padding: 1rem max(1.5rem, env(safe-area-inset-right)); 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 100; 
+        }
+        .dark header { background-color: rgba(30, 41, 59, 0.85); }
+        
+        .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; letter-spacing: -0.5px; }
+        .theme-toggle { background: none; border: none; cursor: pointer; color: var(--text-main); padding: 0.5rem; border-radius: 50%; transition: var(--transition); }
+        
+        main { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 2rem 1.5rem max(2rem, env(safe-area-inset-bottom)); 
+        }
+        
+        .screen { display: none; animation: fadeIn 0.3s ease-out forwards; }
+        .screen.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.15; letter-spacing: -1px; }
+        h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
+        p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.05rem; }
+
+        .card { 
+            background-color: var(--surface); 
+            border-radius: var(--radius-lg); 
+            padding: 2.5rem; 
+            box-shadow: var(--shadow-md); 
+            border: 1px solid var(--border); 
+            margin-bottom: 2rem;
+        }
+        
+        .rama-highlight { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; padding: 2rem; border-radius: var(--radius-lg); 
+            margin-bottom: 2rem; box-shadow: var(--shadow-lg); 
+        }
+        .rama-highlight * { color: white !important; }
+
+        .btn { 
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; 
+            padding: 0.85rem 1.75rem; border-radius: var(--radius-md); font-weight: 600; 
+            cursor: pointer; transition: var(--transition); border: none; font-size: 1rem; 
+            text-align: center;
+        }
+        .btn:active { transform: scale(0.97); } 
+        .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 4px 14px 0 rgb(79 70 229 / 0.3); }
+        .btn-primary:active { background-color: var(--primary-active); }
+        .btn-outline { background-color: transparent; border: 2px solid var(--border); color: var(--text-main); }
+        .btn-outline:active { background-color: var(--bg); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        select, input { 
+            width: 100%; padding: 0.85rem 1rem; border-radius: var(--radius-md); 
+            border: 1px solid var(--border); background-color: var(--bg); 
+            color: var(--text-main); font-family: inherit; 
+            font-size: 16px; 
+            appearance: none; -webkit-appearance: none;
+        }
+        select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
+        select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgb(79 70 229 / 0.15); }
+
+        .progress-container { width: 100%; height: 6px; background-color: var(--border); border-radius: 3px; margin: 1.5rem 0; overflow: hidden; }
+        .progress-bar { height: 100%; background-color: var(--primary); width: 0%; transition: width 0.3s ease; }
+        .section-badge { display: inline-block; padding: 0.35rem 1rem; background-color: var(--bg); border-radius: 999px; font-size: 0.85rem; font-weight: 700; color: var(--primary); border: 1px solid var(--border); }
+        
+        .likert-group { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+        .likert-option { 
+            display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border); 
+            border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); 
+            background-color: var(--surface); min-height: 56px; 
+        }
+        .likert-option.selected { border-color: var(--primary); background-color: rgba(79, 70, 229, 0.05); }
+        .likert-label { flex-grow: 1; font-weight: 500; font-size: 0.95rem; }
+        .likert-circle { 
+            width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); 
+            display: flex; align-items: center; justify-content: center; margin-right: 1rem; 
+            flex-shrink: 0; 
+            transition: var(--transition); 
+        }
+        .likert-option.selected .likert-circle { border-color: var(--primary); }
+        .likert-option.selected .likert-circle::after { content: ''; width: 10px; height: 10px; background-color: var(--primary); border-radius: 50%; }
+
+        .test-controls { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .profession-card { padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background-color: var(--surface); }
+        .prof-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+        .prof-score { font-size: 1.5rem; font-weight: 800; color: var(--primary); background: var(--bg); padding: 0.35rem 0.75rem; border-radius: var(--radius-md); }
+        .match-reason { background-color: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--success); padding: 0.85rem; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin: 1rem 0; font-size: 0.9rem; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .tag { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--border); }
+        .tag-rama { background-color: var(--primary); color: white; border-color: var(--primary); }
+        .tag-via { background-color: var(--bg); color: var(--text-muted); }
+        
+        .key-points { margin-top: 1rem; padding-left: 1.2rem; font-size: 0.9rem; color: var(--text-muted); }
+        .key-points li { margin-bottom: 0.5rem; }
+
+        .chart-container { position: relative; height: 350px; width: 100%; margin: 1.5rem 0; display: flex; justify-content: center; }
+
+        @media (max-width: 600px) {
+            main { padding: 1rem 1rem max(1.5rem, env(safe-area-inset-bottom)); }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.35rem; }
+            .card { padding: 1.5rem; }
+            .rama-highlight { padding: 1.5rem; }
+            .rama-highlight h2 { font-size: 1.75rem; }
+            
+            #question-text { font-size: 1.25rem; margin-bottom: 1.5rem; }
+            
+            .test-controls { flex-direction: column-reverse; }
+            .test-controls .btn { width: 100%; padding: 1rem; }
+            
+            .prof-header { flex-direction: column; gap: 0.5rem; }
+            .prof-score { align-self: flex-start; }
+            
+            .actions-results { flex-direction: column; width: 100%; }
+            .actions-results .btn { width: 100%; }
+            
+            .chart-container { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+            OrientaEBAU
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar modo oscuro">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+    </header>
+
+    <main id="app">
+        <!-- Pantalla Inicio -->
+        <section id="screen-welcome" class="screen active">
+            <div class="card" style="text-align: center;">
+                <span class="section-badge" style="margin-bottom: 1rem;">17-18 años · España</span>
+                <h1>Descubre tu Futuro Profesional</h1>
+                <p>Acabas Bachillerato y decidir asusta. Este test analiza tu perfil y te dice qué <strong>Rama de Conocimiento</strong> (Universidad o FP) y profesiones encajan con tu forma de ser.</p>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="app.navigate('personal')">Empezar Análisis</button>
+            </div>
+        </section>
+
+        <!-- Pantalla Datos -->
+        <section id="screen-personal" class="screen">
+            <div class="card">
+                <h2 style="text-align: center;">Tu Perfil Actual</h2>
+                <form id="form-personal" onsubmit="event.preventDefault(); app.startTest();">
+                    <div class="form-group">
+                        <label>Bachillerato de procedencia:</label>
+                        <select id="pd-bach" required>
+                            <option value="">Selecciona...</option>
+                            <option value="ciencias_salud">Ciencias (Salud)</option>
+                            <option value="ciencias_tec">Ciencias (Ingeniería)</option>
+                            <option value="ciencias_sociales">CC. Sociales y Humanidades</option>
+                            <option value="artes">Artes</option>
+                            <option value="general">Bachillerato General</option>
+                            <option value="fp_medio">Grado Medio (FP)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Vía formativa de interés:</label>
+                        <select id="pd-via" required>
+                            <option value="">Selecciona...</option>
+                            <option value="grado">Grado Universitario (EBAU)</option>
+                            <option value="cfgs">Grado Superior (CFGS)</option>
+                            <option value="indeciso">Me valen ambas / Indeciso</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continuar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Pantalla Test -->
+        <section id="screen-test" class="screen">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="section-badge" id="test-section-name">Área</span>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);" id="test-progress-text"></span>
+                </div>
+                <div class="progress-container"><div class="progress-bar" id="test-progress-bar"></div></div>
+
+                <h2 id="question-text">¿?</h2>
+
+                <div id="options-container" class="likert-group"></div>
+
+                <div class="test-controls">
+                    <button class="btn btn-outline" onclick="app.prevQuestion()" id="btn-prev">Volver atrás</button>
+                    <button class="btn btn-primary" onclick="app.nextQuestion()" id="btn-next" disabled>Siguiente</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla Resultados -->
+        <section id="screen-results" class="screen">
+            <h1 style="margin-bottom: 1.5rem;">Tu Diagnóstico</h1>
+
+            <div class="rama-highlight" id="rama-container">
+                <h3 style="opacity: 0.9; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Rama de Conocimiento Ideal:</h3>
+                <h2 id="res-rama-title" style="font-size: 2rem; margin: 0.5rem 0 1rem;"></h2>
+                <p id="res-rama-desc"></p>
+                <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.15); padding: 1rem; border-radius: var(--radius-md);">
+                    <strong style="display:block; margin-bottom: 0.25rem;">Vía recomendada:</strong> 
+                    <span id="res-via" style="font-size: 0.95rem;"></span>
+                </div>
+            </div>
+            
+            <!-- Dashboard Info -->
+            <div class="card" style="margin-top: 2rem;">
+                <h2 style="margin-bottom: 0.5rem;">Análisis de tu Perfil</h2>
+                <p style="font-size: 0.95rem; margin-bottom: 1rem;">Este gráfico refleja tus intereses y aptitudes basados en tus respuestas. Cuanto más cerca esté la forma del borde exterior, mayor es tu afinidad con esa área.</p>
+                
+                <div class="chart-container">
+                    <canvas id="profileChart"></canvas>
+                </div>
+                
+                <div id="profile-summary" style="margin-top: 1.5rem; padding: 1rem; background-color: var(--bg); border-radius: var(--radius-md); border-left: 4px solid var(--primary);"></div>
+            </div>
+
+            <h2 style="margin-top: 2.5rem; margin-bottom: 1rem;">Profesiones Top para ti</h2>
+            <div class="dashboard-grid" id="professions-grid"></div>
+
+            <div class="actions-results" style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+                <button class="btn btn-primary" onclick="app.resetTest()">Repetir el Test</button>
+                <button class="btn btn-outline" onclick="window.print()">Guardar PDF</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const questionsDB = [
+            { id: 1, section: "Intereses", dim: "tech", text: "¿Te fascina entender cómo funcionan las cosas por dentro (software, motores) y resolver problemas lógicos?" },
+            { id: 2, section: "Intereses", dim: "health", text: "¿Sientes vocación por ayudar a personas enfermas o mejorar el bienestar de personas vulnerables?" },
+            { id: 3, section: "Intereses", dim: "social", text: "¿Te ves gestionando equipos, defendiendo ideas en público o tomando decisiones en una empresa?" },
+            { id: 4, section: "Intereses", dim: "art", text: "¿Disfrutas creando desde cero, ya sea dibujando, escribiendo, diseñando o componiendo?" },
+            { id: 5, section: "Intereses", dim: "science", text: "¿Te llama la atención investigar el medio ambiente, el universo o analizar la biología en un laboratorio?" },
+            
+            { id: 6, section: "Aptitudes", dim: "tech", text: "En Bachillerato, las asignaturas de Matemáticas, Física o Tecnología se te daban bien o te resultaban fáciles de entender." },
+            { id: 7, section: "Aptitudes", dim: "health", text: "Tienes buena memoria anatómica y mantienes la calma si alguien tiene una emergencia médica o crisis emocional." },
+            { id: 8, section: "Aptitudes", dim: "social", text: "Se te da bien redactar, argumentar en debates, estudiar Historia/Economía y convencer a otros." },
+            { id: 9, section: "Aptitudes", dim: "art", text: "Destacas por tu sentido estético y tu capacidad para pensar 'fuera de la caja' ante un proyecto nuevo." },
+            { id: 10, section: "Aptitudes", dim: "science", text: "Eres metódico/a, observador/a y tienes facilidad para comprender procesos biológicos, químicos o físicos." },
+            
+            { id: 11, section: "Estilo Ideal", dim: "tech", text: "Prefieres un trabajo enfocado en datos, ordenadores o tecnología pura, donde se valore tu capacidad lógica." },
+            { id: 12, section: "Estilo Ideal", dim: "health", text: "Te motiva el contacto directo y continuo con pacientes/usuarios, aunque implique turnos o carga emocional." },
+            { id: 13, section: "Estilo Ideal", dim: "social", text: "Prefieres el dinamismo de una oficina, clientes, reuniones comerciales o juicios legales." },
+            { id: 14, section: "Estilo Ideal", dim: "science", text: "Te gustaría un trabajo centrado en la investigación metódica pura (análisis de datos, microscopio, campo)." },
+            { id: 15, section: "Estilo Ideal", dim: "art", text: "Te motiva trabajar en un entorno donde se valore la originalidad estética, la cultura y la innovación artística." },
+            
+            { id: 16, section: "Personalidad", dim: "art", text: "Huyes de la rutina estricta; necesitas libertad horaria y creativa para que tu talento brille." },
+            { id: 17, section: "Personalidad", dim: "tech", text: "Eres una persona muy estructurada; te gusta que los procesos sigan un orden exacto y sin errores." },
+            { id: 18, section: "Personalidad", dim: "social", text: "Eres muy sociable, tienes iniciativa de líder y te adaptas rápido si hay que improvisar hablando." },
+            { id: 19, section: "Personalidad", dim: "health", text: "La gente acude a ti con sus problemas porque sabes escuchar sin juzgar y eres profundamente empático/a." },
+            { id: 20, section: "Personalidad", dim: "science", text: "Disfrutas analizando datos complejos para encontrar la causa raíz de un fenómeno natural, físico o social." },
+            
+            { id: 21, section: "Decisión", dim: "tech", text: "Preferiría programar una Inteligencia Artificial compleja antes que organizar un evento." },
+            { id: 22, section: "Decisión", dim: "health", text: "Preferiría estudiar cómo funciona el cerebro humano antes que aprender sobre leyes económicas." },
+            { id: 23, section: "Decisión", dim: "social", text: "Preferiría ser Director de Marketing o Abogado antes que ser Ingeniero o Médico." },
+            { id: 24, section: "Decisión", dim: "science", text: "Preferiría descubrir un nuevo material en un laboratorio antes que dirigir un equipo de ventas." },
+            { id: 25, section: "Decisión", dim: "art", text: "Preferiría diseñar la identidad visual de una marca antes que auditar sus cuentas financieras." }
+        ];
+
+        // Añadidos los 3 puntos clave para justificar detalladamente cada recomendación
+        const professionsDB = [
+            { n: "Ing. Informática / Desarrollo (DAM/DAW)", rama: "Ingeniería", dimPrincipal: "tech", dimSecundaria: "science", via: "Grado o CFGS", desc: "Diseño y programación de software e Inteligencia Artificial.", rasgo: "Te apasiona la lógica, la tecnología y tienes mentalidad estructurada.", puntosClave: ["Creación de soluciones tecnológicas y automatización de procesos.", "Requiere alta capacidad analítica y de resolución de problemas lógicos.", "Es un sector con altísima empleabilidad, demanda y opciones de teletrabajo."] },
+            { n: "Arquitectura / Edificación", rama: "Ingeniería", dimPrincipal: "tech", dimSecundaria: "art", via: "Grado o CFGS", desc: "Diseño de espacios combinando cálculo y estética.", rasgo: "Unes base técnica con sentido espacial/artístico.", puntosClave: ["Diseño funcional y estético de espacios habitables y estructuras.", "Aplicación práctica y constante de cálculo, física y materiales.", "Gestión integral de proyectos, desde el plano inicial hasta la obra terminada."] },
+            { n: "Ingeniería Industrial", rama: "Ingeniería", dimPrincipal: "tech", dimSecundaria: "social", via: "Grado Universitario", desc: "Optimización de procesos, robótica y maquinaria.", rasgo: "Te fascina entender cómo se construyen las cosas físicas.", puntosClave: ["Diseño y mantenimiento de sistemas mecánicos y procesos productivos.", "Enfoque constante en la eficiencia, la robótica y la innovación tecnológica.", "Oportunidad de ejercer liderazgo técnico en plantas y cadenas de producción."] },
+            
+            { n: "Medicina / Enfermería", rama: "Ciencias de la Salud", dimPrincipal: "health", dimSecundaria: "science", via: "Grado Universitario", desc: "Tratamiento y cuidado directo de pacientes.", rasgo: "Tienes alta vocación de servicio y resistencia ante crisis.", puntosClave: ["Impacto directo, tangible y vital en la salud y vida de las personas.", "Trabajo altamente dinámico y colaborativo en entornos clínicos y hospitalarios.", "Requiere empatía excepcional, control del estrés y respuesta rápida ante emergencias."] },
+            { n: "Psicología Clínica", rama: "Ciencias de la Salud", dimPrincipal: "health", dimSecundaria: "social", via: "Grado Universitario", desc: "Evaluación y tratamiento de la salud mental.", rasgo: "Eres quien mejor escucha y tienes gran inteligencia emocional.", puntosClave: ["Evaluación exhaustiva y terapia del comportamiento y la mente humana.", "Fuerte enfoque en la escucha activa, la comunicación y el apoyo continuo.", "Trabajo enfocado a la mejora del bienestar mental a medio y largo plazo."] },
+            { n: "Imagen para el Diagnóstico", rama: "Ciencias de la Salud", dimPrincipal: "health", dimSecundaria: "tech", via: "CFGS (FP Superior)", desc: "Radiografías y TACs en hospitales.", rasgo: "Sector sanitario pero con un enfoque más técnico e instrumental.", puntosClave: ["Manejo diario de tecnología médica y maquinaria de última generación.", "Soporte instrumental fundamental para que los médicos realicen diagnósticos precisos.", "Trabajo en el ámbito de la salud pero con una menor carga emocional directa."] },
+            
+            { n: "ADE / Finanzas", rama: "CC. Sociales", dimPrincipal: "social", dimSecundaria: "tech", via: "Grado o CFGS", desc: "Gestión financiera y estratégica de empresas.", rasgo: "Tienes perfil de liderazgo y visión práctica de negocio.", puntosClave: ["Planificación económica, gestión de presupuestos y viabilidad de proyectos.", "Trabajo en un entorno corporativo dinámico y orientado a resultados.", "Toma de decisiones estratégicas basadas en el análisis de datos y del mercado."] },
+            { n: "Derecho", rama: "CC. Sociales", dimPrincipal: "social", dimSecundaria: "art", via: "Grado Universitario", desc: "Asesoramiento legal y judicatura.", rasgo: "Destacas argumentando y te interesan las normativas.", puntosClave: ["Interpretación, redacción y aplicación constante de leyes y normativas.", "Defensa de derechos, mediación y resolución formal de conflictos.", "Requiere excelentes habilidades de lectura comprensiva, memoria y oratoria."] },
+            { n: "Marketing y Publicidad", rama: "CC. Sociales", dimPrincipal: "social", dimSecundaria: "art", via: "Grado o CFGS", desc: "Estrategias comerciales y comunicación digital.", rasgo: "Combinas perfil persuasivo con creatividad.", puntosClave: ["Análisis exhaustivo del mercado y psicología del comportamiento del consumidor.", "Creación de campañas creativas, persuasivas y estrategias de marca.", "Trabajo en un entorno digital en constante evolución y cambio de tendencias."] },
+            
+            { n: "Biotecnología / Lab. Clínico", rama: "Ciencias", dimPrincipal: "science", dimSecundaria: "tech", via: "Grado o CFGS", desc: "Análisis biológico e investigación clínica.", rasgo: "Eres metódico/a y te apasiona el trabajo de laboratorio.", puntosClave: ["Investigación biológica aplicada a la salud, la agricultura o la industria.", "Trabajo riguroso, procedimental y metódico en entornos de laboratorio.", "Contribución a la innovación científica con un alto impacto global a largo plazo."] },
+            { n: "Ciencias Ambientales", rama: "Ciencias", dimPrincipal: "science", dimSecundaria: "social", via: "Grado Universitario", desc: "Conservación medioambiental y ecología.", rasgo: "Sientes urgencia por la naturaleza y la sostenibilidad.", puntosClave: ["Gestión, protección y conservación activa de ecosistemas y recursos naturales.", "Evaluación técnica del impacto ambiental de proyectos y normativas.", "Equilibrio ideal entre la investigación técnica y el trabajo de campo activo."] },
+            
+            { n: "Diseño Gráfico / Animación 3D", rama: "Artes", dimPrincipal: "art", dimSecundaria: "tech", via: "Grado o CFGS", desc: "Creación visual, interfaces y modelado.", rasgo: "Posees gran talento visual y huyes de rutinas aburridas.", puntosClave: ["Expresión creativa y conceptualización a través de herramientas y medios digitales.", "Solución visual a problemas comunicativos, enfocándose en la estética y usabilidad.", "Alta flexibilidad laboral, permitiendo trabajar como freelance o en agencias dinámicas."] },
+            { n: "Traducción e Interpretación", rama: "Artes", dimPrincipal: "art", dimSecundaria: "social", via: "Grado Universitario", desc: "Dominio y traslado entre distintos idiomas.", rasgo: "Tienes facilidad innata para las lenguas y la cultura.", puntosClave: ["Conexión directa entre diferentes culturas, personas y mercados internacionales.", "Requiere un altísimo dominio lingüístico, vocabulario y atención estricta al detalle.", "Posibilidad de trabajar en organismos internacionales, turismo o edición literaria."] }
+        ];
+
+        const infoRamas = {
+            "tech": { t: "Ingeniería y Arquitectura", d: "Tu mente analítica te sitúa aquí. Las ingenierías, la informática o el desarrollo web (FP) te darán el reto intelectual que buscas." },
+            "health": { t: "Ciencias de la Salud", d: "Tu altísima empatía indica que tu lugar es la sanidad. Medicina, Psicología o los Ciclos Superiores Sanitarios encajan a la perfección." },
+            "social": { t: "CC. Sociales y Jurídicas", d: "Destacas por tu comunicación y visión. Derecho, Economía, Marketing o Educación son carreras ideales para perfiles dinámicos." },
+            "science": { t: "Ciencias Puras", d: "Tienes un perfil investigador. Biotecnología, Biología o Física encajan con tu rigor científico." },
+            "art": { t: "Artes y Humanidades", d: "Tu perfil es innovador. Huyes de la rigidez y priorizas la expresión. El Diseño o las Bellas Artes son tu hábitat natural." }
+        };
+
+        const dimNames = { "tech": "Tecnología", "health": "Salud", "social": "Gestión/Social", "science": "Ciencias", "art": "Arte/Creatividad" };
+
+        const app = {
+            state: { answers: {}, currentQIndex: 0, via: "" },
+            totalQ: questionsDB.length,
+
+            init() { this.likertLabels = ["Nada", "Poco", "Neutro", "Bastante", "Totalmente"]; },
+
+            navigate(screenId) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-' + screenId).classList.add('active');
+                window.scrollTo(0,0);
+            },
+
+            startTest() {
+                const via = document.getElementById('pd-via').value;
+                if(!document.getElementById('pd-bach').value || !via) { alert("Por favor, completa los campos."); return; }
+                this.state.via = via;
+                this.navigate('test');
+                this.renderQuestion();
+            },
+
+            renderQuestion() {
+                const q = questionsDB[this.state.currentQIndex];
+                
+                document.getElementById('test-section-name').textContent = q.section;
+                document.getElementById('test-progress-text').textContent = `${this.state.currentQIndex + 1} de ${this.totalQ}`;
+                document.getElementById('test-progress-bar').style.width = `${((this.state.currentQIndex + 1) / this.totalQ) * 100}%`;
+                document.getElementById('question-text').textContent = q.text;
+
+                const optsContainer = document.getElementById('options-container');
+                optsContainer.innerHTML = '';
+                
+                this.likertLabels.forEach((label, index) => {
+                    const val = index + 1;
+                    const isSelected = this.state.answers[q.id] === val;
+                    const div = document.createElement('div');
+                    div.className = `likert-option ${isSelected ? 'selected' : ''}`;
+                    div.onclick = () => this.selectOption(val);
+                    div.innerHTML = `<div class="likert-circle"></div><span class="likert-label">${label}</span>`;
+                    optsContainer.appendChild(div);
+                });
+
+                document.getElementById('btn-prev').style.display = this.state.currentQIndex === 0 ? 'none' : 'inline-flex';
+                
+                const nextBtn = document.getElementById('btn-next');
+                if (this.state.answers[q.id]) {
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = this.state.currentQIndex === this.totalQ - 1 ? 'Ver Resultados Finales' : 'Siguiente →';
+                } else {
+                    nextBtn.disabled = true;
+                    nextBtn.textContent = 'Siguiente →';
+                }
+            },
+
+            selectOption(val) {
+                this.state.answers[questionsDB[this.state.currentQIndex].id] = val;
+                this.renderQuestion(); 
+                setTimeout(() => this.nextQuestion(), 200); 
+            },
+
+            nextQuestion() {
+                if (!this.state.answers[questionsDB[this.state.currentQIndex].id]) return;
+                if (this.state.currentQIndex < this.totalQ - 1) {
+                    this.state.currentQIndex++;
+                    this.renderQuestion();
+                } else {
+                    this.calculateResults();
+                }
+            },
+
+            prevQuestion() {
+                if (this.state.currentQIndex > 0) {
+                    this.state.currentQIndex--;
+                    this.renderQuestion();
+                }
+            },
+
+            renderChart(scores) {
+                const ctx = document.getElementById('profileChart').getContext('2d');
+                
+                const isDark = document.body.classList.contains('dark');
+                const textColor = isDark ? '#94a3b8' : '#475569';
+                const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+                if (window.profileChartInstance) {
+                    window.profileChartInstance.destroy();
+                }
+
+                window.profileChartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: [dimNames.tech, dimNames.health, dimNames.social, dimNames.art, dimNames.science],
+                        datasets: [{
+                            label: 'Tus Puntos',
+                            data: [scores.tech, scores.health, scores.social, scores.art, scores.science],
+                            backgroundColor: 'rgba(79, 70, 229, 0.25)',
+                            borderColor: 'rgba(79, 70, 229, 1)',
+                            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(79, 70, 229, 1)',
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: gridColor },
+                                grid: { color: gridColor },
+                                pointLabels: { color: textColor, font: { size: 13, family: "system-ui" } },
+                                ticks: { display: false, min: 0, max: 25, stepSize: 5 }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            },
+
+            calculateResults() {
+                let scores = { tech: 0, health: 0, social: 0, art: 0, science: 0 };
+                questionsDB.forEach(q => { if(this.state.answers[q.id]) scores[q.dim] += this.state.answers[q.id]; });
+
+                // Ordenar dimensiones de mayor a menor para sacar perfil principal y secundario
+                const sortedDims = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+                const bestDim = sortedDims[0];
+                const secondDim = sortedDims[1];
+                
+                const rama = infoRamas[bestDim];
+                document.getElementById('res-rama-title').textContent = rama.t;
+                document.getElementById('res-rama-desc').textContent = rama.d;
+                
+                let viaText = "Tanto el Grado como un CFGS Superior son excelentes opciones.";
+                if(this.state.via === 'grado') viaText = "Prefieres Universidad: enfoca tu estudio de EBAU en las asignaturas de ponderación 0.2 para esta rama.";
+                if(this.state.via === 'cfgs') viaText = "Prefieres FP: Los Grados Superiores de esta familia tienen alta empleabilidad y son muy prácticos.";
+                document.getElementById('res-via').textContent = viaText;
+
+                // Generar el resumen narrativo del perfil
+                const summaryHtml = `
+                    <p style="margin-bottom:0.5rem; color:var(--text-main);"><strong>Tu Análisis Vocacional:</strong></p>
+                    <p style="margin-bottom:0; font-size:0.95rem; line-height:1.6;">
+                        Tu perfil muestra una clara inclinación dominante hacia el ámbito de <strong>${dimNames[bestDim]}</strong> (${scores[bestDim]} pts), destacando por tus habilidades y preferencias en esta área. 
+                        Como interés secundario muy marcado, muestras afinidad por el sector de <strong>${dimNames[secondDim]}</strong> (${scores[secondDim]} pts). 
+                        Esta combinación sugiere que tu mayor potencial de satisfacción profesional se encuentra en disciplinas o carreras híbridas que te permitan aplicar tu base de <em>${dimNames[bestDim].toLowerCase()}</em> apoyándote en herramientas y enfoques de <em>${dimNames[secondDim].toLowerCase()}</em>.
+                    </p>
+                `;
+                document.getElementById('profile-summary').innerHTML = summaryHtml;
+
+                // Renderizar el gráfico de radar
+                this.renderChart(scores);
+
+                // Calcular matching de profesiones
+                let recs = professionsDB.map(prof => {
+                    let score = (scores[prof.dimPrincipal] * 10) + (scores[prof.dimSecundaria] || 0); 
+                    
+                    if(this.state.via === 'grado' && !prof.via.includes('Grado')) score -= 25;
+                    if(this.state.via === 'cfgs' && !prof.via.includes('CFGS')) score -= 25;
+                    
+                    return { ...prof, score };
+                });
+
+                recs.sort((a, b) => b.score - a.score);
+                
+                const grid = document.getElementById('professions-grid');
+                grid.innerHTML = '';
+                recs.slice(0, 4).forEach((p, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'profession-card';
+                    
+                    let pointsHtml = p.puntosClave.map(punto => `<li>${punto}</li>`).join('');
+
+                    card.innerHTML = `
+                        <div class="prof-header">
+                            <div><h3 style="margin:0; font-size:1.15rem;">${p.n}</h3></div>
+                            <div class="prof-score">#${idx + 1}</div>
+                        </div>
+                        <div class="tag-list" style="margin-bottom:0.75rem;">
+                            <span class="tag tag-rama">${p.rama}</span>
+                            <span class="tag tag-via">${p.via}</span>
+                        </div>
+                        <p style="font-size:0.95rem; margin-bottom:0;">${p.desc}</p>
+                        <div class="match-reason"><strong>Por qué encaja:</strong> ${p.rasgo}</div>
+                        <ul class="key-points">
+                            ${pointsHtml}
+                        </ul>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                this.navigate('results');
+            },
+
+            resetTest() {
+                if(confirm("¿Repetir el test desde cero?")) {
+                    this.state.answers = {};
+                    this.state.currentQIndex = 0;
+                    this.navigate('welcome');
+                }
+            }
+        };
+
+        function toggleTheme() { 
+            document.body.classList.toggle('dark'); 
+            // Repintar gráfico para que adapte los colores al modo oscuro
+            if(window.profileChartInstance && document.getElementById('screen-results').classList.contains('active')) {
+                let scores = { tech: 0, health: 0, social: 0, art: 0, science: 0 };
+                questionsDB.forEach(q => { if(app.state.answers[q.id]) scores[q.dim] += app.state.answers[q.id]; });
+                app.renderChart(scores);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.add('dark');
+            app.init();
+        });
+    </script>
+</body>
+</html>
